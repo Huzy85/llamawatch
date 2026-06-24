@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llamawatch"
+version = "0.5.2"
+description = "Self-hosted ops dashboard for local LLMs"
+readme = "README.md"
+license = "AGPL-3.0-or-later"
+requires-python = ">=3.10"
+authors = [{name = "Steam Vibe Ltd"}]
+keywords = ["llm", "dashboard", "llama", "ollama", "monitoring", "self-hosted"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Topic :: System :: Monitoring",
+]
+dependencies = [
+    "fastapi>=0.100",
+    "uvicorn[standard]>=0.20",
+    "argon2-cffi>=23.1",
+    "cryptography>=42.0",
+    "sse-starlette>=2.1",
+    "aiofiles>=23.0",
+    "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.0", "pytest-asyncio>=0.23", "httpx>=0.27"]
+predictions = ["psycopg2-binary>=2.9"]
+documents = ["pypdf>=4.0", "python-docx>=1.1"]
+
+[project.scripts]
+llamawatch = "llamawatch.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/Huzy85/llamawatch"
+Issues = "https://github.com/Huzy85/llamawatch/issues"
+
+[tool.setuptools.packages.find]
+include = ["llamawatch*"]
+
+[tool.setuptools.package-data]
+llamawatch = ["static/**/*", "config.json"]

@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>llamawatch</title>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#0d1018">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="llamawatch">
+<link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+<link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="/static/studio.css?v=131">
+<link rel="stylesheet" href="/static/vendor/xterm.min.css">
+</head>
+<body>
+<div id="studio-bg"></div>
+
+<div id="studio">
+
+  <!-- ═══ TOP BAR ═══════════════════════════════════════════════════════════ -->
+  <header id="top-bar">
+    <div class="top-bar-brand">
+      <img class="top-bar-brand-mark" src="/static/icons/icon-192.png" alt="llamawatch">
+      <span>llamawatch</span>
+    </div>
+
+    <div id="status-ticker">
+      <span class="tick-label">MODEL</span>
+      <span id="tick-model"   class="tick-model">—</span>
+      <span class="tick-sep">·</span>
+      <span class="tick-label">BACKENDS</span>
+      <span id="tick-health"  class="tick-health">—</span>
+      <span class="tick-sep">·</span>
+      <span class="tick-label">FREE SLOTS</span>
+      <span id="tick-slots"   class="tick-slots">—</span>
+      <span class="tick-sep">·</span>
+      <span class="tick-label">TOK/S</span>
+      <span id="tick-tps"     class="tick-tps">—</span>
+      <span class="tick-sep">·</span>
+      <span class="tick-label">GPU</span>
+      <span id="tick-gpu"     class="tick-gpu">—</span>
+    </div>
+
+    <div id="top-right">
+      <div id="top-clock">--:--:--</div>
+      <button id="top-fullscreen-btn" title="Toggle full screen" onclick="(()=>{const d=document;if(d.fullscreenElement){d.exitFullscreen();}else{d.documentElement.requestFullscreen&&d.documentElement.requestFullscreen();}})()">&#9974;</button>
+      <button id="top-clearcache-btn" title="Clear cache and reload" onclick="(async()=>{try{const k=await caches.keys();await Promise.all(k.map(n=>caches.delete(n)));const r=await navigator.serviceWorker?.getRegistrations();if(r)await Promise.all(r.map(x=>x.unregister()));}catch(e){}location.reload();})()">&#10226;</button>
+      <button id="top-settings-btn" onclick="LlamaWatch && LlamaWatch.settings && LlamaWatch.settings.open()" title="Settings">&#9881;</button>
+    </div>
+  </header>
+
+  <!-- ═══ STAT STRIP ════════════════════════════════════════════════════════ -->
+  <div id="stat-strip" data-panel="stat_strip">
+    <div class="stat-cell accent-cyan">
+      <div id="sc-model"   class="stat-val">—</div>
+      <div class="stat-label">Active Model</div>
+    </div>
+    <div class="stat-cell accent-violet">
+      <div id="sc-params"  class="stat-val">—</div>
+      <div class="stat-label">Params</div>
+    </div>
+    <div class="stat-cell accent-magenta">
+      <div id="sc-ctx"     class="stat-val">—</div>
+      <div class="stat-label">Max Context</div>
+    </div>
+    <div class="stat-cell accent-lime">
+      <div id="sc-backends"class="stat-val">—</div>
+      <div class="stat-label">Backends</div>
+    </div>
+    <div class="stat-cell accent-orange">
+      <div id="sc-slots"   class="stat-val">—</div>
+      <div class="stat-label">Free Slots</div>
+    </div>
+    <div class="stat-cell accent-green">
+      <div id="sc-status"  class="stat-val">—</div>
+      <div class="stat-label">Status</div>
+    </div>
+  </div>
+
+  <!-- ═══ VIEW NAV ══════════════════════════════════════════════════════════ -->
+  <div id="view-nav">
+    <button class="view-nav-arrow" id="view-prev" aria-label="Previous view">&#8249;</button>
+    <div id="view-dots">
+      <button class="view-dot active" data-view="0" aria-label="View 1: Command"></button>
+      <button class="view-dot"        data-view="1" aria-label="View 2: System"></button>
+      <button class="view-dot"        data-view="2" aria-label="View 3: Knowledge"></button>
+    </div>
+    <span id="view-label">COMMAND</span>
+    <button class="view-nav-arrow" id="view-next" aria-label="Next view">&#8250;</button>
+  </div>
+
+  <!-- ═══ VIEW TRACK ════════════════════════════════════════════════════════ -->
+  <div id="view-port">
+    <div id="view-track">
+
+      <!-- ── VIEW 1: COMMAND ────────────────────────────────────────────── -->
+      <div class="view" id="view-0" data-view="command">
+        <div id="main-region">
+
+          <!-- Left: system gauges + fleet mini-strip + token usage chart -->
+          <div id="left-col" data-panel="command_left">
+            <div class="col-title">System Vitals</div>
+            <div id="gauges-grid">
+              <div class="gauge-cell"><div class="gauge-wrap" id="g-cpu"    data-label="CPU"  data-unit="%" data-kind="percent" data-color="cyan"></div></div>
+              <div class="gauge-cell"><div class="gauge-wrap" id="g-ram"    data-label="RAM"  data-unit="%" data-kind="percent" data-color="lime"></div></div>
+              <div class="gauge-cell"><div class="gauge-wrap" id="g-cputmp" data-label="CPU°" data-unit="°C" data-kind="temp"  data-color="orange"></div></div>
+              <div class="gauge-cell"><div class="gauge-wrap" id="g-disk"   data-label="DISK" data-unit="%" data-kind="percent" data-color="violet"></div></div>
+            </div>
+            <!-- Hidden compat gauges — still updated by handlers, not shown -->
+            <div style="display:none">
+              <div class="gauge-wrap" id="g-gpu"    data-label="GPU"  data-unit="%" data-kind="percent" data-color="pink"></div>
+              <div class="gauge-wrap" id="g-gputmp" data-label="GPU°" data-unit="°C" data-kind="temp"  data-color="amber"></div>
+            </div>
+            <!-- Remote machines compact vitals strip -->
+            <div id="cmd-fleet-strip"></div>
+            <!-- Token usage bar chart -->
+            <div id="token-usage-section">
+              <div class="section-label">TOKEN USAGE — 24H</div>
+              <div id="token-bar-chart"></div>
+              <div id="token-totals">
+                <span class="tu-kpi"><span id="tu-total-req" class="tu-kpi-val">—</span><span class="tu-kpi-lbl">reqs</span></span>
+                <span class="tu-kpi"><span id="tu-total-tok" class="tu-kpi-val">—</span><span class="tu-kpi-lbl">tokens</span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center: slots (top) → orb (middle) → charts+actions (bottom) -->
+          <div id="center-col">
+            <div id="center-header">
+              <span class="ch-label">INFERENCE ENGINE</span>
+              <span class="ch-sep">·</span>
+              <span class="ch-label">CONTEXT</span>
+              <span class="ch-val" id="ch-ctx-val">—</span>
+            </div>
+
+            <!-- TOP: Slot pips for all backends -->
+            <div id="slots-section" data-panel="slots">
+              <div id="slots-label">Slot Occupancy — <span id="slots-summary">0/0 busy</span></div>
+              <div id="slots-row"></div>
+            </div>
+
+            <!-- MIDDLE: Hero orb — moderate size, does NOT flex-grow -->
+            <div id="hero-area">
+              <!-- Hero SVG — condensed, no neural net canvas -->
+              <svg id="hero-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="hero-core-grad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%"   stop-color="#2dd4bf" stop-opacity="0.18"/>
+                    <stop offset="60%"  stop-color="#a78bfa" stop-opacity="0.06"/>
+                    <stop offset="100%" stop-color="#0d1018" stop-opacity="0"/>
+                  </radialGradient>
+                  <linearGradient id="ring-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%"   stop-color="#2dd4bf" stop-opacity="1"/>
+                    <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.6"/>
+                  </linearGradient>
+                  <linearGradient id="ring-grad-2" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%"   stop-color="#f472b6" stop-opacity="0.9"/>
+                    <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.5"/>
+                  </linearGradient>
+                  <linearGradient id="ring-grad-3" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%"   stop-color="#a78bfa" stop-opacity="1"/>
+                    <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0.6"/>
+                  </linearGradient>
+                  <filter id="hero-glow" x="-25%" y="-25%" width="150%" height="150%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                  <filter id="hero-glow-strong" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+
+                <circle cx="120" cy="120" r="80" fill="url(#hero-core-grad)"/>
+
+                <g class="ring-outer" style="transform-origin:120px 120px">
+                  <circle cx="120" cy="120" r="105" fill="none"
+                    stroke="url(#ring-grad-1)" stroke-width="1.5"
+                    stroke-dasharray="8 6" filter="url(#hero-glow)"/>
+                </g>
+
+                <circle cx="120" cy="120" r="92" fill="none"
+                  class="ring-pulse"
+                  stroke="#2dd4bf" stroke-width="0.5" stroke-opacity="0.35"/>
+
+                <g class="ring-mid" style="transform-origin:120px 120px">
+                  <circle cx="120" cy="120" r="86" fill="none"
+                    stroke="url(#ring-grad-2)" stroke-width="1.8"
+                    stroke-dasharray="24 10 6 10" filter="url(#hero-glow)"/>
+                </g>
+
+                <g class="ring-inner" style="transform-origin:120px 120px">
+                  <circle cx="120" cy="120" r="72" fill="none"
+                    stroke="url(#ring-grad-3)" stroke-width="2"
+                    stroke-dasharray="48 16" filter="url(#hero-glow-strong)"/>
+                </g>
+
+                <circle cx="120" cy="120" r="56" fill="rgba(13,16,24,0.93)"
+                  stroke="rgba(45,212,191,0.4)" stroke-width="1.2"/>
+
+                <g class="dot-track" style="transform-origin:120px 120px">
+                  <circle cx="120" cy="15" r="3" fill="#2dd4bf" filter="url(#hero-glow-strong)"/>
+                </g>
+                <g class="dot-track" style="transform-origin:120px 120px">
+                  <circle cx="120" cy="15" r="2.5" fill="#a78bfa" filter="url(#hero-glow)"/>
+                </g>
+                <g class="dot-track" style="transform-origin:120px 120px">
+                  <circle cx="120" cy="15" r="2" fill="#f472b6" filter="url(#hero-glow)"/>
+                </g>
+
+                <circle id="hero-kv-arc" cx="120" cy="120" r="72" fill="none"
+                  stroke="#2dd4bf" stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-dasharray="0 452"
+                  stroke-dashoffset="0"
+                  style="transform:rotate(-90deg);transform-origin:120px 120px;transition:stroke-dasharray .8s ease;"/>
+              </svg>
+
+              <div id="hero-center">
+                <span id="hero-model-name">Loading…</span>
+                <span id="hero-status-badge" class="badge-idle">IDLE</span>
+                <button id="hero-voice-btn" class="hero-voice-btn" title="Voice command">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="2" width="6" height="12" rx="3"/>
+                    <path d="M5 10a7 7 0 0 0 14 0"/>
+                    <line x1="12" y1="19" x2="12" y2="22"/>
+                    <line x1="9" y1="22" x2="15" y2="22"/>
+                  </svg>
+                </button>
+                <canvas id="hero-neural"></canvas>
+              </div>
+            </div>
+
+            <!-- BOTTOM: tok/s area chart + quick actions + context donut -->
+            <div id="center-bottom" data-panel="terminal">
+              <!-- Terminal + Chat launch strip -->
+              <div id="term-tab-section">
+                <div id="term-tab-bar">
+                  <button id="chat-new-btn" title="Chat with your models">&#128172;<span class="mob-term-label">CHAT</span></button>
+                  <div id="term-tabs"></div>
+                  <button id="term-new-btn" title="New terminal">+<span class="mob-term-label">OPEN TERMINAL</span></button>
+                </div>
+              </div>
+
+              <!-- Quick-action buttons — rendered dynamically from config -->
+              <div id="quick-actions" data-panel="terminal"></div>
+
+            </div>
+          </div>
+
+          <!-- Right: agents (top) + GPU bars (middle) + RAM donut + KV (bottom) -->
+          <div id="right-col" data-panel="command_right">
+            <!-- Agents panel — top -->
+            <div class="right-section" id="agents-section">
+              <div class="right-section-title">Agents</div>
+              <!-- Agent rows rendered dynamically from config (agents array) -->
+              <div id="agents-list"></div>
+              <div id="agents-empty" class="agent-empty-hint" style="display:none">
+                No agents configured. Add background services to monitor in Settings → Fleet → Agents.
+              </div>
+            </div>
+
+            <!-- Network — live throughput graph (grows to fill the column) -->
+            <div class="right-section" id="net-section">
+              <div class="right-section-title">Network — <span id="net-rc-rates">↓0.0 ↑0.0 Mbps</span></div>
+              <div id="net-graph-wrap">
+                <canvas id="net-rc-canvas"></canvas>
+                <div id="net-idle-label">idle</div>
+              </div>
+            </div>
+
+            <!-- GPU bars — middle -->
+            <div class="right-section" id="gpu-section">
+              <div class="right-section-title">GPU — <span id="gpu-vendor">—</span></div>
+              <div class="gpu-bars">
+                <div class="gpu-bar-row">
+                  <span class="gpu-bar-label" style="color:var(--pink-hi)">LOAD</span>
+                  <div class="gpu-bar-track">
+                    <div class="gpu-bar-fill" id="gpu-util-bar" style="background:linear-gradient(90deg,#f472b6,#a78bfa);width:0%"></div>
+                  </div>
+                  <span class="gpu-bar-val" id="gpu-util-val" style="color:var(--pink-hi)">—</span>
+                </div>
+                <div class="gpu-bar-row">
+                  <span class="gpu-bar-label" style="color:var(--teal-hi)">VRAM</span>
+                  <div class="gpu-bar-track">
+                    <div class="gpu-bar-fill" id="gpu-vram-bar" style="background:linear-gradient(90deg,#2dd4bf,#60a5fa);width:0%"></div>
+                  </div>
+                  <span class="gpu-bar-val" id="gpu-vram-val" style="color:var(--teal-hi)">—</span>
+                </div>
+                <div class="gpu-bar-row">
+                  <span class="gpu-bar-label" style="color:var(--orange-hi)">TEMP</span>
+                  <div class="gpu-bar-track">
+                    <div class="gpu-bar-fill" id="gpu-temp-bar" style="background:linear-gradient(90deg,#fb923c,#f87171);width:0%"></div>
+                  </div>
+                  <span class="gpu-bar-val" id="gpu-temp-val" style="color:var(--orange-hi)">—</span>
+                </div>
+                <div class="gpu-bar-row">
+                  <span class="gpu-bar-label" style="color:var(--amber-hi)">POWER</span>
+                  <div class="gpu-bar-track">
+                    <div class="gpu-bar-fill" id="gpu-power-bar" style="background:linear-gradient(90deg,#fbbf24,#fb923c);width:0%"></div>
+                  </div>
+                  <span class="gpu-bar-val" id="gpu-power-val" style="color:var(--amber-hi)">—</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fleet RAM bars + KV — bottom -->
+            <div class="right-section" id="mem-section">
+              <div class="right-section-title">Memory</div>
+              <!-- 3-machine RAM bars -->
+              <div id="fleet-ram-bars"></div>
+              <!-- KV bar (KV cache fill) -->
+              <div class="gpu-bar-row" style="margin-top:6px">
+                <span class="gpu-bar-label" style="color:var(--violet-hi)">KV</span>
+                <div class="gpu-bar-track">
+                  <div class="gpu-bar-fill" id="kv-bar" style="background:linear-gradient(90deg,#a78bfa,#6d28d9);width:0%"></div>
+                </div>
+                <span class="gpu-bar-val" id="kv-val" style="color:var(--violet-hi)">—</span>
+              </div>
+              <!-- Hidden compat: local-machine RAM used val (still written in system handler) -->
+              <span id="ram-used-val" style="display:none">—</span>
+              <!-- Hidden compat: RAM donut arc (still written by setRamDonut) -->
+              <svg style="display:none">
+                <circle id="ram-donut-arc"/>
+                <text id="ram-donut-pct"/>
+              </svg>
+            </div>
+          </div>
+
+        </div><!-- #main-region -->
+      </div><!-- .view#view-0 -->
+
+      <!-- ── VIEW 2: SYSTEM ─────────────────────────────────────────────── -->
+      <div class="view" id="view-1" data-view="system">
+        <div id="system-region">
+
+          <!-- Row 1: Fleet machines side by side -->
+          <div id="fleet-row" data-panel="fleet_machines">
+            <div id="fleet-machines"></div><!-- #fleet-machines -->
+          </div><!-- #fleet-row -->
+
+          <!-- Row 2: Docker + Processes -->
+          <div id="sys-row-1">
+            <div id="docker-panel" class="sys-panel" data-panel="docker">
+              <div class="panel-title">Docker Containers</div>
+              <div id="docker-table" class="data-table">
+                <div class="data-row docker-row" style="opacity:.4">
+                  <span class="dr-name" style="color:var(--text-3)">waiting for data…</span>
+                  <span></span><span></span>
+                </div>
+              </div>
+            </div>
+
+            <div id="hogs-panel" class="sys-panel" data-panel="processes">
+              <div class="panel-title">Top Processes — CPU</div>
+              <div id="proc-donuts-row"></div>
+              <!-- Hidden compat: original hogs-table kept empty so old code doesn't error -->
+              <div id="hogs-table" style="display:none"></div>
+            </div>
+          </div>
+
+          <!-- Hidden compat elements kept for JS handlers -->
+          <span id="net-dl"            style="display:none">0.00</span>
+          <span id="net-ul"            style="display:none">0.00</span>
+          <canvas id="net-area-canvas" style="display:none"></canvas>
+          <span id="pwr-fleet-est"     style="display:none">—</span>
+          <span id="pwr-cpu"           style="display:none">—</span>
+          <span id="pwr-total"         style="display:none">—</span>
+          <span id="pwr-gpu-measured-val" style="display:none">—</span>
+          <div id="pwr-cpu-tile"       style="display:none"></div>
+          <canvas id="pwr-cpu-spark"   style="display:none"></canvas>
+          <canvas id="pwr-total-spark" style="display:none"></canvas>
+
+        </div><!-- #system-region -->
+      </div><!-- .view#view-1 -->
+
+      <!-- ── VIEW 3: KNOWLEDGE ──────────────────────────────────────────── -->
+      <div class="view" id="view-2" data-view="knowledge">
+        <div id="knowledge-region">
+
+          <!-- Tab strip — 2 tabs -->
+          <div id="know-tabs">
+            <button class="know-tab know-tab-active" data-panel="intel">INTEL</button>
+            <button class="know-tab" data-panel="library">LIBRARY</button>
+          </div>
+
+          <!-- Panel 1: INTEL — Press Room + Predictions side by side -->
+          <div id="know-panel-intel" class="know-panel know-panel-active">
+            <div id="intel-split">
+
+              <!-- Left: Press Room -->
+              <div id="intel-pressroom" data-panel="press_room">
+                <div class="know-col-hdr">
+                  <span class="know-col-title">PRESS ROOM</span>
+                  <span class="know-section-sub" id="pr-sub"></span>
+                  <div class="know-search-bar" id="pr-search-bar" style="margin-left:auto">
+                    <input type="search" id="pr-search-input" class="know-search-input" placeholder="Search…" autocomplete="off" spellcheck="false">
+                    <button class="know-toggle-btn know-toggle-active" id="pr-toggle-latest">Latest</button>
+                    <button class="know-toggle-btn" id="pr-toggle-all">All</button>
+                  </div>
+                </div>
+                <div id="pressroom-feed" class="know-feed">
+                  <div class="know-empty-state know-empty-state-sm">
+                    <div class="know-empty-icon">▤</div>
+                    <div class="know-empty-title">No articles yet</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Predictions -->
+              <div id="intel-predictions" data-panel="predictions">
+                <div class="know-col-hdr">
+                  <span class="know-col-title">PREDICTIONS</span>
+                  <div style="margin-left:auto;display:flex;gap:4px">
+                    <button class="know-toggle-btn know-toggle-active" id="pred-filter-all">All</button>
+                    <button class="know-toggle-btn" id="pred-filter-pending">Pending</button>
+                    <button class="know-toggle-btn" id="pred-filter-verified">Verified</button>
+                  </div>
+                </div>
+                <div id="predictions-feed" class="know-feed">
+                  <div class="know-empty-state know-empty-state-sm">
+                    <div class="know-empty-icon">◎</div>
+                    <div class="know-empty-title">Click to load</div>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- #intel-split -->
+          </div>
+
+          <!-- Panel 2: LIBRARY + DOCS + FILES -->
+          <div id="know-panel-library" class="know-panel">
+            <!-- Library stats + search -->
+            <div class="know-sub-section" data-panel="library">
+              <div class="know-sub-section-hdr">
+                <span class="know-section-title">LIBRARY</span>
+                <span class="know-section-sub">RAG knowledge base</span>
+                <div id="library-stats" class="lib-stats-row">
+                  <div class="lib-stat-cell"><span class="lib-stat-val" id="lib-chunks">—</span><span class="lib-stat-lbl">chunks</span></div>
+                  <div class="lib-stat-cell"><span class="lib-stat-val" id="lib-docs">—</span><span class="lib-stat-lbl">docs</span></div>
+                  <div class="lib-stat-cell"><span class="lib-stat-val" id="lib-collections">—</span><span class="lib-stat-lbl">collections</span></div>
+                </div>
+              </div>
+              <div class="know-search-bar" id="lib-search-bar">
+                <input type="search" id="lib-search-input" class="know-search-input" placeholder="Search RAG library…" autocomplete="off" spellcheck="false">
+              </div>
+              <div id="lib-search-results" class="know-feed know-feed-compact" style="display:none"></div>
+              <div class="section-label" style="margin:8px 12px 4px">COLLECTION BREAKDOWN</div>
+              <div id="lib-segment-bar-wrap">
+                <div id="lib-segment-bar"></div>
+                <div id="lib-segment-legend"></div>
+              </div>
+              <div id="library-feed" class="know-feed know-feed-compact">
+                <div class="know-empty-state know-empty-state-sm">
+                  <div class="know-empty-icon">◈</div>
+                  <div class="know-empty-title">Hub offline or no data</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Docs browser -->
+            <div class="know-sub-section" data-panel="docs">
+              <div class="know-sub-section-hdr">
+                <span class="know-section-title">DOCS</span>
+                <span class="know-section-sub" id="docs-sub">Markdown files</span>
+              </div>
+              <div class="know-search-bar" id="docs-search-bar">
+                <input type="search" id="docs-search-input" class="know-search-input" placeholder="Filter by filename…" autocomplete="off" spellcheck="false">
+              </div>
+              <div id="docs-feed" class="know-feed know-feed-compact">
+                <div class="know-empty-state know-empty-state-sm">
+                  <div class="know-empty-icon">▤</div>
+                  <div class="know-empty-title">Loading docs…</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Files: compact inline section -->
+            <div class="know-sub-section" data-panel="files">
+              <div class="know-sub-section-hdr">
+                <span class="know-section-title">FILES</span>
+                <span class="know-section-sub">Upload to inbox · Download from share</span>
+                <button class="know-toggle-btn" id="files-refresh-btn" style="margin-left:auto">Refresh</button>
+              </div>
+              <!-- Compact drop zone -->
+              <div id="file-drop-zone" class="file-drop-zone file-drop-compact">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:rgba(45,212,191,0.5);flex-shrink:0"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span class="file-drop-label-inline">Drag a file here to upload to ~/inbox/</span>
+                <label class="file-browse-btn">Browse<input type="file" id="file-upload-input" multiple style="display:none"></label>
+              </div>
+              <div id="file-upload-status" class="file-status-list"></div>
+              <div id="file-download-list" class="know-feed know-feed-compact">
+                <div class="know-empty-state know-empty-state-sm">
+                  <div class="know-empty-icon">▤</div>
+                  <div class="know-empty-title">No files in ~/inbox/llamawatch-share/</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- FILES section is now inside the library panel below -->
+
+        </div><!-- #knowledge-region -->
+      </div><!-- .view#view-2 -->
+
+    </div><!-- #view-track -->
+  </div><!-- #view-port -->
+
+  <!-- ═══ BOTTOM STRIP ══════════════════════════════════════════════════════ -->
+  <footer id="bottom-strip" data-panel="bottom_strip">
+
+    <!-- Per-machine vitals cells are generated dynamically by renderFleetDOM() -->
+
+    <!-- Net + Power — right-aligned -->
+    <div class="bs-right-cells">
+      <div class="bs-cell bs-cell-net">
+        <span class="bs-lbl">NET</span>
+        <span class="bs-val bs-val-sm" id="bs-net" style="color:var(--blue-hi)">—</span>
+      </div>
+      <div class="bs-cell bs-cell-pwr">
+        <span class="bs-val" id="bs-est-pwr" style="color:var(--amber-hi)">—</span>
+        <span class="bs-lbl" id="bs-est-pwr-lbl" style="margin-left:3px">est · all</span>
+      </div>
+    </div>
+
+    <!-- Hidden compat/compute IDs -->
+    <span id="bs-gpu-watts" style="display:none">—</span>
+    <span id="bs-slots"     style="display:none">—</span>
+    <span id="bs-cpu"       style="display:none"></span>
+    <span id="bs-ram"       style="display:none"></span>
+    <span id="bs-gputmp"    style="display:none"></span>
+    <span id="bs-pwr"       style="display:none"></span>
+    <div id="sentiment-bar" style="display:none"><div id="sentiment-fill" style="width:0%"></div></div>
+  </footer>
+
+</div><!-- #studio -->
+
+<!-- WM dock — populated by StudioWM at runtime -->
+<div id="swm-dock"></div>
+
+<script src="/static/vendor/xterm.min.js"></script>
+<script src="/static/vendor/addon-fit.min.js"></script>
+<script src="/static/vendor/addon-web-links.min.js"></script>
+<script src="/static/gauge.js?v=33"></script>
+<script src="/static/topojson-client.min.js"></script>
+<script src="/static/studio.js?v=147"></script>
+<script>
+// Minimal LlamaWatch stub for settings modal
+window.lockBodyScroll = window.lockBodyScroll || function() { document.body.style.overflow = 'hidden'; };
+window.unlockBodyScroll = window.unlockBodyScroll || function() { document.body.style.overflow = ''; };
+const LlamaWatch = {
+  toast: function(message, type) {
+    const el = document.createElement('div');
+    el.className = 'lw-toast lw-toast-' + (type || 'info');
+    el.textContent = message;
+    document.body.appendChild(el);
+    setTimeout(function() { el.style.opacity = '0'; setTimeout(function() { el.remove(); }, 300); }, 3000);
+  }
+};
+</script>
+<script src="/static/settings.js?v=14"></script>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/static/sw.js").then(function (reg) {
+    reg.addEventListener("updatefound", function () {
+      var w = reg.installing;
+      if (w) w.addEventListener("statechange", function () {
+        if (w.state === "installed" && navigator.serviceWorker.controller) {
+          // New SW ready — show unobtrusive refresh hint
+          var hint = document.createElement("div");
+          hint.style.cssText = "position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:#1a1f2e;border:1px solid rgba(45,212,191,0.35);color:#2dd4bf;font-size:11px;font-family:monospace;padding:8px 16px;border-radius:6px;z-index:99999;cursor:pointer;letter-spacing:.06em";
+          hint.textContent = "Update available — tap to refresh";
+          hint.addEventListener("click", function () { window.location.reload(); });
+          document.body.appendChild(hint);
+          setTimeout(function () { if (hint.parentNode) hint.parentNode.removeChild(hint); }, 8000);
+        }
+      });
+    });
+  }).catch(function () {});
+}
+</script>
+
+</body>
+</html>
