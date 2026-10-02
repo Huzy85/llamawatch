@@ -1,0 +1,11 @@
+config.local.json
+__pycache__/
+*.pyc
+.superpowers/
+*.egg-info/
+dist/
+build/
+.env
+layout.json
+sessions.json
+WIKI.md
