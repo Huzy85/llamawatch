@@ -1,0 +1,19 @@
+config.local.json
+__pycache__/
+*.pyc
+.superpowers/
+*.egg-info/
+dist/
+build/
+.env
+layout.json
+sessions.json
+WIKI.md
+
+# Invented sample config for the browser tests (safe to publish)
+!tests/ui/fixtures/config.local.json
+
+# UI test screenshots and diffs (references live in tests/ui/reference/)
+tests/ui/out/
+
+*.bak*

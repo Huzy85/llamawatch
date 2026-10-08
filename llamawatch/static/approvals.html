@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Approvals · llamawatch</title>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#0d1018">
+<link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+<link rel="stylesheet" href="/static/approvals.css?v=5">
+<link rel="stylesheet" href="/static/rail.css?v=6">
+</head>
+<body>
+
+<nav id="rail" aria-label="Main">
+  <button id="rail-toggle" type="button" aria-expanded="false" aria-label="Open menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <div id="rail-items"></div>
+  <button id="rail-pin" type="button" aria-pressed="false" aria-label="Keep menu open">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l-1 6 4 4H6l4-4zM12 13v8"/></svg><span class="rail-label">Keep open</span>
+  </button>
+</nav>
+
+<div id="rs-page" class="lw-page">
+  <header class="rs-top">
+    <a class="rs-brand" href="/studio"><img src="/static/icons/icon-192.png" alt=""><span>llamawatch</span></a>
+    <span class="rs-crumb">/ Approvals</span>
+    <span class="ap-updated" id="ap-updated" aria-live="polite"></span>
+  </header>
+
+  <main class="rs-main">
+    <section class="rs-card ap-head">
+      <div>
+        <h1>Approvals</h1>
+        <p class="ap-sub">Quick actions, services, containers, jobs, the terminal and your agents ask here before they act. A fixed blocklist can never be approved.</p>
+      </div>
+      <p class="ap-note" id="ap-local-note" hidden>No password is set, so only this machine can approve. Set one in Settings on the Monitor page to approve from your phone.</p>
+    </section>
+
+    <div class="ap-cols">
+      <div class="ap-col">
+        <section class="rs-card" id="ap-waiting-card">
+          <div class="ap-card-head">
+            <h2>Waiting for you <span class="ap-count" id="ap-waiting-count"></span></h2>
+          </div>
+          <ul class="ap-waiting" id="ap-waiting" aria-live="polite"></ul>
+          <p class="ap-empty" id="ap-waiting-empty" hidden>Nothing is waiting. Anything that asks will appear here within a few seconds.</p>
+        </section>
+
+        <section class="rs-card">
+          <div class="ap-card-head">
+            <h2>Rules</h2>
+            <span class="ap-hint">Allow runs at once. Ask waits for you. Block refuses.</span>
+          </div>
+          <div class="ap-rules" id="ap-rules" role="group" aria-label="Rules"></div>
+        </section>
+
+        <section class="rs-card">
+          <div class="ap-card-head">
+            <h2>Always blocked</h2>
+            <span class="ap-hint">These cannot be approved. Nothing, not even you from here, can run them.</span>
+          </div>
+          <details class="ap-builtin">
+            <summary>Built-in list <span class="ap-count" id="ap-builtin-count"></span></summary>
+            <ul id="ap-builtin"></ul>
+          </details>
+          <h3 class="rs-kicker">Your own patterns</h3>
+          <ul class="ap-patterns" id="ap-patterns"></ul>
+          <form class="ap-add" id="ap-pattern-form" novalidate>
+            <input id="ap-pattern-input" type="text" maxlength="300" autocomplete="off" spellcheck="false" placeholder="docker system prune   or a regular expression" aria-label="New blocked pattern">
+            <button type="submit" class="rs-btn small">Add</button>
+          </form>
+          <p class="ap-hint">Plain text matches anywhere in a command, case ignored. A valid regular expression is used as one.</p>
+          <h3 class="rs-kicker">Recent refusals</h3>
+          <ul class="ap-refusals" id="ap-refusals"></ul>
+          <p class="ap-empty small" id="ap-refusals-empty" hidden>No refusals yet.</p>
+        </section>
+
+      </div>
+
+      <div class="ap-col ap-col-trail">
+        <section class="rs-card ap-trail-card">
+          <div class="ap-card-head">
+            <h2>Audit trail</h2>
+            <span class="ap-hint">Everything that changed something, newest first.</span>
+          </div>
+          <div class="ap-chips" id="ap-chips" role="group" aria-label="Show"></div>
+          <div class="ap-tools">
+            <input id="ap-search" type="search" placeholder="Search the trail" aria-label="Search the audit trail" autocomplete="off">
+            <span class="ap-count" id="ap-trail-count"></span>
+          </div>
+          <ol class="ap-trail" id="ap-trail"></ol>
+          <p class="ap-empty" id="ap-trail-empty" hidden>Nothing matches.</p>
+        </section>
+
+      </div>
+    </div>
+
+    <section class="rs-card ap-settings">
+      <div class="ap-card-head"><h2>Settings</h2></div>
+      <div class="ap-settings-grid">
+        <div class="ap-setting">
+          <h3 class="rs-kicker">Requester token</h3>
+          <p class="ap-hint">Agents and scripts on other machines send it as <code>X-Llamawatch-Token</code> when they ask. It can only ask and poll, never approve.</p>
+          <p class="ap-token-state" id="ap-token-state"></p>
+          <div class="ap-token-show" id="ap-token-show" hidden>
+            <code id="ap-token-value"></code>
+            <button type="button" class="rs-btn small" id="ap-token-copy">Copy</button>
+          </div>
+          <div class="rs-actions left">
+            <button type="button" class="rs-btn small" id="ap-token-new">New token</button>
+            <button type="button" class="rs-btn small danger" id="ap-token-revoke" hidden>Revoke</button>
+          </div>
+        </div>
+        <form class="ap-setting" id="ap-notify-form" novalidate>
+          <h3 class="rs-kicker">Notify me</h3>
+          <label class="ap-hint" for="ap-notify">A shell line run when something waits. It gets <code>$LW_TITLE</code>, <code>$LW_KIND</code>, <code>$LW_REQUESTER</code>, <code>$LW_COMMAND</code> and <code>$LW_URL</code>.</label>
+          <input id="ap-notify" type="text" maxlength="2000" autocomplete="off" spellcheck="false" placeholder='curl -d "$LW_TITLE" https://ntfy.example.com/approvals'>
+          <div class="rs-actions left"><button type="submit" class="rs-btn small">Save</button></div>
+        </form>
+        <form class="ap-setting" id="ap-ttl-form" novalidate>
+          <h3 class="rs-kicker">Requests expire after</h3>
+          <label class="ap-hint" for="ap-ttl">Minutes a request waits before it counts as denied.</label>
+          <div class="ap-inline">
+            <input id="ap-ttl" type="number" min="1" max="1440" step="1" inputmode="numeric">
+            <span>min</span>
+            <button type="submit" class="rs-btn small">Save</button>
+          </div>
+        </form>
+      </div>
+      <p class="rs-err" id="ap-err"></p>
+    </section>
+  </main>
+</div>
+
+<div class="ap-toast" id="ap-toast" role="status" hidden></div>
+
+<script src="/static/layout.js?v=7"></script>
+<script src="/static/approvals.js?v=2"></script>
+</body>
+</html>

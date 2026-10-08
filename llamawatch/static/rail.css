@@ -1,0 +1,54 @@
+/* llamawatch side rail, shared by every page (Monitor, Research, Jobs, Approvals).
+   Needs the colour and type tokens of the page's own stylesheet. */
+/* ═══ RAIL ═════════════════════════════════════════════════════════════════
+   Side: 48px icons, opens to 200px over the page on hover/tap/focus, pin pushes
+   the page. Bottom (phones / portrait): a tab bar. z-index stays under the
+   settings overlay (500) and floating windows (8800). */
+#rail {
+  position: fixed; left: 0; top: 0; bottom: 0; width: 48px; z-index: 400;
+  display: flex; flex-direction: column; gap: 4px; padding: 8px 6px;
+  background: rgba(10,12,20,0.96); border-right: 1px solid var(--rule);
+  overflow: hidden; transition: width .18s ease;
+}
+#rail.open, html.rail-pinned #rail { width: 200px; }
+#rail button {
+  position: relative;
+  display: flex; align-items: center; gap: 12px; width: 100%; min-height: 36px;
+  padding: 0 6px; background: none; border: none; border-radius: 6px; cursor: pointer;
+  color: var(--text-2); font: inherit; font-size: var(--fs-2); white-space: nowrap;
+}
+#rail button:hover, #rail button[aria-current="page"], #rail button[aria-pressed="true"] { color: var(--teal-hi); background: rgba(45,212,191,0.08); }
+#rail button:focus-visible { outline: 2px solid var(--teal-hi); outline-offset: 1px; }
+#rail svg { flex: 0 0 24px; width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+#rail .rail-label { opacity: 0; transition: opacity .12s; }
+#rail.open .rail-label, html.rail-pinned #rail .rail-label { opacity: 1; }
+#rail-items { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+/* pending-approvals count: sits on the icon's top right, never moves the label */
+#rail .rail-badge {
+  position: absolute; left: 22px; top: 2px; min-width: 16px; height: 16px; padding: 0 4px;
+  border-radius: 8px; background: var(--amber-hi, #fbbf24); color: #1a1403;
+  font-size: 11px; font-weight: 700; line-height: 16px; text-align: center; pointer-events: none;
+}
+#rail .rail-badge[hidden] { display: none; }
+html[data-rail="side"] .lw-page { margin-left: 48px; width: calc(100% - 48px); }
+html[data-rail="side"].rail-pinned .lw-page { margin-left: 200px; width: calc(100% - 200px); }
+
+html[data-rail="bottom"] #rail {
+  top: auto; right: 0; width: auto; height: calc(56px + env(safe-area-inset-bottom, 0px));
+  flex-direction: row; padding: 4px 4px env(safe-area-inset-bottom, 0px);
+  border-right: none; border-top: 1px solid var(--rule);
+}
+html[data-rail="bottom"] #rail-toggle, html[data-rail="bottom"] #rail-pin { display: none; }
+html[data-rail="bottom"] #rail-items { flex-direction: row; justify-content: space-around; gap: 0; }
+html[data-rail="bottom"] #rail button { flex: 1 1 0; flex-direction: column; gap: 2px; width: auto; min-width: 0; padding: 0; justify-content: center; font-size: var(--fs-1); }
+html[data-rail="bottom"] #rail .rail-label { opacity: 1; font-family: var(--font-ui); font-size: 12px; letter-spacing: -0.02em; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html[data-rail="bottom"] #rail .rail-badge { left: calc(50% + 4px); top: 0; }
+html[data-rail="bottom"] .lw-page { height: calc(100% - 56px - env(safe-area-inset-bottom, 0px)); }
+
+@media (prefers-reduced-motion: reduce) {
+  #rail, #rail .rail-label { transition: none; }
+}
+
+/* Dark scrollbars on the side pages (the browser default is white). The
+   Monitor page styles its own. */
+html:has(.lw-page) { color-scheme: dark; scrollbar-color: rgba(255,255,255,0.18) transparent; }

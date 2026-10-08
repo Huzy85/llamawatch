@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Research · llamawatch</title>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#0d1018">
+<link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+<link rel="stylesheet" href="/static/research.css?v=6">
+<link rel="stylesheet" href="/static/rail.css?v=6">
+</head>
+<body>
+
+<nav id="rail" aria-label="Main">
+  <button id="rail-toggle" type="button" aria-expanded="false" aria-label="Open menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <div id="rail-items"></div>
+  <button id="rail-pin" type="button" aria-pressed="false" aria-label="Keep menu open">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l-1 6 4 4H6l4-4zM12 13v8"/></svg><span class="rail-label">Keep open</span>
+  </button>
+</nav>
+
+<div id="rs-page" class="lw-page">
+  <header class="rs-top">
+    <a class="rs-brand" href="/studio"><img src="/static/icons/icon-192.png" alt=""><span>llamawatch</span></a>
+    <span class="rs-crumb">/ Research</span>
+  </header>
+
+  <main class="rs-main">
+    <!-- A run in progress, or the one picked from the list -->
+    <section id="rs-live" class="rs-card" hidden aria-live="polite">
+      <div class="rs-live-head">
+        <span class="rs-kicker" id="rs-live-kicker">Researching</span>
+        <span class="rs-elapsed" id="rs-elapsed"></span>
+      </div>
+      <h2 id="rs-live-q"></h2>
+      <div class="rs-live-meta" id="rs-live-meta"></div>
+      <ol class="rs-steps" id="rs-steps"></ol>
+      <div class="rs-now" id="rs-now"></div>
+      <details class="rs-log-wrap">
+        <summary>Full log</summary>
+        <ol class="rs-log" id="rs-log"></ol>
+      </details>
+      <div class="rs-actions">
+        <button type="button" class="rs-btn" id="rs-cancel">Stop</button>
+        <a class="rs-btn primary" id="rs-open" hidden>Read the report</a>
+        <button type="button" class="rs-btn" id="rs-close" hidden>Close</button>
+      </div>
+      <p class="rs-hint" id="rs-live-hint">You can leave this page. The run carries on and shows up under Past research.</p>
+    </section>
+
+    <!-- New question -->
+    <section id="rs-new" class="rs-card">
+      <h1>Ask a research question</h1>
+      <label class="rs-label" for="rs-q">Question</label>
+      <textarea id="rs-q" rows="3" maxlength="2000" placeholder="For example: which robot vacuums under £400 cope best with pet hair?"></textarea>
+      <div class="rs-count" id="rs-count"></div>
+
+      <label class="rs-label" for="rs-model">Model</label>
+      <div class="rs-model-row">
+        <select id="rs-model"></select>
+        <button type="button" class="rs-btn rs-api-btn" id="rs-api-add">+ Add online API</button>
+      </div>
+      <p class="rs-model-note" id="rs-model-note"></p>
+      <div class="rs-model-tools">
+        <button type="button" class="rs-link" id="rs-api-remove" hidden>Remove this API</button>
+      </div>
+
+      <fieldset class="rs-levels" id="rs-levels">
+        <legend class="rs-label">How deep</legend>
+      </fieldset>
+      <p class="rs-note" id="rs-note"></p>
+
+      <div class="rs-go">
+        <span class="rs-cost" id="rs-cost"></span>
+        <button type="button" class="rs-btn primary" id="rs-start">Start research</button>
+      </div>
+      <p class="rs-err" id="rs-err" role="alert"></p>
+    </section>
+
+    <section class="rs-past">
+      <div class="rs-past-head"><h2>Past research</h2><button type="button" class="rs-btn small" id="rs-refresh">Refresh</button></div>
+      <ol class="rs-list" id="rs-list"><li class="rs-empty">Loading…</li></ol>
+      <button type="button" class="rs-btn small" id="rs-more" hidden>Show all</button>
+    </section>
+  </main>
+</div>
+
+<div class="rs-scrim" id="rs-scrim" hidden>
+  <div class="rs-dialog" role="dialog" aria-modal="true" aria-labelledby="rs-dlg-title">
+    <h3 id="rs-dlg-title">Approve cost</h3>
+    <p id="rs-dlg-text"></p>
+    <div class="rs-dlg-cost"><span>Spending cap</span><b id="rs-dlg-cost"></b></div>
+    <div class="rs-actions">
+      <button type="button" class="rs-btn" id="rs-dlg-cancel">Cancel</button>
+      <button type="button" class="rs-btn primary" id="rs-dlg-ok">Approve and start</button>
+    </div>
+  </div>
+</div>
+
+<div class="rs-scrim" id="rs-api-scrim" hidden>
+  <form class="rs-dialog rs-api" id="rs-api-form" role="dialog" aria-modal="true" aria-labelledby="rs-api-title" autocomplete="off">
+    <h3 id="rs-api-title">Add an online API</h3>
+    <p>Any service with an OpenAI-style chat API works: OpenAI, Anthropic's OpenAI-compatible endpoint, DeepSeek, OpenRouter, Groq, Mistral and others. Copy the details from the provider's API page.</p>
+    <label class="rs-label" for="rs-api-name">Name in the model list</label>
+    <input id="rs-api-name" maxlength="40" placeholder="DeepSeek" required>
+    <label class="rs-label" for="rs-api-base">API address</label>
+    <input id="rs-api-base" type="url" placeholder="https://api.deepseek.com/v1" required>
+    <label class="rs-label" for="rs-api-model">Model name</label>
+    <input id="rs-api-model" placeholder="deepseek-chat" required>
+    <label class="rs-label" for="rs-api-key">API key</label>
+    <input id="rs-api-key" type="password" placeholder="Paste the key" autocomplete="new-password">
+    <div class="rs-api-prices">
+      <div><label class="rs-label" for="rs-api-in">Price per million tokens in</label><input id="rs-api-in" type="number" min="0" step="0.01" value="0"></div>
+      <div><label class="rs-label" for="rs-api-out">Price per million tokens out</label><input id="rs-api-out" type="number" min="0" step="0.01" value="0"></div>
+      <div><label class="rs-label" for="rs-api-cur">Currency</label><input id="rs-api-cur" maxlength="3" value="$"></div>
+    </div>
+    <p class="rs-api-help">The prices set the spending cap you approve before each run. Leave them at 0 only if the API is free. The key is stored encrypted on this machine and never shown again.</p>
+    <p class="rs-err" id="rs-api-err" role="alert"></p>
+    <div class="rs-actions">
+      <button type="button" class="rs-btn" id="rs-api-cancel">Cancel</button>
+      <button type="submit" class="rs-btn primary" id="rs-api-save">Test and save</button>
+    </div>
+  </form>
+</div>
+
+<script src="/static/layout.js?v=7"></script>
+<script src="/static/research.js?v=3"></script>
+</body>
+</html>

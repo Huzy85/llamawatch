@@ -1,0 +1,19 @@
+{
+  "auth_enabled": false,
+  "host": "127.0.0.1",
+  "fleet": {
+    "hosts": [
+      {"name": "node-a", "host": "192.0.2.10", "idle_watts": 18, "tdp_watts": 120},
+      {"name": "node-b", "host": "192.0.2.11", "idle_watts": 9, "tdp_watts": 35},
+      {"name": "node-c", "host": "192.0.2.12", "idle_watts": 9, "tdp_watts": 35}
+    ]
+  },
+  "agents": [
+    {"id": "crawler", "name": "Crawler", "containers": ["crawler"], "machine": "node-b", "primary": "crawler"},
+    {"id": "indexer", "name": "Indexer", "containers": ["vector-store"], "machine": "node-a", "primary": "vector-store"},
+    {"id": "workflows", "name": "Workflows", "containers": ["workflows"], "machine": "node-c", "primary": "workflows"},
+    {"id": "monitor", "name": "Monitor", "containers": ["uptime", "metrics"], "machine": "node-b", "primary": "uptime"},
+    {"id": "backup", "name": "Backup", "containers": ["backup"], "machine": "node-c", "primary": "backup"}
+  ],
+  "studio_panels": {"views": ["command", "system", "knowledge"]}
+}

@@ -1,0 +1,29 @@
+{
+  "port": 8400,
+  "host": "127.0.0.1",
+  "auth_enabled": false,
+  "backends": [],
+  "services": [],
+  "sensors": "auto",
+  "model_names": {},
+  "studio_panels": {
+    "views": ["command", "system", "knowledge"],
+    "stat_strip": true,
+    "bottom_strip": true,
+    "command_left": true,
+    "command_right": true,
+    "slots": true,
+    "terminal": true,
+    "fleet_machines": true,
+    "docker": true,
+    "processes": true,
+    "press_room": true,
+    "predictions": true,
+    "library": true,
+    "docs": true,
+    "files": true,
+    "voice": false
+  },
+  "quick_actions": [],
+  "fleet": { "hosts": [] }
+}

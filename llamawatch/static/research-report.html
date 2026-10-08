@@ -1,0 +1,1026 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research report (mockup)</title>
+<!--
+  llamawatch Research report page: clickable mockup, sample data only.
+
+  Screens / states:
+    1. Report reading view (paper sheet inside Studio chrome)
+       - source numbers [n] jump to and highlight the source
+       - "Print / PDF" -> window.print() with the A4 print sheet
+       - "Export" menu -> Markdown download, HTML download, copy Markdown
+       - "Social drafts" -> drawer
+    2. Social drafts drawer
+       - local model: generates straight away (fake 1.4s)
+       - paid model: cost check dialog first, then generates
+       - short (X, max 280 chars) + long (150-250 words), each with Copy
+       - every claim chip points at a report source; drafts never print
+    3. Next question -> run dialog (model picker + cost) -> toast "queued in Jobs"
+    4. Tweaks (bottom-left): which model wrote the report (local / paid)
+
+  State (localStorage "lw-report-mock"): model, draftsMade
+  v2: the page renders the Stage 6 Markdown in #reportMd (a real test run, see
+  docs/research/sample-run/). Fixed headings from research-prompts.md get their own look.
+  v3: answer first. Contents move to a side rail (wide screens, follows the
+  reading position) or a Contents menu (phones). Key numbers show as cards,
+  then an at-a-glance strip: fact-check result and source mix. Tapping or
+  hovering a source number opens a card with the source, the quote the report
+  used and a link to the saved copy. Thin reading-progress line under the bar.
+  Real runs: put {run, sources, next, runId} JSON in #reportData and the report
+  Markdown in #reportMd; sample labels and tweaks then hide.
+-->
+<style>
+:root {
+  --font-mono: 'Geist Mono', ui-monospace, 'JetBrains Mono', 'Fira Code', Menlo, monospace;
+  --font-read: Charter, 'Iowan Old Style', 'Source Serif Pro', Georgia, 'Times New Roman', serif;
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --bg: #0d1018; --surface: #161a2b; --surface-2: #1d2238;
+  --rule: rgba(255,255,255,0.07); --rule-hi: rgba(255,255,255,0.12);
+  --text-1: #f3f6fb; --text-2: #c4cee1; --text-3: #8d98b4; --text-faint: #565e7c;
+  --teal-hi: #2dd4bf; --cyan-hi: #22d3ee; --violet-hi: #a78bfa;
+  --amber: #b45309; --amber-hi: #fbbf24; --green: #059669; --green-hi: #34d399;
+  --red: #dc2626; --red-hi: #f87171;
+  /* paper */
+  --paper: #fbfaf6; --ink: #1c1f26; --ink-2: #4a505e; --ink-3: #7a8090; --paper-rule: #e4e1d8;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--text-1); font-family: var(--font-mono); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+body { min-height: 100vh; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--cyan-hi); outline-offset: 2px; }
+
+/* ── Studio chrome ─────────────────────────────── */
+.bar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 10px 16px; background: rgba(13,16,24,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule-hi); }
+.bar .crumb { color: var(--text-3); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-right: auto; display: flex; align-items: center; gap: 8px; min-width: 0; }
+.bar .crumb b { color: var(--text-1); font-weight: 600; }
+.bar .crumb a { color: var(--text-3); text-decoration: none; }
+.bar .crumb a:hover { color: var(--text-1); }
+.sample { font-size: 12px; padding: 2px 6px; border: 1px solid var(--amber); color: var(--amber-hi); border-radius: 3px; letter-spacing: .08em; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 6px; border: 1px solid var(--rule-hi);
+  background: var(--surface); font-size: 13px; white-space: nowrap; }
+.btn:hover { border-color: var(--text-3); }
+.btn.primary { background: rgba(45,212,191,0.12); border-color: rgba(45,212,191,0.5); color: var(--teal-hi); }
+.btn.primary:hover { background: rgba(45,212,191,0.2); }
+.btn:disabled { opacity: .5; cursor: progress; }
+.menu-wrap { position: relative; }
+.menu { position: absolute; right: 0; top: calc(100% + 6px); min-width: 220px; background: var(--surface-2); border: 1px solid var(--rule-hi);
+  border-radius: 8px; padding: 4px; box-shadow: 0 12px 32px rgba(0,0,0,.5); display: none; z-index: 30; }
+.menu.open { display: block; }
+.menu button { display: block; width: 100%; text-align: left; background: none; border: 0; padding: 8px 10px; border-radius: 5px; font-size: 13px; }
+.menu button:hover, .menu button:focus-visible { background: rgba(255,255,255,0.06); }
+.menu small { display: block; color: var(--text-3); font-size: 12px; }
+
+/* ── Layout ────────────────────────────────────── */
+.stage { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; padding: 24px 16px 96px; gap: 24px; }
+body.drafts-open .stage { grid-template-columns: minmax(0, 1fr) minmax(320px, 420px); justify-items: stretch; max-width: 1400px; margin: 0 auto; }
+body.drafts-open .sheet { justify-self: end; }
+
+/* ── The report sheet ──────────────────────────── */
+.sheet { width: 100%; max-width: 780px; background: var(--paper); color: var(--ink); border-radius: 4px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.04), 0 20px 60px rgba(0,0,0,.45); padding: 56px 64px 48px; font-family: var(--font-read); font-size: 17px; line-height: 1.6; }
+.kicker { font-family: var(--font-ui); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px; }
+.sheet h1 { font-size: 30px; line-height: 1.2; font-weight: 700; letter-spacing: -.01em; margin-bottom: 18px; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--font-ui); font-size: 13px; color: var(--ink-2); padding-bottom: 20px; border-bottom: 1px solid var(--paper-rule); }
+.meta span b { color: var(--ink); font-weight: 600; }
+.meta .free { color: #047857; font-weight: 600; }
+.meta .paid { color: #92400e; font-weight: 600; }
+.sheet h2 { font-family: var(--font-ui); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin: 36px 0 12px; font-weight: 600; }
+.answer { font-size: 20px; line-height: 1.55; margin-top: 24px; padding: 18px 20px; background: #f1efe7; border-left: 3px solid #0f766e; border-radius: 2px; }
+.answer h2 { margin-top: 0; }
+.finding { padding: 14px 0; border-bottom: 1px solid var(--paper-rule); display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: start; }
+.finding:last-child { border-bottom: 0; }
+.finding p { grid-column: 1; }
+.conf { grid-column: 2; grid-row: 1; font-family: var(--font-ui); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 10px; white-space: nowrap; }
+.conf.high { background: #d1fae5; color: #065f46; }
+.conf.medium { background: #fef3c7; color: #92400e; }
+.conf.low { background: #fee2e2; color: #991b1b; }
+sup.cite a { font-family: var(--font-ui); font-size: 12px; font-weight: 600; color: #0f766e; text-decoration: none; padding: 0 2px; }
+sup.cite a:hover { text-decoration: underline; }
+@media (pointer: coarse) { sup.cite a { padding: 10px 6px; margin: -10px -2px; } }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.two-col h3 { font-family: var(--font-ui); font-size: 14px; margin-bottom: 8px; }
+.two-col .for h3 { color: #047857; } .two-col .against h3 { color: #b91c1c; }
+.sheet ul { padding-left: 20px; } .sheet li { margin-bottom: 8px; }
+.unverified { background: #fdf6e3; border: 1px dashed #d6b45c; border-radius: 4px; padding: 14px 18px; }
+.unverified p { font-size: 15px; color: var(--ink-2); margin-bottom: 8px; font-family: var(--font-ui); }
+.sources { list-style: none; padding: 0 !important; counter-reset: s; font-size: 15px; }
+.sources li { counter-increment: s; position: relative; padding: 8px 8px 8px 36px; border-radius: 4px; transition: background .6s; }
+.sources li::before { content: counter(s); position: absolute; left: 8px; top: 8px; font-family: var(--font-ui); font-weight: 700; color: #0f766e; }
+.sources li.flash { background: #ccfbf1; transition: none; }
+.sources a { color: var(--ink); }
+.sources .src-meta { display: block; font-family: var(--font-ui); font-size: 12px; color: var(--ink-3); }
+.sources .src-url { display: none; }
+.next { display: flex; flex-direction: column; gap: 8px; }
+.next button { text-align: left; font-family: var(--font-read); font-size: 16px; background: #fff; border: 1px solid var(--paper-rule); color: var(--ink);
+  padding: 12px 14px; border-radius: 6px; display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+.next button:hover { border-color: #0f766e; }
+.next button span { font-family: var(--font-ui); font-size: 12px; color: #0f766e; white-space: nowrap; }
+/* v2: rendered from the Stage 6 Markdown */
+.q { font-family: var(--font-ui); font-size: 15px; color: var(--ink-2); margin: -6px 0 16px; line-height: 1.5; }
+.toc { margin: 22px 0 4px; font-family: var(--font-ui); font-size: 14px; }
+.toc ol { columns: 2; column-gap: 28px; padding-left: 22px; color: var(--ink-3); }
+.toc li { margin-bottom: 4px; break-inside: avoid; }
+.toc a { color: var(--ink); text-decoration: none; } .toc a:hover { text-decoration: underline; }
+.sec h2.big { font-family: var(--font-read); font-size: 23px; line-height: 1.3; letter-spacing: 0; text-transform: none; color: var(--ink); font-weight: 700; margin: 40px 0 12px; }
+.sec p { margin-bottom: 14px; }
+.sheet p, .sheet li { overflow-wrap: break-word; }   /* a long URL or token must not push the page sideways */
+.sec code { font-family: var(--font-mono); font-size: .85em; background: #eeebe2; padding: 1px 4px; border-radius: 3px; }
+.answer p:last-child { margin-bottom: 0; }
+.answer p + p { font-size: 17px; }
+.tbl { width: 100%; overflow-x: auto; margin: 6px 0 18px; }
+.sheet table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 13.5px; line-height: 1.4; }
+.sheet th { text-align: left; font-weight: 600; color: var(--ink-2); border-bottom: 2px solid var(--ink-3); padding: 7px 8px; vertical-align: bottom; }
+.sheet td { border-bottom: 1px solid var(--paper-rule); padding: 7px 8px; vertical-align: top; }
+.sec-key-numbers td:nth-child(2) { font-weight: 700; color: var(--ink); }
+.res { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 9px; }
+.res.confirmed { background: #d1fae5; color: #065f46; } .res.corrected { background: #dbeafe; color: #1e40af; }
+.res.weakened { background: #fef3c7; color: #92400e; } .res.dropped { background: #fee2e2; color: #991b1b; }
+.sec-the-case-against, .sec-risks-and-unknowns { border-left: 3px solid #b91c1c; padding-left: 18px; }
+.sec-risks-and-unknowns { border-color: #d97706; }
+.sec-recommendations ol { padding-left: 24px; } .sec-recommendations li { margin-bottom: 10px; padding-left: 4px; }
+.sec-how-this-was-researched, .sec-verification-log { font-size: 15px; }
+.stat-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 14px; font-family: var(--font-ui); font-size: 13px; }
+.sources .type { font-family: var(--font-ui); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-left: 6px; color: var(--ink-3); border: 1px solid var(--paper-rule); padding: 1px 6px; border-radius: 9px; }
+.sources .type.primary { color: #065f46; border-color: #6ee7b7; } .sources .type.forum { color: #92400e; border-color: #fcd34d; }
+.print-only { display: none; }
+.foot { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--paper-rule); font-family: var(--font-ui); font-size: 12px; color: var(--ink-3); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+/* v3: answer first, contents rail, at a glance, source cards */
+.progress { position: fixed; top: 0; left: 0; height: 2px; width: 0; background: var(--teal-hi); z-index: 26; pointer-events: none; }
+.layout { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; }
+.rail { display: none; }
+.rail-h { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-faint); margin: 4px 0 10px 12px; }
+.rail ol { list-style: none; }
+.rail a { display: block; padding: 5px 10px 5px 12px; border-left: 2px solid var(--rule-hi); color: var(--text-3); text-decoration: none; line-height: 1.35; }
+.rail a:hover { color: var(--text-1); }
+.rail a.on { color: var(--text-1); border-left-color: var(--teal-hi); }
+.rail .rail-sub a { font-size: 12px; color: var(--text-faint); }
+.rail .rail-sub a.on { color: var(--text-2); }
+#btnToc { display: inline-flex; }
+#tocMenu { max-height: 65vh; overflow: auto; min-width: 260px; max-width: calc(100vw - 24px); }
+#tocMenu button { font-family: var(--font-ui); }
+@media (min-width: 1240px) {
+  .layout { grid-template-columns: 210px minmax(0, 780px); gap: 36px; justify-content: center; justify-items: stretch; }
+  .rail { display: block; position: sticky; top: 76px; align-self: start; max-height: calc(100vh - 100px); overflow: auto; font-family: var(--font-ui); font-size: 13px; padding-bottom: 12px; }
+  #btnToc { display: none; }
+  body.drafts-open .layout { grid-template-columns: minmax(0, 1fr); }
+  body.drafts-open .rail { display: none; }
+  body.drafts-open #btnToc { display: inline-flex; }
+}
+@media (min-width: 1700px) {
+  body.drafts-open .layout { grid-template-columns: 210px minmax(0, 780px); }
+  body.drafts-open .rail { display: block; }
+  body.drafts-open #btnToc { display: none; }
+}
+.sec-summary.answer { margin-top: 26px; }
+.answer h2 { color: #0f766e; }
+.sec-key-numbers h2 { margin-top: 30px; }
+.kn { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; font-family: var(--font-ui); }
+.trust { margin: 0 0 28px; border: 1px solid var(--paper-rule); border-left: 4px solid var(--t-c, var(--amber)); border-radius: 8px; background: #fff; padding: 14px 16px; }
+.trust.good { --t-c: var(--green); } .trust.fair { --t-c: var(--amber); } .trust.weak { --t-c: var(--red); }
+.trust-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; font-size: 14px; color: var(--ink); }
+.trust-head b { font-weight: 700; }
+.trust-level { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--t-c); }
+.trust ul { margin: 8px 0 0 18px; font-size: 13px; color: var(--ink-2); line-height: 1.45; }
+.trust p { margin-top: 8px; font-size: 12.5px; color: var(--ink-3); line-height: 1.45; }
+.kn-card { background: #fff; border: 1px solid var(--paper-rule); border-radius: 8px; padding: 12px 14px 11px; display: flex; flex-direction: column; gap: 4px; }
+.kn-num { font-size: 22px; line-height: 1.15; font-weight: 700; color: var(--ink); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.kn-num.long { font-size: 16px; line-height: 1.3; }
+.kn-cap { font-size: 12px; color: var(--ink-3); line-height: 1.35; }
+.kn-what { font-size: 13px; color: var(--ink-2); line-height: 1.35; padding-top: 2px; }
+.kn-what sup.cite a { font-size: 12px; }
+.glance { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 18px 0 6px; font-family: var(--font-ui); }
+.g-card { border: 1px solid var(--paper-rule); border-radius: 8px; padding: 12px 14px; background: #f6f4ed; }
+.g-h { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+.g-big { font-size: 15px; color: var(--ink-2); margin: 2px 0 8px; }
+.g-big b { font-size: 22px; color: var(--ink); margin-right: 4px; font-variant-numeric: tabular-nums; }
+.meter { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--paper-rule); gap: 2px; }
+.meter i { display: block; height: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 12px; color: var(--ink-2); }
+.legend span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; background: var(--c); vertical-align: 0; }
+.c-confirmed { --c: #059669; } .c-corrected { --c: #2563eb; } .c-weakened { --c: #d97706; } .c-dropped { --c: #dc2626; }
+.c-primary { --c: #0f766e; } .c-secondary { --c: #64748b; } .c-vendor { --c: #7c3aed; } .c-forum { --c: #d97706; }
+.meter i { background: var(--c); }
+.g-note { font-size: 12px; color: var(--ink-3); margin-top: 6px; }
+.g-note a { color: #0f766e; }
+.sec h2.big { scroll-margin-top: 70px; }
+.sec { scroll-margin-top: 64px; }
+sup.cite { line-height: 0; }
+sup.cite a { cursor: pointer; border-radius: 3px; }
+sup.cite a.active { background: #ccfbf1; }
+.sources .type.vendor { color: #6d28d9; border-color: #c4b5fd; }
+.pop { position: fixed; z-index: 55; width: min(380px, calc(100vw - 24px)); background: #fff; color: var(--ink); border: 1px solid #d9d5ca; border-radius: 10px;
+  box-shadow: 0 18px 48px rgba(0,0,0,.35); padding: 14px 16px 12px; font-family: var(--font-ui); font-size: 13.5px; line-height: 1.45; }
+.pop[hidden] { display: none; }
+.pop-h { display: flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+.pop-h .type { margin-left: 0; }
+.pop-h .x { margin-left: auto; color: var(--ink-3); font-size: 18px; }
+.pop-t { font-family: var(--font-read); font-size: 16px; font-weight: 700; line-height: 1.3; margin: 6px 0 2px; }
+.pop-t a { color: var(--ink); text-decoration: none; } .pop-t a:hover { text-decoration: underline; }
+.pop-m { font-size: 12px; color: var(--ink-3); }
+.pop blockquote { margin: 10px 0 0; padding: 8px 10px; border-left: 3px solid #5eead4; background: #f5f3ec; font-family: var(--font-read); font-size: 14.5px; line-height: 1.45; color: var(--ink); border-radius: 0 4px 4px 0; }
+.pop blockquote + blockquote { margin-top: 6px; }
+.pop-l { font-size: 12px; color: var(--ink-3); margin-top: 10px; letter-spacing: .04em; text-transform: uppercase; font-weight: 600; }
+.pop-a { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--paper-rule); }
+.pop-a a, .pop-a button { color: #0f766e; font-size: 13px; font-weight: 600; text-decoration: none; background: none; border: 0; padding: 0; }
+.pop-a a:hover, .pop-a button:hover { text-decoration: underline; }
+.pop .type { font-size: 12px; font-weight: 700; letter-spacing: .06em; padding: 1px 6px; border-radius: 9px; border: 1px solid var(--paper-rule); color: var(--ink-3); }
+.pop .type.primary { color: #065f46; border-color: #6ee7b7; } .pop .type.forum { color: #92400e; border-color: #fcd34d; } .pop .type.vendor { color: #6d28d9; border-color: #c4b5fd; }
+@media (max-width: 640px) {
+  .pop { left: 0 !important; right: 0; bottom: 0; top: auto !important; width: 100%; border-radius: 14px 14px 0 0; max-height: 70vh; overflow: auto; padding: 16px 18px 20px; }
+  .glance { grid-template-columns: 1fr; }
+  .kn { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .kn-card { padding: 10px 11px; }
+  .kn-num { font-size: 18px; } .kn-num.long { font-size: 14px; }
+}
+
+/* ── Drafts drawer ─────────────────────────────── */
+.drafts { display: none; align-self: start; position: sticky; top: 72px; background: var(--surface); border: 1px solid var(--rule-hi); border-radius: 10px; padding: 16px; max-height: calc(100vh - 96px); overflow: auto; }
+body.drafts-open .drafts { display: block; }
+.drafts header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.drafts h2 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-2); }
+.drafts .note { color: var(--text-3); font-size: 12px; margin-bottom: 14px; }
+.x { background: none; border: 0; color: var(--text-3); font-size: 18px; line-height: 1; padding: 4px 8px; border-radius: 4px; }
+.x:hover { color: var(--text-1); background: rgba(255,255,255,.06); }
+.empty { text-align: center; padding: 24px 8px; color: var(--text-3); font-size: 13px; }
+.empty .btn { margin-top: 12px; }
+.spinner { width: 18px; height: 18px; border: 2px solid var(--rule-hi); border-top-color: var(--teal-hi); border-radius: 50%; animation: spin .8s linear infinite; display: inline-block; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.draft { border: 1px solid var(--rule-hi); border-radius: 8px; padding: 12px; margin-bottom: 14px; background: var(--bg); }
+.draft-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; gap: 8px; }
+.draft-head b { font-size: 12px; color: var(--violet-hi); letter-spacing: .06em; text-transform: uppercase; }
+.count { font-size: 12px; color: var(--text-3); }
+.count.ok { color: var(--green-hi); } .count.bad { color: var(--red-hi); }
+.draft-text { font-family: var(--font-ui); font-size: 14px; line-height: 1.55; color: var(--text-1); white-space: pre-wrap; width: 100%; background: transparent; border: 0; resize: vertical; min-height: 80px; }
+.draft-text:focus { outline: 1px solid var(--rule-hi); border-radius: 4px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.chip { font-size: 12px; padding: 2px 8px; border-radius: 10px; border: 1px solid rgba(34,211,238,.4); color: var(--cyan-hi); background: none; }
+.chip:hover { background: rgba(34,211,238,.1); }
+.draft-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.drafts .regen { width: 100%; justify-content: center; margin-top: 4px; }
+
+/* ── Dialog + toast ────────────────────────────── */
+.scrim { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
+.scrim.open { display: flex; }
+.dialog { width: 100%; max-width: 440px; background: var(--surface-2); border: 1px solid var(--rule-hi); border-radius: 12px; padding: 20px; box-shadow: 0 24px 64px rgba(0,0,0,.6); }
+.dialog h3 { font-size: 15px; margin-bottom: 6px; }
+.dialog p { color: var(--text-2); font-size: 13px; margin-bottom: 14px; font-family: var(--font-ui); }
+.dialog label { display: block; font-size: 12px; color: var(--text-3); margin-bottom: 6px; }
+.dialog select { width: 100%; padding: 8px 10px; background: var(--bg); color: var(--text-1); border: 1px solid var(--rule-hi); border-radius: 6px; font: inherit; margin-bottom: 14px; }
+.cost-box { display: flex; justify-content: space-between; padding: 10px 12px; background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; margin-bottom: 16px; font-size: 13px; }
+.cost-box .free { color: var(--green-hi); } .cost-box .paid { color: var(--amber-hi); }
+.dialog .row { display: flex; gap: 8px; justify-content: flex-end; }
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); opacity: 0; background: var(--surface-2); border: 1px solid rgba(45,212,191,.5);
+  color: var(--text-1); padding: 10px 16px; border-radius: 8px; font-size: 13px; transition: .25s; z-index: 60; pointer-events: none; max-width: calc(100vw - 32px); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Tweaks ────────────────────────────────────── */
+.tweaks { position: fixed; left: 16px; bottom: 16px; z-index: 40; background: var(--surface-2); border: 1px solid var(--rule-hi); border-radius: 8px; padding: 10px 12px; font-size: 12px; }
+.tweaks b { display: block; color: var(--text-3); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
+.seg { display: flex; border: 1px solid var(--rule-hi); border-radius: 6px; overflow: hidden; }
+.seg button { background: none; border: 0; padding: 5px 10px; font-size: 12px; color: var(--text-3); }
+.seg button[aria-pressed="true"] { background: rgba(167,139,250,.18); color: var(--violet-hi); }
+
+/* ── Phones ────────────────────────────────────── */
+@media (max-width: 900px) {
+  body.drafts-open .stage { grid-template-columns: minmax(0, 1fr); }
+  .drafts { position: fixed; inset: auto 0 0 0; top: auto; max-height: 75vh; border-radius: 14px 14px 0 0; z-index: 45; box-shadow: 0 -16px 48px rgba(0,0,0,.6); }
+}
+@media (max-width: 640px) {
+  .stage { padding: 0 0 96px; }
+  .sheet { border-radius: 0; padding: 28px 18px 32px; font-size: 16px; }
+  .sheet h1 { font-size: 24px; }
+  .answer { font-size: 18px; padding: 14px 16px; }
+  .toc ol { columns: 1; }
+  .sec h2.big { font-size: 20px; }
+  .sheet table { font-size: 12.5px; }
+  .sec-the-case-against, .sec-risks-and-unknowns { padding-left: 12px; }
+  .two-col { grid-template-columns: 1fr; }
+  .bar .btn .lbl { display: none; }
+  .bar { padding: 8px 12px; flex-wrap: nowrap; }
+  .bar .crumb { overflow: hidden; white-space: nowrap; font-size: 12px; }
+  .bar .crumb .sample { display: none; }
+  .toast { bottom: auto; top: 64px; }
+  .tweaks { left: 8px; bottom: 8px; }
+}
+/* ultrawide: keep the reading measure, just centre it */
+@media (min-width: 2200px) { .sheet { max-width: 860px; font-size: 18px; } }
+
+/* ── Print: A4, no chrome, page numbers, full source URLs ── */
+@page { size: A4; margin: 18mm 16mm 20mm;
+  @bottom-right { content: "Page " counter(page) " of " counter(pages); font-family: system-ui, sans-serif; font-size: 9pt; color: #7a8090; }
+  @bottom-left { content: "llamawatch research report"; font-family: system-ui, sans-serif; font-size: 9pt; color: #7a8090; } }
+@media print {
+  html, body { background: #fff !important; color: #000; }
+  .bar, .drafts, .tweaks, .scrim, .toast, .no-print { display: none !important; }
+  .stage { display: block; padding: 0; }
+  .sheet { max-width: none; box-shadow: none; padding: 0; border-radius: 0; font-size: 11pt; background: #fff; }
+  .sheet h1 { font-size: 20pt; }
+  .answer { font-size: 13pt; background: #f4f4f4; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .conf, .unverified { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .finding, .two-col > div, .answer, .unverified { break-inside: avoid; }
+  h2 { break-after: avoid; }
+  sup.cite a { color: #000; }
+  .sheet { display: flex; flex-direction: column; }
+  .sources-section { order: 98; } .foot { order: 99; }
+  .sources .src-url { display: block; font-family: var(--font-ui); font-size: 9pt; color: #333; word-break: break-all; }
+  .next-wrap { display: none !important; }
+  .print-only { display: block; }
+  .cover { min-height: 245mm; display: flex !important; flex-direction: column; justify-content: center; break-after: page; }
+  .cover h1 { font-size: 26pt; }
+  .toc ol { columns: 1; }
+  .sec h2.big { font-size: 15pt; margin-top: 22pt; break-after: avoid; }
+  .sheet table { font-size: 9pt; } thead { display: table-header-group; } tr { break-inside: avoid; }
+  .tbl { overflow: visible; }
+  .res, .sources .type { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .sec-summary { break-inside: avoid; }
+  .progress, .rail, .pop { display: none !important; }
+  .layout { display: block; }
+  .kn { grid-template-columns: repeat(3, 1fr); gap: 6pt; }
+  .kn-card, .g-card, .trust { break-inside: avoid; background: #fff; }
+  .kn-num { font-size: 14pt; } .kn-num.long { font-size: 11pt; }
+  .meter i, .legend span::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="crumb"><a href="/research" id="back">Research</a> / <b>Report</b> <span class="sample">SAMPLE DATA</span></div>
+  <div class="menu-wrap">
+    <button class="btn" id="btnToc" aria-haspopup="true" aria-expanded="false">&#9776; <span class="lbl">Contents</span></button>
+    <div class="menu" id="tocMenu" role="menu"></div>
+  </div>
+  <button class="btn" id="btnPrint" title="Print, or choose Save as PDF in the print window">&#9113; <span class="lbl">Print / PDF</span></button>
+  <div class="menu-wrap">
+    <button class="btn" id="btnExport" aria-haspopup="true" aria-expanded="false">&#8615; <span class="lbl">Export</span></button>
+    <div class="menu" id="exportMenu" role="menu">
+      <button role="menuitem" data-exp="md">Markdown file<small>For a blog, GitHub or notes</small></button>
+      <button role="menuitem" data-exp="html">HTML file<small>Self-contained web page</small></button>
+      <button role="menuitem" data-exp="copy">Copy as Markdown<small>Paste straight into an editor</small></button>
+    </div>
+  </div>
+  <button class="btn primary" id="btnDrafts">&#9998; <span class="lbl">Social drafts</span></button>
+</div>
+
+<div class="progress" id="progress"></div>
+<main class="stage">
+  <div class="layout">
+    <nav class="rail" id="rail" aria-label="Contents"></nav>
+    <article class="sheet" id="sheet"></article>
+  </div>
+
+  <aside class="drafts" id="drafts" aria-label="Social drafts">
+    <header><h2>Social drafts</h2><button class="x" id="closeDrafts" aria-label="Close drafts">&times;</button></header>
+    <p class="note">Built only from claims in this report. Never printed or exported.</p>
+    <div id="draftsBody"></div>
+  </aside>
+</main>
+
+<div class="tweaks no-print">
+  <b>Mockup: report written by</b>
+  <div class="seg" id="modelSeg">
+    <button data-m="local" aria-pressed="true">Local (free)</button>
+    <button data-m="paid" aria-pressed="false">Paid API</button>
+  </div>
+</div>
+
+<div class="scrim" id="scrim">
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+    <h3 id="dlgTitle"></h3>
+    <p id="dlgText"></p>
+    <div id="dlgPicker">
+      <label for="dlgModel">Model</label>
+      <select id="dlgModel"></select>
+    </div>
+    <div class="cost-box"><span>Estimated cost</span><b id="dlgCost"></b></div>
+    <div class="row">
+      <button class="btn" id="dlgCancel">Cancel</button>
+      <button class="btn primary" id="dlgOk"></button>
+    </div>
+  </div>
+</div>
+
+<script type="text/markdown" id="reportMd">
+# A 128GB Strix Halo box is the £3,000 answer
+
+*Question: What is the best hardware a UK buyer can get for under £3,000 to run 100B+ parameter language models locally, as of October 2026?*
+*Depth: Standard. Run: 7 October 2026. Sources: 17. Claims checked: 17 (5 confirmed, 6 corrected, 3 weakened, 3 dropped).*
+
+## Summary
+
+A mini PC built on AMD's Ryzen AI Max+ 395 chip ("Strix Halo") with 128GB of memory is the best way to run 100B+ models for under £3,000 in October 2026. It is the only machine found in budget where a 4-bit 120B model fits entirely in memory the graphics chip can use, and it has a measured speed of about 46 tokens (word pieces) per second on gpt-oss-120b [1]. European presale prices of €1,499 to €1,799 [13] and a US list price of $1,999 to $2,599 [14] put it at roughly £1,500 to £2,000, which leaves room for storage and a spare.
+
+The alternatives each fail one test. A Mac with enough memory starts at £3,799 for 64GB, which is still too little, so 128GB Macs are well over budget [5][6]. NVIDIA's DGX Spark has the right memory size but cost £3,699.97 in the UK a year ago and has risen since [3][4]. An RTX 5090 now costs about £2,019 [7], but its 32GB cannot hold a 120B model, and the one measured test of it with the rest of the model in system memory gave 8 tokens per second [11].
+
+The biggest caveat: the 46 tokens per second figure comes from one pre-production machine tested in September 2025 [1], and no UK retailer price for a 128GB Strix Halo box was confirmed. Check both before buying.
+
+## Key numbers
+
+| What | Number | Source |
+|---|---|---|
+| Strix Halo, gpt-oss-120b generation speed | 46 tokens/s (MXFP4, ROCm, pre-production unit) | [1] |
+| 128GB Strix Halo mini PC price | €1,499-€1,799 presale; $1,999-$2,599 list | [13][14] |
+| Cheapest RTX 5090 in the UK | £2,019 (5 Oct 2026) | [7] |
+| Cheapest Mac Studio with 64GB | £3,799 | [6] |
+| DGX Spark UK price, Oct 2025 | £3,699.97 (since raised in US and EU) | [3][4] |
+| DGX Spark memory bandwidth | 273 GB/s | [2] |
+| Memory needed for gpt-oss-120b at 4-bit | about 61GB | [11] |
+| UK electricity unit rate, Oct-Dec 2026 | 26.32p per kWh | [12] |
+
+## Background
+
+A language model's size is counted in parameters. At 4-bit precision, the usual way to run large models at home, each billion parameters needs a little over half a gigabyte of memory. A 120B model therefore needs about 61 to 70GB before any working space for the conversation itself [11].
+
+Most current large open models are "mixture of experts" (MoE) models. gpt-oss-120b, Qwen3.5-122B-A10B and Qwen3-235B-A22B hold all their parameters in memory but use only a small slice of them for each word. That makes them much faster than a dense model of the same size, provided the whole model fits in fast memory. The LMSYS test of DGX Spark shows the difference: a dense 70B model ran at 2.7 tokens per second [2], which is too slow for conversation.
+
+Speed when generating text depends mostly on memory bandwidth, the rate at which the chip can read the model. So the buying question has two parts: does the model fit, and how fast can the memory be read.
+
+## Only unified-memory machines fit a 120B model in budget
+
+There are three ways to get 64GB or more of memory a graphics chip can use. One is a unified-memory machine (Strix Halo, Apple Silicon, DGX Spark), where the processor and graphics share one large pool. Another is several graphics cards whose memory adds up. The last is one graphics card with the rest of the model in ordinary system memory.
+
+Within £3,000, only Strix Halo offers 128GB of unified memory. Apple's current Mac Studio range starts with 36GB on the M5 Max at £2,499, then 64GB at £3,799, and 96GB on the M5 Ultra at £5,499 [5][6]. The 36GB model cannot hold a 100B model at all. DGX Spark has 128GB but sat at £3,699.97 in the UK in October 2025 [4], and NVIDIA raised the US price from $3,999 to $4,699 in February 2026, citing memory supply [3].
+
+| Machine | Usable memory | UK price found | Fits 120B at 4-bit? |
+|---|---|---|---|
+| Strix Halo mini PC (128GB) | 128GB shared | ~£1,500-£2,000 (converted) [13][14] | Yes |
+| Mac Studio M5 Max (36GB) | 36GB | £2,499 [6] | No |
+| Mac Studio M5 Max (64GB) | 64GB | £3,799 [6] | Barely, over budget |
+| DGX Spark | 128GB shared | £3,699.97 (2025) [4] | Yes, over budget |
+| RTX 5090 desktop | 32GB on card | £2,019 card only [7] | No, needs system RAM |
+| 2 x used RTX 3090 | 48GB across cards | from £900 each [8] | No, needs system RAM |
+
+## Strix Halo runs gpt-oss-120b at about 46 tokens per second
+
+The only measured result for a 100B+ model on Strix Halo that survived checking is 46.08 tokens per second for gpt-oss-120b in its native 4-bit format, posted on the Framework community forum on 21 September 2025 [1]. That is comfortable reading speed. The test used a pre-production Framework Desktop and a release-candidate version of AMD's ROCm software, so a shipping machine on current software may differ in either direction.
+
+A second claim, 18 to 19 tokens per second for Qwen3.5-122B-A10B on the Level1Techs forum, was dropped: the thread, when reopened, contains no result for that model. No checked figure exists for Qwen3-235B on this chip. At 4-bit that model needs around 130GB, which is more than the 128GB in the machine, so it would need a smaller 3-bit or 2-bit version.
+
+Software choice matters on this chip. Phoronix testing found AMD's open Vulkan driver faster for normal conversation lengths, with ROCm pulling ahead only at very long contexts [15]. This was not re-checked for this report.
+
+## A single RTX 5090 is fast for small models and slow for large ones
+
+UK RTX 5090 prices have fallen back. One researcher's note gave £3,799 to £3,999, but the price tracker it cited shows £2,019 for a Gigabyte Gaming OC on 5 October 2026 [7]. A complete desktop around it, with 128GB of system memory and a 1,000W power supply, would land close to £3,000.
+
+The card has 32GB, so a 120B model must split, with the experts in system memory and the rest on the card (llama.cpp's `--n-cpu-moe` option). The one checked test of this, from November 2025, measured gpt-oss-120b rising from 3.4 to just over 8 tokens per second on an RTX 5090 with 64GB of DDR4 [11]. That test machine had barely enough system memory to hold the model, and a separate user report in the same source quoted about 15 tokens per second on an older RTX 3090 with a similar setup [11]. Faster DDR5 memory should help, but no measurement was found. Treat the RTX 5090 as the better choice only if most of the work is on models of 32B or smaller, where it is several times faster than any unified-memory machine.
+
+## Used RTX 3090s are cheap but do not solve the size problem
+
+A used RTX 3090 has 24GB and lists from £900 on PriceSpy [8]. Two of them give 48GB, which is still short of a 4-bit 120B model, so they face the same split-memory slowdown as the RTX 5090 [11]. They also draw far more power and need a large case, a motherboard with two full-length slots and a power supply of 1,200W or more. One researcher's claim of 267 to 455 tokens per second for gpt-oss-120b on a single 3090 was dropped as impossible: the model is 61GB and the card holds 24GB, and the cited post predates the model's release.
+
+## Apple is the fastest option for 122B models, at more than double the budget
+
+Apple machines run these models well when they have the memory. A Mac Studio M3 Ultra with 512GB ran Qwen3.5-122B-A10B at 8-bit at 41.5 tokens per second in a March 2026 community benchmark [9]. A widely cited figure of 40 to 55 tokens per second on an M4 Max 128GB is labelled on its own page as an estimate, not a measurement [10]. The new Mac Studio launched in August 2026 with up to 512GB [17], but the configurations with enough memory for these models start well above £3,000 [6]. A used 128GB M4 Max Mac Studio may come close to budget; no UK price was checked.
+
+## Who else is doing this
+
+Four other approaches compete for the same buyer.
+
+| Approach | Strength | Weakness | Fit for this question |
+|---|---|---|---|
+| NVIDIA DGX Spark | 128GB, CUDA software, compact | £3,700+ and rising [3][4]; 273 GB/s [2] | Over budget |
+| Apple Mac Studio M5 | Fast, quiet, mature MLX software | 128GB configurations far above £3,000 [6] | Over budget |
+| Gaming GPU desktop (RTX 5090) | Very fast on models up to 32B | Large models spill into system RAM, ~8 tok/s measured [11] | Runner-up |
+| Workstation cards (Intel Arc Pro B60, 24GB) | Low price, low power | Bandwidth 456 GB/s; software fragmented [16] | Not recommended |
+| Renting cloud GPUs | No upfront cost | Ongoing cost, data leaves the house | Outside scope |
+
+## The case against
+
+The main conclusion rests on one measured speed from one pre-production machine more than a year old [1]. If shipping machines or current software are slower, the margin over the RTX 5090 shrinks. The Strix Halo price is converted from euro and dollar prices [13][14], and memory prices have risen through 2026 [3], so a UK box may now cost more than £2,000.
+
+Strix Halo is also slow at reading long prompts compared with a dedicated graphics card, which matters for work like summarising long documents. An RTX 5090 owner who mostly runs 30B-class models gets several times the speed, and can still run a 120B model slowly when needed. For that user the RTX 5090 is the better buy.
+
+## Risks and unknowns
+
+- No UK retail price for a 128GB Strix Halo mini PC was confirmed.
+- No measured speed for Qwen3.5-122B-A10B or Qwen3-235B on Strix Halo survived checking.
+- The RTX 5090 split-memory speed was measured on DDR4 with only 64GB [11]. A DDR5 system with 128GB could be much faster. This is the gap most likely to change the runner-up.
+- DGX Spark's current UK price was not found. It may have risen further.
+- Running cost: every 100W drawn all year costs about £231 at 26.32p per kWh [12]. Power draw figures for these machines were not re-checked, so this report does not compare running costs.
+
+## Recommendations
+
+1. Buy a 128GB Ryzen AI Max+ 395 mini PC if the main goal is running 100B+ MoE models. Confirm the UK price and that the memory is the full 128GB before ordering.
+2. Before buying, look for a recent measured result for the exact model you plan to run on that chip. If none exists, ask on the Framework or Level1Techs forums.
+3. Choose an RTX 5090 desktop with 128GB DDR5 instead only if most daily work uses models of 32B or smaller.
+4. Skip new Apple and DGX Spark hardware at this budget. Check used 128GB M4 Max Mac Studio prices if Apple's software matters to you.
+5. Re-run this research in six months. GPU and memory prices moved by hundreds of pounds during 2026 [3][7].
+
+## How this was researched
+
+The question was split into five sub-questions: unified-memory machines, GPU and server builds, measured speeds, software and running costs, and the wider market including what is coming next. Five researchers worked in parallel, making 86 searches and page opens between them. Their notes produced 17 claims.
+
+A separate check reopened the cited source for every claim with a number in it. Five claims were confirmed, six corrected, three weakened and three dropped. Two of the dropped claims were physically impossible: a 130GB model said to run on a 32GB card, and a 61GB model said to run on a 24GB card. One extra search round was run to measure the RTX 5090 with system-memory offload, the gap that most affected the runner-up.
+
+## Verification log
+
+| Claim | Result | What was checked | Change |
+|---|---|---|---|
+| Strix Halo 128GB price | weakened | presale and US prices; no UK listing found | stated as a conversion |
+| Strix Halo gpt-oss-120b speed | corrected | forum post reopened | 53.4 to 46 tok/s; pre-production noted |
+| Strix Halo Qwen3.5-122B 18-19 tok/s | dropped | forum thread reopened, no such result | removed |
+| RTX 5090 UK price | corrected | price tracker reopened | £3,799 to £2,019 |
+| Mac Studio for 100B+ from £2,499 | corrected | Apple UK store and price article | 36GB too small; 64GB is £3,799 |
+| M4 Max 122B 40-55 tok/s | weakened | page says figures are estimates | labelled as estimate |
+| M3 Ultra 122B speed | corrected | benchmark reopened | 41.5 tok/s, 8-bit, 512GB |
+| DGX Spark gpt-oss-120b 60 tok/s | corrected | review reopened, figure not present | speed removed; bandwidth kept |
+| DGX Spark over budget | confirmed | forum and price check | none |
+| Used RTX 3090 price | confirmed | price comparison site | none |
+| RTX 5090 runs Qwen3-235B at 118 tok/s | dropped | does not fit in memory | removed |
+| Single GPU plus system RAM speed | corrected | test reopened | 8 tok/s on 5090; conflict noted |
+| UK electricity rate | confirmed | Ofgem | none |
+| 120B memory need | confirmed | several sources agree | wording fixed |
+| Arc Pro B60 price and software | weakened | not reopened | caveat |
+| 2026 GPU and memory price rises | confirmed | NVIDIA forum | none |
+| Apple cannot run 100B models | dropped | contradicted by M3 Ultra benchmark | removed |
+
+## Sources
+
+1. AMD Strix Halo (Ryzen AI Max+ 395) GPU LLM performance tests. Framework Community. https://community.frame.work/t/amd-strix-halo-ryzen-ai-max-395-gpu-llm-performance-tests/72521. Post dated 21 Sep 2025. Read 7 Oct 2026. Forum.
+2. NVIDIA DGX Spark in-depth review. LMSYS. https://www.lmsys.org/blog/2025-10-13-nvidia-dgx-spark. 13 Oct 2025. Read 7 Oct 2026. Secondary (independent test).
+3. DGX Spark price increase. NVIDIA Developer Forums. https://forums.developer.nvidia.com/t/dgx-spark-price-increase/361640. 24 Feb 2026. Read 7 Oct 2026. Forum.
+4. DGX Spark vs Mac Studio: price-checked look. glukhov.org. https://glukhov.org/hardware/ai/nvidia-dgx-spark-prices/. Undated (prices as of Oct 2025). Read 7 Oct 2026. Secondary.
+5. Buy Mac Studio. Apple UK. https://www.apple.com/uk/shop/buy-mac/mac-studio. Live page. Read 7 Oct 2026. Primary.
+6. Mac Studio M5 release date, UK prices, Max vs Ultra. lewislovelock.com. https://lewislovelock.com/blog/mac-studio-m5. 16 Jul 2026. Read 7 Oct 2026. Secondary.
+7. RTX 5090 UK price history. GPU Price History. https://gpupricehistory.com/uk/rtx-5090. Updated 5 Oct 2026. Read 7 Oct 2026. Secondary (price tracker).
+8. Gigabyte GeForce RTX 3090 Gaming OC 24GB. PriceSpy UK. https://pricespy.co.uk/gigabyte-geforce-rtx-3090-gaming-oc-2xhdmi-3xdp-24gb--p5509028. Live page. Read 7 Oct 2026. Secondary (price comparison).
+9. Qwen3.5-122B-A10B on M3 Ultra. oMLX benchmarks. https://omlx.ai/benchmarks/c9cwjmc1. 31 Mar 2026. Read 7 Oct 2026. Forum (community benchmark).
+10. Qwen 3.5 122B-A10B on M4 Max. LLMCheck. https://llmcheck.net/models/qwen-35-122b-a10b-on-m4-max/. Undated. Read 7 Oct 2026. Secondary (estimate).
+11. GPT-OSS 120B: offloading MoE layers to CPU. Hardware Corner. https://www.hardware-corner.net/guides/gpt-oss-offloading-moe-layers/. 10 Nov 2025. Read 7 Oct 2026. Secondary.
+12. Changes to energy price cap between 1 October and 31 December 2026. Ofgem. https://ofgem.gov.uk/news/changes-energy-price-cap-between-1-october-and-31-december-2026. Aug 2026. Read 7 Oct 2026. Primary.
+13. GMKtec EVO-X2 is officially the cheapest PC with AMD's most powerful AI CPU. TechRadar. https://www.techradar.com/pro/at-eur1-499-gmktec-evo-x2-is-officially-the-cheapest-pc-with-the-most-powerful-amd-ai-cpu-ever-and-it-will-come-with-windows-11. 2025. Read 7 Oct 2026. Secondary.
+14. Mini PC with AMD's fastest AI processor and 128GB RAM gets $800 discount. TechRadar. https://www.techradar.com/pro/hurry-mini-pc-with-amds-fastest-ai-processor-and-128gb-ram-gets-whopping-usd800-discount-for-just-a-week. Undated. Read 7 Oct 2026. Secondary.
+15. AMD Ryzen AI Max+ "Strix Halo" performance with ROCm 7.0. Phoronix. https://www.phoronix.com/review/amd-rocm-7-strix-halo/3. 2025. Not reopened. Secondary.
+16. Intel Arc Pro B60 workstation test. Igor's Lab. https://www.igorslab.de/en/intel-arc-pro-b60-workstation-test-with-technical-analysis-and-teardown-battle-of-the-small-workhorses-under-1000-euros/. 2026. Not reopened. Secondary.
+17. Apple's new Mac Studio supports up to 512GB of unified memory. PetaPixel. https://petapixel.com/2026/08/25/apples-new-mac-studio-supports-up-to-512gb-of-unified-memory/. 25 Aug 2026. Read via search. Secondary.
+</script>
+
+<div class="pop" id="pop" role="dialog" aria-label="Source" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script type="application/json" id="reportData">{}</script>
+
+<script>
+// ── Models the picker offers (sample prices, per run) ─────────────
+const MODELS = [
+  { id: 'local-main', name: 'Qwen 35B (local)', cost: 0 },
+  { id: 'gemma',  name: 'Gemma 4 (local)', cost: 0 },
+  { id: 'deepseek', name: 'DeepSeek V4', cost: 0.03 },
+  { id: 'gpt', name: 'OpenAI GPT-5.4', cost: 0.38 },
+  { id: 'claude', name: 'Claude Opus 5.5', cost: 0.62 },
+];
+
+// ── The report. Stage 6 writes this Markdown; the page renders it. ─
+// Fixed headings (see docs/research/research-prompts.md) get their own look.
+const REPORT_MD = document.getElementById('reportMd').textContent.trim();
+const DATA = (() => { try { return JSON.parse(document.getElementById('reportData').textContent || '{}'); } catch (e) { return {}; } })();
+const LIVE = !!DATA.run;
+const RUN = LIVE ? DATA.run : { createdAt: '2026-10-07 10:41', runSeconds: 1386, depth: 'Full report', paidCost: 1.84,
+  trust: { level: 'fair', reasons: ['2 of 12 sources are primary; the rest are second-hand', '3 gaps the research could not fill'] },
+  modelNote: { size: 'medium', note: 'Mid-sized model. Good at gathering and checking facts. It can still miss options a specialist would expect and weigh evidence less well than the largest models.' } };
+const TRUST_GENERAL = 'Research quality depends on the model you pick. Smaller models miss more and judge evidence less well. Every report shows how its claims were checked, so you can see where it is weak.';
+function trustBox() {
+  const t = RUN.trust, n = RUN.modelNote;
+  if (!t && !n) return `<aside class="trust fair"><p style="margin:0">${esc(TRUST_GENERAL)}</p></aside>`;
+  const label = { good: 'Good', fair: 'Fair', weak: 'Weak' }[t?.level] || 'Unrated';
+  return `<aside class="trust ${t ? esc(t.level) : 'fair'}" aria-label="How far to trust this report">
+    <div class="trust-head"><b>How far to trust this report</b><span class="trust-level">${label}</span></div>
+    ${t?.reasons?.length ? `<ul>${t.reasons.map(r => `<li>${esc(r[0].toUpperCase() + r.slice(1))}</li>`).join('')}</ul>` : ''}
+    <p>${n ? esc(n.note) + ' The checking record at the end shows where this report is weak.' : esc(TRUST_GENERAL)}</p></aside>`;
+}
+// Per source number: what sources.json gives (kind, date, the quotes the report used, saved page id).
+const SOURCES = LIVE ? (DATA.sources || {}) : {
+  1: { kind: 'primary', published: '2025-09-18', page: 'P4', quotes: ['gpt-oss-120b (MXFP4) runs at 46 tokens per second on the pre-production unit with ROCm.'] },
+  7: { kind: 'secondary', published: '2026-10-05', page: 'P11', quotes: ['The cheapest RTX 5090 we could find today is £2,019.'] },
+  11: { kind: 'secondary', published: '2025-11-10', page: 'P15', quotes: ['With the experts offloaded to system RAM, generation settled at around 8 tokens per second.', 'The 4-bit model weighs in at roughly 61GB.'] },
+};
+const NEXT_QUESTIONS = LIVE ? (DATA.next || []) : [
+  'What do 128GB Ryzen AI Max+ 395 mini PCs cost from UK retailers right now?',
+  'How fast is gpt-oss-120b on an RTX 5090 with 128GB of DDR5 and expert offload?',
+  'Which used 128GB Mac Studio models sell for under £3,000 in the UK?',
+];
+
+// ── Drafts (sample output; real ones come from the chosen model) ──
+let DRAFTS = LIVE && DATA.drafts ? { short: { text: DATA.drafts.short || '', claims: [] }, long: { text: DATA.drafts.long || '', claims: [] } } : {
+  short: { text: 'Running 100B+ AI models at home for under £3,000? A 128GB Ryzen AI Max+ 395 mini PC is the only in-budget machine where a 120B model fits in graphics memory. Measured: about 46 tokens/s on gpt-oss-120b. Macs with enough memory start above £3,799.', claims: [1, 6] },
+  long: { text: 'What is the best machine for running 100B+ AI models at home on a £3,000 budget?\n\nThe answer from 17 checked sources: a mini PC with AMD\'s Ryzen AI Max+ 395 chip and 128GB of memory. It is the only machine in budget where a 120B model fits in memory the graphics chip can use. One measured test put gpt-oss-120b at about 46 tokens a second, which is comfortable reading speed.\n\nWhy not the others?\n- An RTX 5090 is now about £2,019 but holds 32GB. With the rest of a 120B model in system memory, one test measured about 8 tokens a second.\n- A Mac Studio with 64GB costs £3,799, and the 36GB model cannot hold a model this size.\n- NVIDIA\'s DGX Spark cost £3,700 in the UK a year ago and has gone up since.\n\nTwo caveats. The speed figure comes from one pre-production machine, and no UK shop price for a 128GB box was confirmed. Check both before you buy.\n\nIf most of your work uses smaller models of 32B or less, the RTX 5090 is the faster choice.', claims: [1, 4, 6, 7, 11] },
+};
+
+// ── State ─────────────────────────────────────────────────────────
+const KEY = 'lw-report-mock';
+let state = { model: 'local', draftsMade: false };
+if (!LIVE) try { Object.assign(state, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
+else state.draftsMade = !!DATA.drafts;
+const save = () => { if (!LIVE) try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const reportModel = () => LIVE ? { name: RUN.model || 'model', cost: RUN.cost || 0 } : state.model === 'paid' ? MODELS[4] : MODELS[0];
+const money = n => n === 0 ? 'Free (local)' : '£' + n.toFixed(2);
+const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+function mins(s) { return Math.floor(s / 60) + ' min ' + (s % 60) + ' s'; }
+
+// ── Small Markdown reader: headings, paragraphs, tables, lists ────
+function inline(s) {
+  return esc(s)
+    .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+    .replace(/`(.+?)`/g, '<code>$1</code>')
+    .replace(/(^|[^*])\*([^*]+)\*/g, '$1<i>$2</i>')
+    .replace(/((?:\[\d+(?:\s*,\s*\d+)*\])+)/g, m => '<sup class="cite">' + m.match(/\d+/g).map(n => `<a href="#src-${n}" data-src="${n}">[${n}]</a>`).join('') + '</sup>');
+}
+function parse(md) {
+  const lines = md.split('\n'), out = { title: '', meta: [], sections: [] };
+  let sec = null, i = 0;
+  const push = b => (sec ? sec.blocks : out.meta).push(b);
+  while (i < lines.length) {
+    const l = lines[i];
+    if (!l.trim()) { i++; continue; }
+    if (l.startsWith('# ')) { out.title = l.slice(2).trim(); i++; continue; }
+    if (l.startsWith('## ')) { sec = { title: l.slice(3).trim(), blocks: [] }; out.sections.push(sec); i++; continue; }
+    if (l.startsWith('|')) {
+      const rows = []; while (i < lines.length && lines[i].startsWith('|')) rows.push(lines[i++]);
+      const cells = r => r.replace(/^\||\|$/g, '').split('|').map(c => c.trim());
+      push({ t: 'table', head: cells(rows[0]), rows: rows.slice(2).map(cells) }); continue;
+    }
+    if (/^\d+\. /.test(l)) { const items = []; while (i < lines.length && /^\d+\. /.test(lines[i])) items.push(lines[i++].replace(/^\d+\. /, '')); push({ t: 'ol', items }); continue; }
+    if (l.startsWith('- ')) { const items = []; while (i < lines.length && lines[i].startsWith('- ')) items.push(lines[i++].slice(2)); push({ t: 'ul', items }); continue; }
+    const para = []; while (i < lines.length && lines[i].trim() && !/^(#|\||- |\d+\. )/.test(lines[i])) para.push(lines[i++]);
+    push({ t: 'p', text: para.join(' ') });
+  }
+  return out;
+}
+function parseSource(s) {
+  const m = s.match(/^(.*?)\s(https?:\/\/\S+?)\.(?:\s(.*))?$/);
+  if (!m) return null;
+  const [, name, url, rest = ''] = m;
+  const parts = name.replace(/\.$/, '').split('. ');
+  const site = parts.length > 1 ? parts.pop() : (url.match(/\/\/(?:www\.)?([^/]+)/) || ['', ''])[1];
+  return { name: name.replace(/\.$/, ''), title: parts.join('. '), site, url, rest,
+    type: (rest.match(/(primary|secondary|forum|vendor)/i) || [''])[0].toLowerCase() };
+}
+let SRC = {};   // number -> merged source info, filled by render()
+function sourceItem(s, n) {
+  const p = parseSource(s);
+  if (!p) return `<li id="src-${n}">${inline(s)}</li>`;
+  const { name, url, rest } = p, type = SRC[n]?.type || p.type;
+  return `<li id="src-${n}"><a href="${esc(url)}" target="_blank" rel="noopener">${esc(name.replace(/\.$/, ''))}</a>${type ? `<span class="type ${type}">${type}</span>` : ''}` +
+    `<span class="src-meta">${esc(rest)}</span><span class="src-url">${esc(url)}</span></li>`;
+}
+function block(b, secTitle) {
+  if (b.t === 'p') return `<p>${inline(b.text)}</p>`;
+  if (b.t === 'ul') return `<ul>${b.items.map(x => `<li>${inline(x)}</li>`).join('')}</ul>`;
+  if (b.t === 'ol' && secTitle === 'Sources') return `<ol class="sources">${b.items.map((x, k) => sourceItem(x, k + 1)).join('')}</ol>`;
+  if (b.t === 'ol') return `<ol>${b.items.map(x => `<li>${inline(x)}</li>`).join('')}</ol>`;
+  const resCol = b.head.indexOf('Result');
+  const cell = (c, k) => k === resCol ? `<span class="res ${esc(c)}">${esc(c)}</span>` : inline(c);
+  return `<div class="tbl"><table><thead><tr>${b.head.map(h => `<th>${inline(h)}</th>`).join('')}</tr></thead>` +
+    `<tbody>${b.rows.map(r => `<tr>${r.map((c, k) => `<td>${cell(c, k)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+function logStats(sections) {
+  const log = sections.find(s => s.title === 'Verification log'); if (!log) return '';
+  const t = log.blocks.find(b => b.t === 'table'); if (!t) return '';
+  const k = t.head.indexOf('Result'), n = {};
+  t.rows.forEach(r => { n[r[k]] = (n[r[k]] || 0) + 1; });
+  return `<div class="stat-row">${['confirmed', 'corrected', 'weakened', 'dropped'].filter(x => n[x]).map(x => `<span class="res ${x}">${n[x]} ${x}</span>`).join('')}</div>`;
+}
+
+function verdictCounts(sections) {
+  const log = sections.find(s => s.title === 'Verification log'), n = {};
+  const t = log && log.blocks.find(b => b.t === 'table'); if (!t) return n;
+  const k = t.head.indexOf('Result');
+  t.rows.forEach(r => { const v = (r[k] || '').toLowerCase(); n[v] = (n[v] || 0) + 1; });
+  return n;
+}
+function meterCard(title, big, counts, keys, note) {
+  const total = keys.reduce((a, k) => a + (counts[k] || 0), 0) || 1;
+  return `<div class="g-card"><div class="g-h">${title}</div><div class="g-big">${big}</div>
+    <div class="meter" role="img" aria-label="${keys.filter(k => counts[k]).map(k => counts[k] + ' ' + k).join(', ')}">${keys.filter(k => counts[k]).map(k => `<i class="c-${k}" style="width:${(counts[k] / total * 100).toFixed(1)}%"></i>`).join('')}</div>
+    <div class="legend">${keys.filter(k => counts[k]).map(k => `<span class="c-${k}">${counts[k]} ${k}</span>`).join('')}</div>${note ? `<div class="g-note">${note}</div>` : ''}</div>`;
+}
+function glance(sections) {
+  const v = verdictCounts(sections), checked = Object.values(v).reduce((a, b) => a + b, 0);
+  const kinds = {}; Object.values(SRC).forEach(s => { const k = s.type || 'secondary'; kinds[k] = (kinds[k] || 0) + 1; });
+  const nSrc = Object.keys(SRC).length;
+  const kept = checked - (v.dropped || 0);
+  return `<div class="glance">
+    ${checked ? meterCard('Fact-check', `<b>${kept}</b>of ${checked} claims kept`, v, ['confirmed', 'corrected', 'weakened', 'dropped'],
+      `Each claim was checked against the quote behind it. <a href="#s-verification-log">See the log</a>`) : ''}
+    ${nSrc ? meterCard('Sources', `<b>${nSrc}</b>sources, ${kinds.primary || 0} primary`, kinds, ['primary', 'secondary', 'vendor', 'forum'],
+      `Primary = the maker, regulator, study or original test.`) : ''}
+  </div>`;
+}
+function keyCards(b) {
+  const col = n => b.head.findIndex(h => h.toLowerCase().startsWith(n));
+  const w = col('what'), num = col('number'), src = col('source');
+  return `<div class="kn">${b.rows.map(r => {
+    const raw = r[num] || '', m = raw.match(/^(.*?)\s*\((.+)\)\s*$/);
+    const big = m ? m[1] : raw, cap = m ? m[2] : '';
+    return `<div class="kn-card"><div class="kn-num${big.length > 16 ? ' long' : ''}">${inline(big)}</div>${cap ? `<div class="kn-cap">${inline(cap)}</div>` : ''}
+      <div class="kn-what">${inline(r[w] || '')} ${inline(r[src] || '')}</div></div>`;
+  }).join('')}</div>`;
+}
+function render() {
+  const r = parse(REPORT_MD), m = reportModel(), cost = LIVE ? (RUN.cost || 0) : state.model === 'paid' ? RUN.paidCost : 0;
+  const question = LIVE && RUN.question ? RUN.question : (r.meta.find(b => b.t === 'p' && /^\*Question:/.test(b.text)) || { text: '' }).text.replace(/^\*Question:\s*/, '').replace(/\?.*$/, '?');
+  const srcSec = r.sections.find(s => s.title === 'Sources'), srcList = srcSec?.blocks.find(b => b.t === 'ol')?.items || [];
+  SRC = {};
+  srcList.forEach((x, k) => {
+    const n = k + 1, p = parseSource(x) || { name: x, title: x, site: '', url: '', rest: '', type: '' }, d = SOURCES[n] || {};
+    SRC[n] = { ...p, title: d.title || p.title || p.name, site: d.site || p.site, url: d.url || p.url, type: d.kind || p.type || 'secondary',
+      published: d.published || '', quotes: d.quotes || [], page: d.page || '' };
+  });
+  const nSrc = srcList.length;
+  const big = t => !['Summary', 'Key numbers', 'Sources', 'Verification log'].includes(t);
+  const hasKey = r.sections.some(s => s.title === 'Key numbers');
+  const body = r.sections.map(s => {
+    const id = 's-' + slug(s.title);
+    const inner = s.title === 'Key numbers'
+      ? s.blocks.map(b => b.t === 'table' ? keyCards(b) : block(b, s.title)).join('')
+      : s.blocks.map(b => block(b, s.title)).join('');
+    const after = (s.title === 'Key numbers' || (!hasKey && s.title === 'Summary')) ? glance(r.sections) : '';
+    return `<section class="sec sec-${slug(s.title)}${s.title === 'Summary' ? ' answer' : ''}${s.title === 'Sources' ? ' sources-section' : ''}" id="${id}">
+      <h2${big(s.title) ? ' class="big"' : ''}>${esc(s.title === 'Summary' ? 'The answer' : s.title)}</h2>
+      ${s.title === 'Verification log' ? logStats(r.sections) : ''}${inner}</section>${after}`;
+  }).join('');
+  $('#sheet').innerHTML = `
+    <header class="cover">
+      <div class="kicker">Research report · ${esc(RUN.depth)}</div>
+      <h1>${esc(r.title)}</h1>
+      <p class="q">${esc(question)}</p>
+      <div class="meta">
+        <span>Model <b>${esc(m.name)}</b></span>
+        <span>${esc(RUN.createdAt)}</span>
+        ${RUN.runSeconds ? `<span>Took <b>${mins(RUN.runSeconds)}</b></span>` : ''}
+        <span>Cost <span class="${cost ? 'paid' : 'free'}">${cost ? '£' + cost.toFixed(2) : '£0 (local)'}</span></span>
+        <span><b>${nSrc}</b> sources</span>
+      </div>
+      <nav class="toc print-only" aria-label="Contents"><ol>${r.sections.map(s => `<li><a href="#s-${slug(s.title)}">${esc(s.title)}</a></li>`).join('')}</ol></nav>
+    </header>
+    ${trustBox()}
+    ${body}
+    ${NEXT_QUESTIONS.length ? `<div class="next-wrap"><h2>Next questions</h2>
+    <div class="next">${NEXT_QUESTIONS.map((q, i) => `<button data-q="${i}">${esc(q)}<span>Research this &rarr;</span></button>`).join('')}</div></div>` : ''}
+    <div class="foot"><span>Generated by llamawatch Research</span><span>${esc(m.name)} · ${esc(RUN.createdAt)}</span></div>`;
+  // contents: rail on wide screens, menu on phones. Reference sections go in a quieter group.
+  const ref = t => ['How this was researched', 'Verification log', 'Sources'].includes(t);
+  const link = s => `<li><a href="#s-${slug(s.title)}" data-spy="s-${slug(s.title)}">${esc(s.title === 'Summary' ? 'The answer' : s.title)}</a></li>`;
+  $('#rail').innerHTML = `<div class="rail-h">Contents</div><ol>${r.sections.filter(s => !ref(s.title)).map(link).join('')}</ol>
+    <div class="rail-h" style="margin-top:16px">Reference</div><ol class="rail-sub">${r.sections.filter(s => ref(s.title)).map(link).join('')}</ol>`;
+  $('#tocMenu').innerHTML = r.sections.map(s => `<button role="menuitem" data-go="s-${slug(s.title)}">${esc(s.title === 'Summary' ? 'The answer' : s.title)}</button>`).join('');
+  document.querySelectorAll('#modelSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.m === state.model));
+  renderDrafts();
+  spy();
+}
+
+// ── Reading position: progress line and contents highlight ────────
+let spyObs;
+function spy() {
+  if (spyObs) spyObs.disconnect();
+  const links = [...document.querySelectorAll('#rail a[data-spy]')];
+  spyObs = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle('on', a.dataset.spy === e.target.id)); });
+  }, { rootMargin: '-72px 0px -70% 0px' });
+  document.querySelectorAll('#sheet .sec').forEach(s => spyObs.observe(s));
+  if (links[0] && !links.some(a => a.classList.contains('on'))) links[0].classList.add('on');
+}
+function progress() {
+  const h = document.documentElement, max = h.scrollHeight - innerHeight;
+  $('#progress').style.width = (max > 0 ? Math.min(100, h.scrollTop / max * 100) : 0) + '%';
+  if (!$('#pop').hidden && !$('#pop').classList.contains('pinned')) hidePop();
+}
+addEventListener('scroll', progress, { passive: true });
+
+// ── Source cards on source numbers ────────────────────────────────
+let popFor = null, popT;
+function showPop(a, pinned) {
+  const n = a.dataset.src, s = SRC[n], p = $('#pop');
+  if (!s) return;
+  if (popFor) popFor.classList.remove('active');
+  popFor = a; a.classList.add('active');
+  const saved = LIVE && DATA.runId && s.page ? `/api/research/runs/${encodeURIComponent(DATA.runId)}/pages/${encodeURIComponent(s.page)}` : '';
+  p.innerHTML = `<div class="pop-h">Source ${esc(n)} <span class="type ${esc(s.type)}">${esc(s.type)}</span><button class="x" data-popclose aria-label="Close">&times;</button></div>
+    <div class="pop-t">${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a>` : esc(s.title)}</div>
+    <div class="pop-m">${esc(s.site)}${s.published ? ' · ' + esc(s.published) : ''}</div>
+    ${s.quotes.length ? `<div class="pop-l">What the report used</div>${s.quotes.slice(0, 2).map(q => `<blockquote>${esc(q)}</blockquote>`).join('')}` : ''}
+    <div class="pop-a">${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">Open original &#8599;</a>` : ''}
+      ${saved ? `<a href="${saved}" target="_blank" rel="noopener">Copy as read</a>` : ''}
+      <button data-golist="${esc(n)}">Show in sources</button></div>`;
+  p.hidden = false; p.classList.toggle('pinned', !!pinned);
+  if (innerWidth > 640) {
+    const r = a.getBoundingClientRect(), w = p.offsetWidth, h = p.offsetHeight;
+    let top = r.bottom + 8; if (top + h > innerHeight - 12) top = Math.max(64, r.top - h - 8);
+    p.style.left = Math.min(Math.max(12, r.left + r.width / 2 - w / 2), innerWidth - w - 12) + 'px'; p.style.top = top + 'px';
+  }
+  if (pinned) p.querySelector('[data-popclose]').focus({ preventScroll: true });
+}
+function hidePop() {
+  const p = $('#pop'); p.hidden = true; p.classList.remove('pinned');
+  if (popFor) { popFor.classList.remove('active'); popFor = null; }
+}
+const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+if (canHover) {
+  document.addEventListener('mouseover', e => {
+    const a = e.target.closest('sup.cite a');
+    if (a) { clearTimeout(popT); popT = setTimeout(() => showPop(a), 220); return; }
+    if (e.target.closest('#pop')) { clearTimeout(popT); return; }
+    if (!$('#pop').classList.contains('pinned')) { clearTimeout(popT); popT = setTimeout(hidePop, 280); }
+  });
+}
+
+// ── Source highlight ──────────────────────────────────────────────
+function flashSource(n) {
+  const li = document.getElementById('src-' + n);
+  if (!li) return;
+  li.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  li.classList.add('flash'); setTimeout(() => li.classList.remove('flash'), 60);
+}
+document.addEventListener('click', e => {
+  const cite = e.target.closest('sup.cite a');
+  if (cite) { e.preventDefault(); popFor === cite && $('#pop').classList.contains('pinned') ? hidePop() : showPop(cite, true); return; }
+  if (e.target.closest('[data-popclose]')) { const f = popFor; hidePop(); if (f) f.focus(); return; }
+  const g = e.target.closest('[data-golist]');
+  if (g) { hidePop(); flashSource(g.dataset.golist); return; }
+  const a = e.target.closest('[data-src]');
+  if (a) { e.preventDefault(); flashSource(a.dataset.src); return; }
+  if (!e.target.closest('#pop') && !$('#pop').hidden) hidePop();
+});
+
+// ── Toast ─────────────────────────────────────────────────────────
+let toastT;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
+
+// ── Dialog (cost check / run question) ────────────────────────────
+let dlgResolve = null, lastFocus = null;
+function openDialog({ title, text, okLabel, picker, fixedCost }) {
+  lastFocus = document.activeElement;
+  $('#dlgTitle').textContent = title; $('#dlgText').textContent = text; $('#dlgOk').textContent = okLabel;
+  $('#dlgPicker').style.display = picker ? '' : 'none';
+  const sel = $('#dlgModel');
+  sel.innerHTML = MODELS.map(m => `<option value="${m.id}">${m.name}${m.cost ? '' : ' (free)'}</option>`).join('');
+  const setCost = () => {
+    const c = picker ? MODELS.find(m => m.id === sel.value).cost : fixedCost;
+    const box = $('#dlgCost'); box.textContent = money(c); box.className = c ? 'paid' : 'free';
+    $('#dlgOk').textContent = picker ? (c ? `Approve ${money(c)} and run` : 'Run') : okLabel;
+  };
+  sel.onchange = setCost; setCost();
+  $('#scrim').classList.add('open');
+  (picker ? sel : $('#dlgOk')).focus();
+  return new Promise(res => { dlgResolve = res; });
+}
+function closeDialog(val) {
+  $('#scrim').classList.remove('open');
+  const r = dlgResolve; dlgResolve = null;
+  if (lastFocus) lastFocus.focus();
+  if (r) r(val);
+}
+$('#dlgCancel').onclick = () => closeDialog(null);
+$('#dlgOk').onclick = () => closeDialog($('#dlgPicker').style.display === 'none' ? true : $('#dlgModel').value);
+$('#scrim').addEventListener('click', e => { if (e.target.id === 'scrim') closeDialog(null); });
+
+// ── Next questions -> new run ─────────────────────────────────────
+$('#sheet').addEventListener('click', async e => {
+  const b = e.target.closest('[data-q]'); if (!b) return;
+  const q = NEXT_QUESTIONS[b.dataset.q];
+  if (LIVE) { location.href = '/research?q=' + encodeURIComponent(q) + (RUN.model ? '&model=' + encodeURIComponent(RUN.model) : ''); return; }
+  const m = await openDialog({ title: 'Start new research', text: q, picker: true });
+  if (!m) return;
+  const model = MODELS.find(x => x.id === m);
+  toast(`Queued with ${model.name}. It will show up in Jobs.`);
+});
+
+// ── Social drafts ─────────────────────────────────────────────────
+function renderDrafts(loading) {
+  const body = $('#draftsBody');
+  if (loading) { body.innerHTML = `<div class="empty"><span class="spinner"></span><p style="margin-top:10px">Writing drafts with ${esc(reportModel().name)}…</p></div>`; return; }
+  if (!state.draftsMade) {
+    const m = reportModel();
+    body.innerHTML = `<div class="empty"><p>Two drafts: a short one for X and a longer one for LinkedIn or Facebook.</p>
+      <p style="margin-top:6px">Uses <b>${esc(m.name)}</b> · ${m.cost ? 'about £0.04' : 'free'}</p>
+      <button class="btn primary" id="makeDrafts">Write drafts</button></div>`;
+    $('#makeDrafts').onclick = makeDrafts; return;
+  }
+  const card = (key, label, limitText, check) => {
+    const d = DRAFTS[key];
+    return `<div class="draft"><div class="draft-head"><b>${label}</b><span class="count" data-count="${key}"></span></div>
+      <textarea class="draft-text" data-draft="${key}" rows="${key === 'short' ? 5 : 14}" aria-label="${label} draft">${esc(d.text)}</textarea>
+      <div class="chips">${d.claims.map(c => `<button class="chip" data-src="${c}" title="${esc((document.querySelector('#src-' + c + ' a') || {}).textContent || '')}">source ${c}</button>`).join('')}</div>
+      <div class="draft-actions"><button class="btn" data-copy="${key}">Copy</button></div></div>`;
+  };
+  body.innerHTML = card('short', 'Short · X', '280 characters') + card('long', 'Long · LinkedIn / Facebook', '150-250 words') +
+    `<button class="btn regen" id="regen">Write again</button>`;
+  body.querySelectorAll('.draft-text').forEach(t => { t.addEventListener('input', updateCounts); });
+  body.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => copyText(body.querySelector(`[data-draft="${b.dataset.copy}"]`).value, 'Draft copied'));
+  $('#regen').onclick = makeDrafts;
+  updateCounts();
+}
+function updateCounts() {
+  document.querySelectorAll('.draft-text').forEach(t => {
+    const el = document.querySelector(`[data-count="${t.dataset.draft}"]`);
+    if (t.dataset.draft === 'short') { const n = t.value.length; el.textContent = `${n} / 280 characters`; el.className = 'count ' + (n <= 280 ? 'ok' : 'bad'); }
+    else { const n = t.value.trim().split(/\s+/).filter(Boolean).length; el.textContent = `${n} words (150-250)`; el.className = 'count ' + (n >= 150 && n <= 250 ? 'ok' : 'bad'); }
+  });
+}
+async function makeDrafts() {
+  if (LIVE) return makeLiveDrafts();
+  const m = reportModel();
+  if (m.cost) {
+    const ok = await openDialog({ title: 'Approve cost', text: `Writing drafts with ${m.name} is a paid run.`, okLabel: 'Approve £0.04', picker: false, fixedCost: 0.04 });
+    if (!ok) return;
+  }
+  renderDrafts(true);
+  setTimeout(() => { state.draftsMade = true; save(); renderDrafts(); toast('Drafts ready'); }, 1400);
+}
+// Real run: the server writes the drafts with the report's model. Paid models ask first.
+async function makeLiveDrafts(approved) {
+  renderDrafts(true);
+  const body = { model: RUN.model || '' };
+  if (approved) { body.approved = true; body.approved_cost = approved; }
+  let r;
+  try { r = await fetch(`/api/research/runs/${encodeURIComponent(DATA.runId)}/drafts`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); }
+  catch (e) { state.draftsMade = !!DATA.drafts; renderDrafts(); toast('Could not reach llamawatch'); return; }
+  const d = await r.json().catch(() => ({}));
+  if (r.status === 402) {
+    state.draftsMade = !!DATA.drafts; renderDrafts();
+    const est = d.estimate || 0.05;
+    const ok = await openDialog({ title: 'Approve cost', text: `Writing drafts with ${RUN.model} is a paid run.`, okLabel: `Approve ${money(est)}`, picker: false, fixedCost: est });
+    if (ok) makeLiveDrafts(est);
+    return;
+  }
+  if (!r.ok) { state.draftsMade = !!DATA.drafts; renderDrafts(); toast(d.error || 'Drafts failed'); return; }
+  DRAFTS = { short: { text: d.short || '', claims: [] }, long: { text: d.long || '', claims: [] } };
+  DATA.drafts = d; state.draftsMade = true; renderDrafts(); toast('Drafts ready');
+}
+function openDrafts() { document.body.classList.add('drafts-open'); $('#closeDrafts').focus(); }
+$('#btnDrafts').onclick = () => document.body.classList.contains('drafts-open') ? document.body.classList.remove('drafts-open') : openDrafts();
+$('#closeDrafts').onclick = () => { document.body.classList.remove('drafts-open'); $('#btnDrafts').focus(); };
+
+// ── Export ────────────────────────────────────────────────────────
+function toMarkdown() {
+  const m = reportModel();
+  return REPORT_MD.replace(/\n/, `\n\n*Written by ${m.name}, ${RUN.createdAt}, with llamawatch Research.*\n`) + '\n';
+}
+function toHtml() {
+  const css = [...document.styleSheets[0].cssRules].map(r => r.cssText).join('\n');
+  const sheet = $('#sheet').cloneNode(true);
+  sheet.querySelectorAll('.next-wrap').forEach(n => n.remove());
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(parse(REPORT_MD).title)}</title><style>${css} html,body{background:#fbfaf6}.sheet{margin:0 auto;box-shadow:none}</style></head><body><main class="stage">${sheet.outerHTML}</main></body></html>`;
+}
+function download(name, text, type) {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+async function copyText(t, msg) {
+  try { await navigator.clipboard.writeText(t); toast(msg); }
+  catch (e) { toast('Copy blocked by the browser. Select the text and copy it by hand.'); }
+}
+const menu = $('#exportMenu'), expBtn = $('#btnExport');
+function setMenu(open) { menu.classList.toggle('open', open); expBtn.setAttribute('aria-expanded', open); if (open) menu.querySelector('button').focus(); }
+expBtn.onclick = e => { e.stopPropagation(); setMenu(!menu.classList.contains('open')); };
+document.addEventListener('click', e => { if (!e.target.closest('.menu-wrap')) setMenu(false); });
+menu.addEventListener('click', e => {
+  const b = e.target.closest('[data-exp]'); if (!b) return;
+  setMenu(false);
+  const fileSlug = slug(parse(REPORT_MD).title || 'research-report').slice(0, 60) || 'research-report';
+  if (b.dataset.exp === 'md') { download(fileSlug + '.md', toMarkdown(), 'text/markdown'); toast('Markdown file saved'); }
+  if (b.dataset.exp === 'html') { download(fileSlug + '.html', toHtml(), 'text/html'); toast('HTML file saved'); }
+  if (b.dataset.exp === 'copy') copyText(toMarkdown(), 'Markdown copied');
+});
+
+const tocMenu = $('#tocMenu'), tocBtn = $('#btnToc');
+function setToc(open) { tocMenu.classList.toggle('open', open); tocBtn.setAttribute('aria-expanded', open); if (open) tocMenu.querySelector('button')?.focus(); }
+tocBtn.onclick = e => { e.stopPropagation(); setMenu(false); setToc(!tocMenu.classList.contains('open')); };
+document.addEventListener('click', e => { if (!e.target.closest('#tocMenu') && !e.target.closest('#btnToc')) setToc(false); });
+tocMenu.addEventListener('click', e => {
+  const b = e.target.closest('[data-go]'); if (!b) return;
+  setToc(false); document.getElementById(b.dataset.go)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+$('#btnPrint').onclick = () => window.print();
+$('#back').onclick = e => { if (!LIVE) { e.preventDefault(); toast('Mockup: this would go back to the Research list'); } };
+
+// ── Tweaks ────────────────────────────────────────────────────────
+$('#modelSeg').addEventListener('click', e => {
+  const b = e.target.closest('[data-m]'); if (!b) return;
+  state.model = b.dataset.m; state.draftsMade = false; save(); render();
+});
+
+// ── Keyboard ──────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if ($('#scrim').classList.contains('open')) closeDialog(null);
+  else if (!$('#pop').hidden) { const f = popFor; hidePop(); if (f) f.focus(); }
+  else if (tocMenu.classList.contains('open')) { setToc(false); tocBtn.focus(); }
+  else if (menu.classList.contains('open')) { setMenu(false); expBtn.focus(); }
+  else if (document.body.classList.contains('drafts-open')) $('#closeDrafts').click();
+});
+
+if (LIVE) { document.querySelectorAll('.sample, .tweaks').forEach(n => n.remove()); document.title = parse(REPORT_MD).title || 'Research report'; }
+render();
+progress();
+</script>
+</body>
+</html>

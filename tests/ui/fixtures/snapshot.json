@@ -1,0 +1,6373 @@
+{
+  "widgets": {
+    "slots": {
+      "backends": [
+        {
+          "name": "main",
+          "model": "demo-model-30b",
+          "total": 4,
+          "busy": 1,
+          "reachable": true,
+          "slots": [
+            {
+              "id": 0,
+              "busy": true,
+              "ctx_total": 32768
+            },
+            {
+              "id": 1,
+              "busy": false,
+              "ctx_total": 32768
+            },
+            {
+              "id": 2,
+              "busy": false,
+              "ctx_total": 32768
+            },
+            {
+              "id": 3,
+              "busy": false,
+              "ctx_total": 32768
+            }
+          ]
+        }
+      ],
+      "total": 4,
+      "busy": 1
+    },
+    "model-status": {
+      "name": "demo-model-30b",
+      "friendly": "Demo Model 30B",
+      "status": "ready",
+      "health": "ok",
+      "backend_name": "main",
+      "ram_gb": 21.4,
+      "kv_gb": null,
+      "kv_used": 6100,
+      "kv_total": 32768,
+      "kv_pct": 18.6,
+      "models": [
+        {
+          "name": "demo-model-30b",
+          "friendly": "Demo Model 30B",
+          "status": "ready",
+          "health": "ok",
+          "backend_name": "main",
+          "ram_gb": 21.4,
+          "kv_gb": null,
+          "kv_used": 6100,
+          "kv_total": 32768,
+          "kv_pct": 18.6
+        }
+      ]
+    },
+    "system": {
+      "cpu_pct": 37,
+      "cpu_temp": 61,
+      "gpu_temp": 55,
+      "gpu_pct": 42,
+      "ssd_temp": 44,
+      "wifi_temp": 40,
+      "ram_used_gb": 48.2,
+      "ram_total_gb": 128,
+      "ram_available_gb": 79.8,
+      "disk_pct": 41
+    },
+    "gpu": {
+      "vendor": "amd",
+      "vram_used_mb": 30500,
+      "vram_total_mb": 98304,
+      "utilization_pct": 42,
+      "temperature_c": 55,
+      "power_watts": 64
+    },
+    "services": [
+      {
+        "name": "demo-api",
+        "status": "active",
+        "port": 8000
+      },
+      {
+        "name": "demo-worker",
+        "status": "active",
+        "port": 8001
+      },
+      {
+        "name": "demo-search",
+        "status": "failed",
+        "port": 8002
+      }
+    ],
+    "timers": {
+      "timers": [
+        {
+          "name": "backup-nightly",
+          "next": "02:00",
+          "last_status": "ok",
+          "last_detail": null,
+          "last_time": "01:00"
+        },
+        {
+          "name": "index-refresh",
+          "next": "every 10 min",
+          "last_status": "ok",
+          "last_detail": null,
+          "last_time": "12:50"
+        }
+      ]
+    },
+    "network": {
+      "download_mbps": 21.43,
+      "upload_mbps": 1.62,
+      "recent": [
+        [
+          25.57,
+          6.27
+        ],
+        [
+          29.24,
+          6.78
+        ],
+        [
+          31.18,
+          6.88
+        ],
+        [
+          31.4,
+          6.43
+        ],
+        [
+          30.18,
+          5.42
+        ],
+        [
+          28.07,
+          4.03
+        ],
+        [
+          25.73,
+          2.56
+        ],
+        [
+          23.81,
+          1.33
+        ],
+        [
+          22.85,
+          0.61
+        ],
+        [
+          23.15,
+          0.51
+        ],
+        [
+          24.69,
+          0.97
+        ],
+        [
+          27.2,
+          1.78
+        ],
+        [
+          30.14,
+          2.65
+        ],
+        [
+          32.83,
+          3.32
+        ],
+        [
+          34.6,
+          3.63
+        ],
+        [
+          34.89,
+          3.58
+        ],
+        [
+          33.35,
+          3.32
+        ],
+        [
+          29.98,
+          3.1
+        ],
+        [
+          25.05,
+          3.16
+        ],
+        [
+          19.12,
+          3.65
+        ],
+        [
+          12.92,
+          4.56
+        ],
+        [
+          7.25,
+          5.74
+        ],
+        [
+          2.8,
+          6.89
+        ],
+        [
+          0.5,
+          7.72
+        ],
+        [
+          0.5,
+          7.97
+        ],
+        [
+          0.5,
+          7.57
+        ],
+        [
+          2.66,
+          6.6
+        ],
+        [
+          5.86,
+          5.3
+        ],
+        [
+          9.15,
+          3.99
+        ],
+        [
+          11.87,
+          2.97
+        ],
+        [
+          13.54,
+          2.41
+        ],
+        [
+          13.9,
+          2.34
+        ],
+        [
+          13.04,
+          2.6
+        ],
+        [
+          11.29,
+          2.96
+        ],
+        [
+          9.23,
+          3.17
+        ],
+        [
+          7.52,
+          3.05
+        ],
+        [
+          6.8,
+          2.59
+        ],
+        [
+          7.54,
+          1.92
+        ],
+        [
+          31.97,
+          1.28
+        ],
+        [
+          36.0,
+          0.96
+        ],
+        [
+          41.26,
+          1.16
+        ],
+        [
+          47.11,
+          1.95
+        ],
+        [
+          52.8,
+          3.21
+        ],
+        [
+          57.56,
+          4.7
+        ],
+        [
+          60.77,
+          6.07
+        ],
+        [
+          40.04,
+          7.04
+        ],
+        [
+          39.29,
+          7.42
+        ],
+        [
+          36.75,
+          7.2
+        ],
+        [
+          32.94,
+          6.54
+        ],
+        [
+          28.55,
+          5.7
+        ],
+        [
+          24.3,
+          4.98
+        ],
+        [
+          20.85,
+          4.56
+        ],
+        [
+          18.64,
+          4.52
+        ],
+        [
+          17.83,
+          4.75
+        ],
+        [
+          18.29,
+          5.03
+        ],
+        [
+          19.61,
+          5.1
+        ],
+        [
+          21.2,
+          4.78
+        ],
+        [
+          22.39,
+          3.99
+        ],
+        [
+          22.6,
+          2.86
+        ],
+        [
+          21.43,
+          1.62
+        ]
+      ]
+    },
+    "claude-code": [],
+    "inference-speed": {
+      "generation_tps": 38.5,
+      "prompt_tps": 610.0,
+      "ttft_ms": 420,
+      "history": [
+        31,
+        35,
+        38,
+        36,
+        40,
+        38
+      ],
+      "idle": false,
+      "idle_since": null,
+      "total_generation_tokens": 182000,
+      "total_prompt_tokens": 1240000,
+      "ttft_p50": 400,
+      "ttft_p95": 900
+    },
+    "docker": {
+      "available": true,
+      "error": null,
+      "containers": [
+        {
+          "id": "c0000",
+          "name": "demo-db",
+          "image": "postgres:16",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-a",
+          "cpu_pct": 1.4
+        },
+        {
+          "id": "c0001",
+          "name": "demo-cache",
+          "image": "redis:7",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-a",
+          "cpu_pct": 0.3
+        },
+        {
+          "id": "c0002",
+          "name": "search",
+          "image": "searxng/searxng",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-a",
+          "cpu_pct": 0.8
+        },
+        {
+          "id": "c0003",
+          "name": "vector-store",
+          "image": "chromadb/chroma",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-a",
+          "cpu_pct": 2.1
+        },
+        {
+          "id": "c0004",
+          "name": "web-proxy",
+          "image": "nginx:1.27",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-a",
+          "cpu_pct": 0.1
+        },
+        {
+          "id": "c0005",
+          "name": "metrics",
+          "image": "prom/prometheus",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-a",
+          "cpu_pct": 0.9
+        },
+        {
+          "id": "c0006",
+          "name": "graphs",
+          "image": "grafana/grafana",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-a",
+          "cpu_pct": 0.4
+        },
+        {
+          "id": "c0007",
+          "name": "chat-ui",
+          "image": "open-webui",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-a",
+          "cpu_pct": 0.2
+        },
+        {
+          "id": "c0008",
+          "name": "crawler",
+          "image": "demo/crawler",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-b",
+          "cpu_pct": 3.6
+        },
+        {
+          "id": "c0009",
+          "name": "vpn",
+          "image": "qmcgaw/gluetun",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-b",
+          "cpu_pct": 0.5
+        },
+        {
+          "id": "c000a",
+          "name": "uptime",
+          "image": "louislam/uptime-kuma",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-b",
+          "cpu_pct": 0.6
+        },
+        {
+          "id": "c000b",
+          "name": "git",
+          "image": "gitea/gitea",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-b",
+          "cpu_pct": 0.2
+        },
+        {
+          "id": "c000c",
+          "name": "graph-db",
+          "image": "neo4j:5",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-c",
+          "cpu_pct": 1.8
+        },
+        {
+          "id": "c000d",
+          "name": "workflows",
+          "image": "n8nio/n8n",
+          "state": "running",
+          "status": "Up 3 days",
+          "created": "2025-12-20",
+          "machine": "node-c",
+          "cpu_pct": 0.7
+        },
+        {
+          "id": "c000e",
+          "name": "backup",
+          "image": "restic/rest-server",
+          "state": "exited",
+          "status": "Exited (0) 2 hours ago",
+          "created": "2025-12-20",
+          "machine": "node-c",
+          "cpu_pct": 0.0
+        }
+      ]
+    },
+    "power": {
+      "cpu_watts": null,
+      "gpu_watts": 64,
+      "total_watts": 112,
+      "history": [
+        98,
+        104,
+        110,
+        112,
+        108,
+        112
+      ]
+    },
+    "resource-hogs": {
+      "processes": [
+        {
+          "pid": 1201,
+          "name": "llama-server",
+          "cmdline": "llama-server --port 8080",
+          "cpu_pct": 31.0,
+          "ram_mb": 21900
+        },
+        {
+          "pid": 1302,
+          "name": "python3",
+          "cmdline": "python3 worker.py",
+          "cpu_pct": 4.2,
+          "ram_mb": 410
+        },
+        {
+          "pid": 1350,
+          "name": "chroma",
+          "cmdline": "chroma run",
+          "cpu_pct": 2.1,
+          "ram_mb": 1300
+        },
+        {
+          "pid": 1403,
+          "name": "postgres",
+          "cmdline": "postgres",
+          "cpu_pct": 1.1,
+          "ram_mb": 220
+        },
+        {
+          "pid": 1480,
+          "name": "node",
+          "cmdline": "node server.js",
+          "cpu_pct": 0.9,
+          "ram_mb": 180
+        },
+        {
+          "pid": 1511,
+          "name": "prometheus",
+          "cmdline": "prometheus",
+          "cpu_pct": 0.8,
+          "ram_mb": 260
+        },
+        {
+          "pid": 1530,
+          "name": "nginx",
+          "cmdline": "nginx",
+          "cpu_pct": 0.2,
+          "ram_mb": 30
+        },
+        {
+          "pid": 1560,
+          "name": "sshd",
+          "cmdline": "sshd",
+          "cpu_pct": 0.1,
+          "ram_mb": 8
+        }
+      ],
+      "machines": [
+        {
+          "name": "node-a",
+          "machine_cpu_pct": null,
+          "procs": [
+            {
+              "name": "llama-server",
+              "cpu_pct": 31.0
+            },
+            {
+              "name": "python3",
+              "cpu_pct": 4.2
+            },
+            {
+              "name": "chroma",
+              "cpu_pct": 2.1
+            },
+            {
+              "name": "postgres",
+              "cpu_pct": 1.1
+            },
+            {
+              "name": "node",
+              "cpu_pct": 0.9
+            }
+          ]
+        },
+        {
+          "name": "node-b",
+          "machine_cpu_pct": 12,
+          "procs": [
+            {
+              "name": "chromium",
+              "cpu_pct": 5.1
+            },
+            {
+              "name": "python3",
+              "cpu_pct": 3.4
+            },
+            {
+              "name": "gluetun",
+              "cpu_pct": 0.9
+            },
+            {
+              "name": "node",
+              "cpu_pct": 0.6
+            },
+            {
+              "name": "sshd",
+              "cpu_pct": 0.2
+            }
+          ]
+        },
+        {
+          "name": "node-c",
+          "machine_cpu_pct": 9,
+          "procs": [
+            {
+              "name": "java",
+              "cpu_pct": 4.8
+            },
+            {
+              "name": "node",
+              "cpu_pct": 1.9
+            },
+            {
+              "name": "python3",
+              "cpu_pct": 1.2
+            },
+            {
+              "name": "dockerd",
+              "cpu_pct": 0.5
+            },
+            {
+              "name": "sshd",
+              "cpu_pct": 0.1
+            }
+          ]
+        }
+      ]
+    },
+    "fleet": {
+      "machines": [
+        {
+          "name": "node-a",
+          "host": "192.0.2.10",
+          "online": true,
+          "cpu_pct": 37,
+          "ram_pct": 38,
+          "ram_used_gb": 48.2,
+          "ram_total_gb": 128,
+          "cpu_temp": 61,
+          "disk_pct": 41,
+          "load1": 2.1,
+          "uptime": "3 days"
+        },
+        {
+          "name": "node-b",
+          "host": "192.0.2.11",
+          "online": true,
+          "cpu_pct": 12,
+          "ram_pct": 44,
+          "ram_used_gb": 7.0,
+          "ram_total_gb": 16,
+          "cpu_temp": 48,
+          "disk_pct": 63,
+          "load1": 0.4,
+          "uptime": "12 days"
+        },
+        {
+          "name": "node-c",
+          "host": "192.0.2.12",
+          "online": true,
+          "cpu_pct": 9,
+          "ram_pct": 34,
+          "ram_used_gb": 10.9,
+          "ram_total_gb": 32,
+          "cpu_temp": 44,
+          "disk_pct": 58,
+          "load1": 0.6,
+          "uptime": "21 days"
+        }
+      ]
+    },
+    "token-usage": {
+      "by_model": [
+        {
+          "model": "demo-model-30b",
+          "in_tokens": 6100000,
+          "out_tokens": 820000,
+          "cache_read_tokens": 0,
+          "kind": "local"
+        },
+        {
+          "model": "cloud-large",
+          "in_tokens": 1900000,
+          "out_tokens": 240000,
+          "cache_read_tokens": 900000,
+          "kind": "tool"
+        },
+        {
+          "model": "demo-model-4b",
+          "in_tokens": 700000,
+          "out_tokens": 95000,
+          "cache_read_tokens": 0,
+          "kind": "local"
+        }
+      ],
+      "total_tokens": 9855000,
+      "sources": [
+        {
+          "name": "cloud-large",
+          "kind": "tool",
+          "hidden": false
+        },
+        {
+          "name": "demo-model-30b",
+          "kind": "local",
+          "hidden": false
+        },
+        {
+          "name": "demo-model-4b",
+          "kind": "local",
+          "hidden": false
+        },
+        {
+          "name": "demo-tiny",
+          "kind": "local",
+          "hidden": true
+        }
+      ],
+      "no_metrics": []
+    },
+    "press-room": {
+      "articles": [
+        {
+          "id": "x1",
+          "title": "Open model beats last year's flagship on maths",
+          "topic": "AI",
+          "status": "published",
+          "when": "2h ago",
+          "is_read": false
+        },
+        {
+          "id": "x2",
+          "title": "Home lab GPU prices fall for a third month",
+          "topic": "AI",
+          "status": "draft",
+          "when": "5h ago",
+          "is_read": false
+        },
+        {
+          "id": "x3",
+          "title": "New quantisation format halves memory use",
+          "topic": "AI",
+          "status": "published",
+          "when": "8h ago",
+          "is_read": false
+        },
+        {
+          "id": "x4",
+          "title": "Browser vendors agree on a local AI API draft",
+          "topic": "AI",
+          "status": "review",
+          "when": "11h ago",
+          "is_read": false
+        },
+        {
+          "id": "x5",
+          "title": "Vector database adds hybrid search",
+          "topic": "AI",
+          "status": "published",
+          "when": "14h ago",
+          "is_read": true
+        },
+        {
+          "id": "x6",
+          "title": "Small model tops a public coding benchmark",
+          "topic": "AI",
+          "status": "published",
+          "when": "17h ago",
+          "is_read": true
+        },
+        {
+          "id": "x7",
+          "title": "Container runtime patches a privilege bug",
+          "topic": "AI",
+          "status": "draft",
+          "when": "20h ago",
+          "is_read": true
+        },
+        {
+          "id": "x8",
+          "title": "Inference server adds speculative decoding",
+          "topic": "AI",
+          "status": "published",
+          "when": "2d ago",
+          "is_read": true
+        },
+        {
+          "id": "x9",
+          "title": "Open dataset of public domain books released",
+          "topic": "AI",
+          "status": "review",
+          "when": "3d ago",
+          "is_read": true
+        },
+        {
+          "id": "x10",
+          "title": "Edge boards get faster memory",
+          "topic": "AI",
+          "status": "published",
+          "when": "4d ago",
+          "is_read": true
+        },
+        {
+          "id": "x11",
+          "title": "Agent framework drops its plugin store",
+          "topic": "AI",
+          "status": "published",
+          "when": "5d ago",
+          "is_read": true
+        },
+        {
+          "id": "x12",
+          "title": "Speech model runs in real time on a laptop",
+          "topic": "AI",
+          "status": "draft",
+          "when": "6d ago",
+          "is_read": true
+        },
+        {
+          "id": "x13",
+          "title": "Report: most teams run a mix of local and cloud models",
+          "topic": "AI",
+          "status": "published",
+          "when": "7d ago",
+          "is_read": true
+        },
+        {
+          "id": "x14",
+          "title": "Linux kernel improves GPU scheduling",
+          "topic": "AI",
+          "status": "review",
+          "when": "8d ago",
+          "is_read": true
+        },
+        {
+          "id": "x15",
+          "title": "Embedding model shrinks to 100 MB",
+          "topic": "AI",
+          "status": "published",
+          "when": "9d ago",
+          "is_read": true
+        },
+        {
+          "id": "x16",
+          "title": "Chip maker previews a low-power AI accelerator",
+          "topic": "AI",
+          "status": "published",
+          "when": "10d ago",
+          "is_read": true
+        },
+        {
+          "id": "x17",
+          "title": "Open licence debate splits model builders",
+          "topic": "AI",
+          "status": "draft",
+          "when": "11d ago",
+          "is_read": true
+        },
+        {
+          "id": "x18",
+          "title": "Study finds most local models run under 30 W",
+          "topic": "AI",
+          "status": "published",
+          "when": "12d ago",
+          "is_read": true
+        },
+        {
+          "id": "x19",
+          "title": "Search engine adds a no-AI results switch",
+          "topic": "AI",
+          "status": "review",
+          "when": "13d ago",
+          "is_read": true
+        },
+        {
+          "id": "x20",
+          "title": "Mini PC sales rise on home AI demand",
+          "topic": "AI",
+          "status": "published",
+          "when": "14d ago",
+          "is_read": true
+        },
+        {
+          "id": "x21",
+          "title": "Open-source OCR model reads handwriting",
+          "topic": "AI",
+          "status": "published",
+          "when": "15d ago",
+          "is_read": true
+        },
+        {
+          "id": "x22",
+          "title": "New benchmark tests agents on spreadsheets",
+          "topic": "AI",
+          "status": "draft",
+          "when": "16d ago",
+          "is_read": true
+        },
+        {
+          "id": "x23",
+          "title": "Model routing cuts cloud bills in a small trial",
+          "topic": "AI",
+          "status": "published",
+          "when": "17d ago",
+          "is_read": true
+        },
+        {
+          "id": "x24",
+          "title": "Router firmware gets a local voice assistant",
+          "topic": "AI",
+          "status": "review",
+          "when": "18d ago",
+          "is_read": true
+        },
+        {
+          "id": "x25",
+          "title": "Researchers shrink a vision model to run on a phone",
+          "topic": "AI",
+          "status": "published",
+          "when": "19d ago",
+          "is_read": true
+        },
+        {
+          "id": "x26",
+          "title": "Self-hosted photo apps add on-device tagging",
+          "topic": "AI",
+          "status": "published",
+          "when": "20d ago",
+          "is_read": true
+        },
+        {
+          "id": "x27",
+          "title": "Price war hits hosted inference APIs",
+          "topic": "AI",
+          "status": "draft",
+          "when": "21d ago",
+          "is_read": true
+        },
+        {
+          "id": "x28",
+          "title": "Open model for weather forecasts released",
+          "topic": "AI",
+          "status": "published",
+          "when": "22d ago",
+          "is_read": true
+        },
+        {
+          "id": "x29",
+          "title": "Library adds 2-bit weights with small quality loss",
+          "topic": "AI",
+          "status": "review",
+          "when": "23d ago",
+          "is_read": true
+        },
+        {
+          "id": "x30",
+          "title": "Home automation hub runs a 3B model offline",
+          "topic": "AI",
+          "status": "published",
+          "when": "24d ago",
+          "is_read": true
+        }
+      ],
+      "total": 30
+    },
+    "library": {
+      "configured": true,
+      "shelves": [
+        {
+          "name": "docs",
+          "id": "docs",
+          "count": 1200,
+          "friendly_name": "Docs"
+        }
+      ],
+      "hub_available": false,
+      "chromadb_available": false
+    },
+    "topology": {
+      "nodes": [
+        {
+          "id": "node-a",
+          "label": "node-a",
+          "type": "host",
+          "status": "up",
+          "x": 0.3,
+          "y": 0.5
+        },
+        {
+          "id": "node-b",
+          "label": "node-b",
+          "type": "host",
+          "status": "up",
+          "x": 0.7,
+          "y": 0.3
+        }
+      ],
+      "edges": [
+        {
+          "from": "node-a",
+          "to": "node-b"
+        }
+      ]
+    }
+  },
+  "rest": {
+    "/api/spend/providers": {
+      "providers": [
+        {
+          "id": "openai",
+          "label": "OpenAI",
+          "mode": "usage",
+          "origin": "Usage report",
+          "key": "Admin key (sk-admin-...)",
+          "extra": [],
+          "detail": "Daily tokens and cost, by model",
+          "connected": true,
+          "last_ok": null,
+          "error": null,
+          "balance": null
+        },
+        {
+          "id": "anthropic",
+          "label": "Anthropic API",
+          "mode": "usage",
+          "origin": "Usage report",
+          "key": "Admin key (sk-ant-admin...)",
+          "extra": [],
+          "detail": "Daily tokens and cost, by model",
+          "connected": false,
+          "last_ok": null,
+          "error": null,
+          "balance": null
+        },
+        {
+          "id": "openrouter",
+          "label": "OpenRouter",
+          "mode": "usage",
+          "origin": "Usage report",
+          "key": "Normal API key",
+          "extra": [],
+          "detail": "Cost per day, kept from the day you connect",
+          "connected": false,
+          "last_ok": null,
+          "error": null,
+          "balance": null
+        },
+        {
+          "id": "deepseek",
+          "label": "DeepSeek",
+          "mode": "balance",
+          "origin": "Balance drops",
+          "key": "Normal API key",
+          "extra": [],
+          "detail": "Spend worked out from balance drops",
+          "connected": true,
+          "last_ok": null,
+          "error": null,
+          "balance": {
+            "amount": 43.48,
+            "currency": "$"
+          }
+        },
+        {
+          "id": "kimi",
+          "label": "Kimi (Moonshot)",
+          "mode": "balance",
+          "origin": "Balance drops",
+          "key": "Normal API key",
+          "extra": [],
+          "detail": "Spend worked out from balance drops",
+          "connected": true,
+          "last_ok": null,
+          "error": "HTTP 401: key rejected",
+          "balance": null
+        },
+        {
+          "id": "xai",
+          "label": "xAI (Grok)",
+          "mode": "balance",
+          "origin": "Balance drops",
+          "key": "Management key",
+          "extra": [
+            "team_id"
+          ],
+          "detail": "Spend worked out from prepaid balance drops",
+          "connected": false,
+          "last_ok": null,
+          "error": null,
+          "balance": null
+        },
+        {
+          "id": "siliconflow",
+          "label": "SiliconFlow",
+          "mode": "balance",
+          "origin": "Balance drops",
+          "key": "Normal API key",
+          "extra": [],
+          "detail": "Spend worked out from balance drops",
+          "connected": false,
+          "last_ok": null,
+          "error": null,
+          "balance": null
+        },
+        {
+          "id": "novita",
+          "label": "Novita AI",
+          "mode": "balance",
+          "origin": "Balance drops",
+          "key": "Normal API key",
+          "extra": [],
+          "detail": "Spend worked out from balance drops",
+          "connected": false,
+          "last_ok": null,
+          "error": null,
+          "balance": null
+        },
+        {
+          "id": "deepinfra",
+          "label": "DeepInfra",
+          "mode": "cumulative",
+          "origin": "Monthly total",
+          "key": "Normal API key",
+          "extra": [],
+          "detail": "Spend worked out from the month's running total",
+          "connected": false,
+          "last_ok": null,
+          "error": null,
+          "balance": null
+        }
+      ]
+    },
+    "/api/models": {
+      "models": [
+        {
+          "name": "main",
+          "model_id": "demo-model-30b",
+          "friendly_name": "Demo Model 30B",
+          "health": "ok",
+          "url": "http://192.0.2.10:8080",
+          "context_window": 32768
+        }
+      ]
+    },
+    "/api/history": {
+      "start": "2025-12-31T12:00:00+00:00",
+      "end": "2026-01-01T12:00:00+00:00",
+      "buckets": 96,
+      "hot_limit": 85.0,
+      "covers_from": "2025-12-31T12:00:00+00:00",
+      "series": {
+        "cpu": [
+          {
+            "min": 54.2,
+            "max": 61.2,
+            "avg": 57.2
+          },
+          {
+            "min": 56.8,
+            "max": 63.8,
+            "avg": 59.8
+          },
+          {
+            "min": 58.5,
+            "max": 65.5,
+            "avg": 61.5
+          },
+          {
+            "min": 59.0,
+            "max": 66.0,
+            "avg": 62.0
+          },
+          {
+            "min": 58.6,
+            "max": 65.6,
+            "avg": 61.6
+          },
+          {
+            "min": 57.4,
+            "max": 64.4,
+            "avg": 60.4
+          },
+          {
+            "min": 55.8,
+            "max": 62.8,
+            "avg": 58.8
+          },
+          {
+            "min": 54.5,
+            "max": 61.5,
+            "avg": 57.5
+          },
+          {
+            "min": 53.6,
+            "max": 60.6,
+            "avg": 56.6
+          },
+          {
+            "min": 53.6,
+            "max": 60.6,
+            "avg": 56.6
+          },
+          {
+            "min": 54.3,
+            "max": 61.3,
+            "avg": 57.3
+          },
+          {
+            "min": 55.7,
+            "max": 62.7,
+            "avg": 58.7
+          },
+          {
+            "min": 57.3,
+            "max": 64.3,
+            "avg": 60.3
+          },
+          {
+            "min": 58.7,
+            "max": 65.7,
+            "avg": 61.7
+          },
+          {
+            "min": 59.5,
+            "max": 66.5,
+            "avg": 62.5
+          },
+          {
+            "min": 59.3,
+            "max": 66.3,
+            "avg": 62.3
+          },
+          {
+            "min": 58.0,
+            "max": 65.0,
+            "avg": 61.0
+          },
+          {
+            "min": 55.6,
+            "max": 62.6,
+            "avg": 58.6
+          },
+          {
+            "min": 52.5,
+            "max": 59.5,
+            "avg": 55.5
+          },
+          {
+            "min": 49.1,
+            "max": 56.1,
+            "avg": 52.1
+          },
+          {
+            "min": 60.0,
+            "max": 67.0,
+            "avg": 63.0
+          },
+          {
+            "min": 57.4,
+            "max": 64.4,
+            "avg": 60.4
+          },
+          {
+            "min": 55.8,
+            "max": 62.8,
+            "avg": 58.8
+          },
+          {
+            "min": 41.3,
+            "max": 48.3,
+            "avg": 44.3
+          },
+          {
+            "min": 41.7,
+            "max": 48.7,
+            "avg": 44.7
+          },
+          {
+            "min": 42.7,
+            "max": 49.7,
+            "avg": 45.7
+          },
+          {
+            "min": 43.9,
+            "max": 50.9,
+            "avg": 46.9
+          },
+          {
+            "min": 44.9,
+            "max": 51.9,
+            "avg": 47.9
+          },
+          {
+            "min": 45.2,
+            "max": 52.2,
+            "avg": 48.2
+          },
+          {
+            "min": 44.7,
+            "max": 51.7,
+            "avg": 47.7
+          },
+          {
+            "min": 43.4,
+            "max": 50.4,
+            "avg": 46.4
+          },
+          {
+            "min": 41.5,
+            "max": 48.5,
+            "avg": 44.5
+          },
+          {
+            "min": 39.5,
+            "max": 46.5,
+            "avg": 42.5
+          },
+          {
+            "min": 37.8,
+            "max": 44.8,
+            "avg": 40.8
+          },
+          {
+            "min": 36.9,
+            "max": 43.9,
+            "avg": 39.9
+          },
+          {
+            "min": 37.0,
+            "max": 44.0,
+            "avg": 40.0
+          },
+          {
+            "min": 38.3,
+            "max": 45.3,
+            "avg": 41.3
+          },
+          {
+            "min": 40.6,
+            "max": 47.6,
+            "avg": 43.6
+          },
+          {
+            "min": 43.6,
+            "max": 50.6,
+            "avg": 46.6
+          },
+          {
+            "min": 46.8,
+            "max": 53.8,
+            "avg": 49.8
+          },
+          {
+            "min": 49.8,
+            "max": 56.8,
+            "avg": 52.8
+          },
+          {
+            "min": 52.2,
+            "max": 59.2,
+            "avg": 55.2
+          },
+          {
+            "min": 53.6,
+            "max": 60.6,
+            "avg": 56.6
+          },
+          {
+            "min": 54.0,
+            "max": 61.0,
+            "avg": 57.0
+          },
+          {
+            "min": 53.6,
+            "max": 60.6,
+            "avg": 56.6
+          },
+          {
+            "min": 52.7,
+            "max": 59.7,
+            "avg": 55.7
+          },
+          {
+            "min": 51.8,
+            "max": 58.8,
+            "avg": 54.8
+          },
+          {
+            "min": 51.2,
+            "max": 58.2,
+            "avg": 54.2
+          },
+          {
+            "min": 51.4,
+            "max": 58.4,
+            "avg": 54.4
+          },
+          {
+            "min": 52.5,
+            "max": 59.5,
+            "avg": 55.5
+          },
+          {
+            "min": 54.3,
+            "max": 61.3,
+            "avg": 57.3
+          },
+          {
+            "min": 56.6,
+            "max": 63.6,
+            "avg": 59.6
+          },
+          {
+            "min": 59.0,
+            "max": 66.0,
+            "avg": 62.0
+          },
+          {
+            "min": 60.9,
+            "max": 67.9,
+            "avg": 63.9
+          },
+          {
+            "min": 62.0,
+            "max": 69.0,
+            "avg": 65.0
+          },
+          {
+            "min": 62.1,
+            "max": 69.1,
+            "avg": 65.1
+          },
+          {
+            "min": 60.9,
+            "max": 67.9,
+            "avg": 63.9
+          },
+          {
+            "min": 58.8,
+            "max": 65.8,
+            "avg": 61.8
+          },
+          {
+            "min": 55.9,
+            "max": 62.9,
+            "avg": 58.9
+          },
+          {
+            "min": 52.9,
+            "max": 59.9,
+            "avg": 55.9
+          },
+          {
+            "min": 64.2,
+            "max": 71.2,
+            "avg": 67.2
+          },
+          {
+            "min": 62.2,
+            "max": 69.2,
+            "avg": 65.2
+          },
+          {
+            "min": 47.1,
+            "max": 54.1,
+            "avg": 50.1
+          },
+          {
+            "min": 46.8,
+            "max": 53.8,
+            "avg": 49.8
+          },
+          {
+            "min": 47.3,
+            "max": 54.3,
+            "avg": 50.3
+          },
+          {
+            "min": 48.2,
+            "max": 55.2,
+            "avg": 51.2
+          },
+          {
+            "min": 48.9,
+            "max": 55.9,
+            "avg": 51.9
+          },
+          {
+            "min": 49.1,
+            "max": 56.1,
+            "avg": 52.1
+          },
+          {
+            "min": 48.5,
+            "max": 55.5,
+            "avg": 51.5
+          },
+          {
+            "min": 47.0,
+            "max": 54.0,
+            "avg": 50.0
+          },
+          {
+            "min": 44.7,
+            "max": 51.7,
+            "avg": 47.7
+          },
+          {
+            "min": 42.0,
+            "max": 49.0,
+            "avg": 45.0
+          },
+          {
+            "min": 39.3,
+            "max": 46.3,
+            "avg": 42.3
+          },
+          {
+            "min": 37.1,
+            "max": 44.1,
+            "avg": 40.1
+          },
+          {
+            "min": 35.8,
+            "max": 42.8,
+            "avg": 38.8
+          },
+          {
+            "min": 35.6,
+            "max": 42.6,
+            "avg": 38.6
+          },
+          {
+            "min": 36.6,
+            "max": 43.6,
+            "avg": 39.6
+          },
+          {
+            "min": 38.5,
+            "max": 45.5,
+            "avg": 41.5
+          },
+          {
+            "min": 41.1,
+            "max": 48.1,
+            "avg": 44.1
+          },
+          {
+            "min": 43.8,
+            "max": 50.8,
+            "avg": 46.8
+          },
+          {
+            "min": 46.1,
+            "max": 53.1,
+            "avg": 49.1
+          },
+          {
+            "min": 47.7,
+            "max": 54.7,
+            "avg": 50.7
+          },
+          {
+            "min": 48.5,
+            "max": 55.5,
+            "avg": 51.5
+          },
+          {
+            "min": 48.4,
+            "max": 55.4,
+            "avg": 51.4
+          },
+          {
+            "min": 47.7,
+            "max": 54.7,
+            "avg": 50.7
+          },
+          {
+            "min": 60.8,
+            "max": 67.8,
+            "avg": 63.8
+          },
+          {
+            "min": 46.2,
+            "max": 53.2,
+            "avg": 49.2
+          },
+          {
+            "min": 46.3,
+            "max": 53.3,
+            "avg": 49.3
+          },
+          {
+            "min": 47.2,
+            "max": 54.2,
+            "avg": 50.2
+          },
+          {
+            "min": 49.1,
+            "max": 56.1,
+            "avg": 52.1
+          },
+          {
+            "min": 51.8,
+            "max": 58.8,
+            "avg": 54.8
+          },
+          {
+            "min": 54.8,
+            "max": 61.8,
+            "avg": 57.8
+          },
+          {
+            "min": 57.8,
+            "max": 64.8,
+            "avg": 60.8
+          },
+          {
+            "min": 60.2,
+            "max": 67.2,
+            "avg": 63.2
+          },
+          {
+            "min": 61.7,
+            "max": 68.7,
+            "avg": 64.7
+          },
+          {
+            "min": 62.0,
+            "max": 69.0,
+            "avg": 65.0
+          }
+        ],
+        "gpu": [
+          {
+            "min": 55.4,
+            "max": 62.4,
+            "avg": 58.4
+          },
+          {
+            "min": 54.4,
+            "max": 61.4,
+            "avg": 57.4
+          },
+          {
+            "min": 52.8,
+            "max": 59.8,
+            "avg": 55.8
+          },
+          {
+            "min": 51.1,
+            "max": 58.1,
+            "avg": 54.1
+          },
+          {
+            "min": 49.7,
+            "max": 56.7,
+            "avg": 52.7
+          },
+          {
+            "min": 48.8,
+            "max": 55.8,
+            "avg": 51.8
+          },
+          {
+            "min": 48.6,
+            "max": 55.6,
+            "avg": 51.6
+          },
+          {
+            "min": 49.2,
+            "max": 56.2,
+            "avg": 52.2
+          },
+          {
+            "min": 50.2,
+            "max": 57.2,
+            "avg": 53.2
+          },
+          {
+            "min": 51.3,
+            "max": 58.3,
+            "avg": 54.3
+          },
+          {
+            "min": 52.1,
+            "max": 59.1,
+            "avg": 55.1
+          },
+          {
+            "min": 52.3,
+            "max": 59.3,
+            "avg": 55.3
+          },
+          {
+            "min": 51.6,
+            "max": 58.6,
+            "avg": 54.6
+          },
+          {
+            "min": 49.9,
+            "max": 56.9,
+            "avg": 52.9
+          },
+          {
+            "min": 47.5,
+            "max": 54.5,
+            "avg": 50.5
+          },
+          {
+            "min": 44.5,
+            "max": 51.5,
+            "avg": 47.5
+          },
+          {
+            "min": 41.5,
+            "max": 48.5,
+            "avg": 44.5
+          },
+          {
+            "min": 38.9,
+            "max": 45.9,
+            "avg": 41.9
+          },
+          {
+            "min": 37.1,
+            "max": 44.1,
+            "avg": 40.1
+          },
+          {
+            "min": 36.1,
+            "max": 43.1,
+            "avg": 39.1
+          },
+          {
+            "min": 50.2,
+            "max": 57.2,
+            "avg": 53.2
+          },
+          {
+            "min": 51.0,
+            "max": 58.0,
+            "avg": 54.0
+          },
+          {
+            "min": 38.3,
+            "max": 45.3,
+            "avg": 41.3
+          },
+          {
+            "min": 39.6,
+            "max": 46.6,
+            "avg": 42.6
+          },
+          {
+            "min": 40.6,
+            "max": 47.6,
+            "avg": 43.6
+          },
+          {
+            "min": 41.0,
+            "max": 48.0,
+            "avg": 44.0
+          },
+          {
+            "min": 40.7,
+            "max": 47.7,
+            "avg": 43.7
+          },
+          {
+            "min": 39.7,
+            "max": 46.7,
+            "avg": 42.7
+          },
+          {
+            "min": 38.3,
+            "max": 45.3,
+            "avg": 41.3
+          },
+          {
+            "min": 36.9,
+            "max": 43.9,
+            "avg": 39.9
+          },
+          {
+            "min": 35.9,
+            "max": 42.9,
+            "avg": 38.9
+          },
+          {
+            "min": 35.7,
+            "max": 42.7,
+            "avg": 38.7
+          },
+          {
+            "min": 36.5,
+            "max": 43.5,
+            "avg": 39.5
+          },
+          {
+            "min": 38.2,
+            "max": 45.2,
+            "avg": 41.2
+          },
+          {
+            "min": 40.7,
+            "max": 47.7,
+            "avg": 43.7
+          },
+          {
+            "min": 43.6,
+            "max": 50.6,
+            "avg": 46.6
+          },
+          {
+            "min": 46.6,
+            "max": 53.6,
+            "avg": 49.6
+          },
+          {
+            "min": 49.1,
+            "max": 56.1,
+            "avg": 52.1
+          },
+          {
+            "min": 50.9,
+            "max": 57.9,
+            "avg": 53.9
+          },
+          {
+            "min": 51.8,
+            "max": 58.8,
+            "avg": 54.8
+          },
+          {
+            "min": 51.8,
+            "max": 58.8,
+            "avg": 54.8
+          },
+          {
+            "min": 51.0,
+            "max": 58.0,
+            "avg": 54.0
+          },
+          {
+            "min": 50.0,
+            "max": 57.0,
+            "avg": 53.0
+          },
+          {
+            "min": 49.0,
+            "max": 56.0,
+            "avg": 52.0
+          },
+          {
+            "min": 48.5,
+            "max": 55.5,
+            "avg": 51.5
+          },
+          {
+            "min": 48.6,
+            "max": 55.6,
+            "avg": 51.6
+          },
+          {
+            "min": 49.4,
+            "max": 56.4,
+            "avg": 52.4
+          },
+          {
+            "min": 50.9,
+            "max": 57.9,
+            "avg": 53.9
+          },
+          {
+            "min": 52.7,
+            "max": 59.7,
+            "avg": 55.7
+          },
+          {
+            "min": 54.3,
+            "max": 61.3,
+            "avg": 57.3
+          },
+          {
+            "min": 55.5,
+            "max": 62.5,
+            "avg": 58.5
+          },
+          {
+            "min": 55.8,
+            "max": 62.8,
+            "avg": 58.8
+          },
+          {
+            "min": 55.1,
+            "max": 62.1,
+            "avg": 58.1
+          },
+          {
+            "min": 53.4,
+            "max": 60.4,
+            "avg": 56.4
+          },
+          {
+            "min": 51.0,
+            "max": 58.0,
+            "avg": 54.0
+          },
+          {
+            "min": 48.1,
+            "max": 55.1,
+            "avg": 51.1
+          },
+          {
+            "min": 45.3,
+            "max": 52.3,
+            "avg": 48.3
+          },
+          {
+            "min": 42.9,
+            "max": 49.9,
+            "avg": 45.9
+          },
+          {
+            "min": 41.3,
+            "max": 48.3,
+            "avg": 44.3
+          },
+          {
+            "min": 40.6,
+            "max": 47.6,
+            "avg": 43.6
+          },
+          {
+            "min": 54.6,
+            "max": 61.6,
+            "avg": 57.6
+          },
+          {
+            "min": 55.3,
+            "max": 62.3,
+            "avg": 58.3
+          },
+          {
+            "min": 42.2,
+            "max": 49.2,
+            "avg": 45.2
+          },
+          {
+            "min": 42.8,
+            "max": 49.8,
+            "avg": 45.8
+          },
+          {
+            "min": 43.0,
+            "max": 50.0,
+            "avg": 46.0
+          },
+          {
+            "min": 42.4,
+            "max": 49.4,
+            "avg": 45.4
+          },
+          {
+            "min": 41.1,
+            "max": 48.1,
+            "avg": 44.1
+          },
+          {
+            "min": 39.2,
+            "max": 46.2,
+            "avg": 42.2
+          },
+          {
+            "min": 37.0,
+            "max": 44.0,
+            "avg": 40.0
+          },
+          {
+            "min": 35.1,
+            "max": 42.1,
+            "avg": 38.1
+          },
+          {
+            "min": 33.7,
+            "max": 40.7,
+            "avg": 36.7
+          },
+          {
+            "min": 33.3,
+            "max": 40.3,
+            "avg": 36.3
+          },
+          {
+            "min": 33.9,
+            "max": 40.9,
+            "avg": 36.9
+          },
+          {
+            "min": 35.4,
+            "max": 42.4,
+            "avg": 38.4
+          },
+          {
+            "min": 37.7,
+            "max": 44.7,
+            "avg": 40.7
+          },
+          {
+            "min": 40.4,
+            "max": 47.4,
+            "avg": 43.4
+          },
+          {
+            "min": 43.0,
+            "max": 50.0,
+            "avg": 46.0
+          },
+          {
+            "min": 45.1,
+            "max": 52.1,
+            "avg": 48.1
+          },
+          {
+            "min": 46.4,
+            "max": 53.4,
+            "avg": 49.4
+          },
+          {
+            "min": 47.0,
+            "max": 54.0,
+            "avg": 50.0
+          },
+          {
+            "min": 46.8,
+            "max": 53.8,
+            "avg": 49.8
+          },
+          {
+            "min": 46.1,
+            "max": 53.1,
+            "avg": 49.1
+          },
+          {
+            "min": 45.4,
+            "max": 52.4,
+            "avg": 48.4
+          },
+          {
+            "min": 45.0,
+            "max": 52.0,
+            "avg": 48.0
+          },
+          {
+            "min": 45.2,
+            "max": 52.2,
+            "avg": 48.2
+          },
+          {
+            "min": 46.1,
+            "max": 53.1,
+            "avg": 49.1
+          },
+          {
+            "min": 47.9,
+            "max": 54.9,
+            "avg": 50.9
+          },
+          {
+            "min": 50.2,
+            "max": 57.2,
+            "avg": 53.2
+          },
+          {
+            "min": 52.6,
+            "max": 59.6,
+            "avg": 55.6
+          },
+          {
+            "min": 54.8,
+            "max": 61.8,
+            "avg": 57.8
+          },
+          {
+            "min": 56.4,
+            "max": 63.4,
+            "avg": 59.4
+          },
+          {
+            "min": 57.0,
+            "max": 64.0,
+            "avg": 60.0
+          },
+          {
+            "min": 56.5,
+            "max": 63.5,
+            "avg": 59.5
+          },
+          {
+            "min": 55.1,
+            "max": 62.1,
+            "avg": 58.1
+          },
+          {
+            "min": 53.0,
+            "max": 60.0,
+            "avg": 56.0
+          },
+          {
+            "min": 50.6,
+            "max": 57.6,
+            "avg": 53.6
+          }
+        ],
+        "nvme": [
+          {
+            "min": 39.6,
+            "max": 46.6,
+            "avg": 42.6
+          },
+          {
+            "min": 39.1,
+            "max": 46.1,
+            "avg": 42.1
+          },
+          {
+            "min": 38.8,
+            "max": 45.8,
+            "avg": 41.8
+          },
+          {
+            "min": 38.8,
+            "max": 45.8,
+            "avg": 41.8
+          },
+          {
+            "min": 39.1,
+            "max": 46.1,
+            "avg": 42.1
+          },
+          {
+            "min": 39.4,
+            "max": 46.4,
+            "avg": 42.4
+          },
+          {
+            "min": 39.7,
+            "max": 46.7,
+            "avg": 42.7
+          },
+          {
+            "min": 39.7,
+            "max": 46.7,
+            "avg": 42.7
+          },
+          {
+            "min": 39.5,
+            "max": 46.5,
+            "avg": 42.5
+          },
+          {
+            "min": 38.9,
+            "max": 45.9,
+            "avg": 41.9
+          },
+          {
+            "min": 38.1,
+            "max": 45.1,
+            "avg": 41.1
+          },
+          {
+            "min": 37.0,
+            "max": 44.0,
+            "avg": 40.0
+          },
+          {
+            "min": 35.9,
+            "max": 42.9,
+            "avg": 38.9
+          },
+          {
+            "min": 35.0,
+            "max": 42.0,
+            "avg": 38.0
+          },
+          {
+            "min": 34.3,
+            "max": 41.3,
+            "avg": 37.3
+          },
+          {
+            "min": 34.0,
+            "max": 41.0,
+            "avg": 37.0
+          },
+          {
+            "min": 34.1,
+            "max": 41.1,
+            "avg": 37.1
+          },
+          {
+            "min": 34.4,
+            "max": 41.4,
+            "avg": 37.4
+          },
+          {
+            "min": 35.0,
+            "max": 42.0,
+            "avg": 38.0
+          },
+          {
+            "min": 35.7,
+            "max": 42.7,
+            "avg": 38.7
+          },
+          {
+            "min": 36.3,
+            "max": 43.3,
+            "avg": 39.3
+          },
+          {
+            "min": 36.6,
+            "max": 43.6,
+            "avg": 39.6
+          },
+          {
+            "min": 36.7,
+            "max": 43.7,
+            "avg": 39.7
+          },
+          {
+            "min": 36.5,
+            "max": 43.5,
+            "avg": 39.5
+          },
+          {
+            "min": 36.2,
+            "max": 43.2,
+            "avg": 39.2
+          },
+          {
+            "min": 35.7,
+            "max": 42.7,
+            "avg": 38.7
+          },
+          {
+            "min": 35.4,
+            "max": 42.4,
+            "avg": 38.4
+          },
+          {
+            "min": 35.4,
+            "max": 42.4,
+            "avg": 38.4
+          },
+          {
+            "min": 35.7,
+            "max": 42.7,
+            "avg": 38.7
+          },
+          {
+            "min": 36.3,
+            "max": 43.3,
+            "avg": 39.3
+          },
+          {
+            "min": 37.2,
+            "max": 44.2,
+            "avg": 40.2
+          },
+          {
+            "min": 38.3,
+            "max": 45.3,
+            "avg": 41.3
+          },
+          {
+            "min": 39.4,
+            "max": 46.4,
+            "avg": 42.4
+          },
+          {
+            "min": 40.4,
+            "max": 47.4,
+            "avg": 43.4
+          },
+          {
+            "min": 41.1,
+            "max": 48.1,
+            "avg": 44.1
+          },
+          {
+            "min": 41.4,
+            "max": 48.4,
+            "avg": 44.4
+          },
+          {
+            "min": 41.4,
+            "max": 48.4,
+            "avg": 44.4
+          },
+          {
+            "min": 41.1,
+            "max": 48.1,
+            "avg": 44.1
+          },
+          {
+            "min": 40.6,
+            "max": 47.6,
+            "avg": 43.6
+          },
+          {
+            "min": 40.1,
+            "max": 47.1,
+            "avg": 43.1
+          },
+          {
+            "min": 39.7,
+            "max": 46.7,
+            "avg": 42.7
+          },
+          {
+            "min": 39.5,
+            "max": 46.5,
+            "avg": 42.5
+          },
+          {
+            "min": 39.6,
+            "max": 46.6,
+            "avg": 42.6
+          },
+          {
+            "min": 40.0,
+            "max": 47.0,
+            "avg": 43.0
+          },
+          {
+            "min": 40.5,
+            "max": 47.5,
+            "avg": 43.5
+          },
+          {
+            "min": 41.0,
+            "max": 48.0,
+            "avg": 44.0
+          },
+          {
+            "min": 41.3,
+            "max": 48.3,
+            "avg": 44.3
+          },
+          {
+            "min": 41.4,
+            "max": 48.4,
+            "avg": 44.4
+          },
+          {
+            "min": 41.1,
+            "max": 48.1,
+            "avg": 44.1
+          },
+          {
+            "min": 40.4,
+            "max": 47.4,
+            "avg": 43.4
+          },
+          {
+            "min": 39.5,
+            "max": 46.5,
+            "avg": 42.5
+          },
+          {
+            "min": 38.4,
+            "max": 45.4,
+            "avg": 41.4
+          },
+          {
+            "min": 37.3,
+            "max": 44.3,
+            "avg": 40.3
+          },
+          {
+            "min": 36.3,
+            "max": 43.3,
+            "avg": 39.3
+          },
+          {
+            "min": 35.7,
+            "max": 42.7,
+            "avg": 38.7
+          },
+          {
+            "min": 35.3,
+            "max": 42.3,
+            "avg": 38.3
+          },
+          {
+            "min": 35.3,
+            "max": 42.3,
+            "avg": 38.3
+          },
+          {
+            "min": 35.6,
+            "max": 42.6,
+            "avg": 38.6
+          },
+          {
+            "min": 36.0,
+            "max": 43.0,
+            "avg": 39.0
+          },
+          {
+            "min": 36.4,
+            "max": 43.4,
+            "avg": 39.4
+          },
+          {
+            "min": 36.6,
+            "max": 43.6,
+            "avg": 39.6
+          },
+          {
+            "min": 36.6,
+            "max": 43.6,
+            "avg": 39.6
+          },
+          {
+            "min": 36.3,
+            "max": 43.3,
+            "avg": 39.3
+          },
+          {
+            "min": 35.8,
+            "max": 42.8,
+            "avg": 38.8
+          },
+          {
+            "min": 35.2,
+            "max": 42.2,
+            "avg": 38.2
+          },
+          {
+            "min": 34.5,
+            "max": 41.5,
+            "avg": 37.5
+          },
+          {
+            "min": 34.1,
+            "max": 41.1,
+            "avg": 37.1
+          },
+          {
+            "min": 34.0,
+            "max": 41.0,
+            "avg": 37.0
+          },
+          {
+            "min": 34.3,
+            "max": 41.3,
+            "avg": 37.3
+          },
+          {
+            "min": 34.9,
+            "max": 41.9,
+            "avg": 37.9
+          },
+          {
+            "min": 35.9,
+            "max": 42.9,
+            "avg": 38.9
+          },
+          {
+            "min": 36.9,
+            "max": 43.9,
+            "avg": 39.9
+          },
+          {
+            "min": 38.0,
+            "max": 45.0,
+            "avg": 41.0
+          },
+          {
+            "min": 38.9,
+            "max": 45.9,
+            "avg": 41.9
+          },
+          {
+            "min": 39.5,
+            "max": 46.5,
+            "avg": 42.5
+          },
+          {
+            "min": 39.8,
+            "max": 46.8,
+            "avg": 42.8
+          },
+          {
+            "min": 39.8,
+            "max": 46.8,
+            "avg": 42.8
+          },
+          {
+            "min": 39.5,
+            "max": 46.5,
+            "avg": 42.5
+          },
+          {
+            "min": 39.2,
+            "max": 46.2,
+            "avg": 42.2
+          },
+          {
+            "min": 38.9,
+            "max": 45.9,
+            "avg": 41.9
+          },
+          {
+            "min": 38.9,
+            "max": 45.9,
+            "avg": 41.9
+          },
+          {
+            "min": 39.1,
+            "max": 46.1,
+            "avg": 42.1
+          },
+          {
+            "min": 39.5,
+            "max": 46.5,
+            "avg": 42.5
+          },
+          {
+            "min": 40.2,
+            "max": 47.2,
+            "avg": 43.2
+          },
+          {
+            "min": 41.0,
+            "max": 48.0,
+            "avg": 44.0
+          },
+          {
+            "min": 41.7,
+            "max": 48.7,
+            "avg": 44.7
+          },
+          {
+            "min": 42.2,
+            "max": 49.2,
+            "avg": 45.2
+          },
+          {
+            "min": 42.4,
+            "max": 49.4,
+            "avg": 45.4
+          },
+          {
+            "min": 42.1,
+            "max": 49.1,
+            "avg": 45.1
+          },
+          {
+            "min": 41.5,
+            "max": 48.5,
+            "avg": 44.5
+          },
+          {
+            "min": 40.7,
+            "max": 47.7,
+            "avg": 43.7
+          },
+          {
+            "min": 39.6,
+            "max": 46.6,
+            "avg": 42.6
+          },
+          {
+            "min": 38.7,
+            "max": 45.7,
+            "avg": 41.7
+          },
+          {
+            "min": 37.9,
+            "max": 44.9,
+            "avg": 40.9
+          },
+          {
+            "min": 37.3,
+            "max": 44.3,
+            "avg": 40.3
+          },
+          {
+            "min": 37.1,
+            "max": 44.1,
+            "avg": 40.1
+          }
+        ],
+        "network": [
+          {
+            "min": 49.3,
+            "max": 56.3,
+            "avg": 52.3
+          },
+          {
+            "min": 49.4,
+            "max": 56.4,
+            "avg": 52.4
+          },
+          {
+            "min": 49.4,
+            "max": 56.4,
+            "avg": 52.4
+          },
+          {
+            "min": 49.1,
+            "max": 56.1,
+            "avg": 52.1
+          },
+          {
+            "min": 48.7,
+            "max": 55.7,
+            "avg": 51.7
+          },
+          {
+            "min": 48.4,
+            "max": 55.4,
+            "avg": 51.4
+          },
+          {
+            "min": 48.1,
+            "max": 55.1,
+            "avg": 51.1
+          },
+          {
+            "min": 48.0,
+            "max": 55.0,
+            "avg": 51.0
+          },
+          {
+            "min": 48.0,
+            "max": 55.0,
+            "avg": 51.0
+          },
+          {
+            "min": 48.3,
+            "max": 55.3,
+            "avg": 51.3
+          },
+          {
+            "min": 48.6,
+            "max": 55.6,
+            "avg": 51.6
+          },
+          {
+            "min": 48.9,
+            "max": 55.9,
+            "avg": 51.9
+          },
+          {
+            "min": 49.1,
+            "max": 56.1,
+            "avg": 52.1
+          },
+          {
+            "min": 49.1,
+            "max": 56.1,
+            "avg": 52.1
+          },
+          {
+            "min": 48.8,
+            "max": 55.8,
+            "avg": 51.8
+          },
+          {
+            "min": 48.4,
+            "max": 55.4,
+            "avg": 51.4
+          },
+          {
+            "min": 47.7,
+            "max": 54.7,
+            "avg": 50.7
+          },
+          {
+            "min": 47.0,
+            "max": 54.0,
+            "avg": 50.0
+          },
+          {
+            "min": 46.2,
+            "max": 53.2,
+            "avg": 49.2
+          },
+          {
+            "min": 45.6,
+            "max": 52.6,
+            "avg": 48.6
+          },
+          {
+            "min": 45.2,
+            "max": 52.2,
+            "avg": 48.2
+          },
+          {
+            "min": 45.0,
+            "max": 52.0,
+            "avg": 48.0
+          },
+          {
+            "min": 45.1,
+            "max": 52.1,
+            "avg": 48.1
+          },
+          {
+            "min": 45.3,
+            "max": 52.3,
+            "avg": 48.3
+          },
+          {
+            "min": 45.6,
+            "max": 52.6,
+            "avg": 48.6
+          },
+          {
+            "min": 45.9,
+            "max": 52.9,
+            "avg": 48.9
+          },
+          {
+            "min": 46.0,
+            "max": 53.0,
+            "avg": 49.0
+          },
+          {
+            "min": 46.0,
+            "max": 53.0,
+            "avg": 49.0
+          },
+          {
+            "min": 45.8,
+            "max": 52.8,
+            "avg": 48.8
+          },
+          {
+            "min": 45.5,
+            "max": 52.5,
+            "avg": 48.5
+          },
+          {
+            "min": 45.1,
+            "max": 52.1,
+            "avg": 48.1
+          },
+          {
+            "min": 44.7,
+            "max": 51.7,
+            "avg": 47.7
+          },
+          {
+            "min": 44.5,
+            "max": 51.5,
+            "avg": 47.5
+          },
+          {
+            "min": 44.5,
+            "max": 51.5,
+            "avg": 47.5
+          },
+          {
+            "min": 44.7,
+            "max": 51.7,
+            "avg": 47.7
+          },
+          {
+            "min": 45.2,
+            "max": 52.2,
+            "avg": 48.2
+          },
+          {
+            "min": 45.8,
+            "max": 52.8,
+            "avg": 48.8
+          },
+          {
+            "min": 46.6,
+            "max": 53.6,
+            "avg": 49.6
+          },
+          {
+            "min": 47.3,
+            "max": 54.3,
+            "avg": 50.3
+          },
+          {
+            "min": 47.9,
+            "max": 54.9,
+            "avg": 50.9
+          },
+          {
+            "min": 48.3,
+            "max": 55.3,
+            "avg": 51.3
+          },
+          {
+            "min": 48.4,
+            "max": 55.4,
+            "avg": 51.4
+          },
+          {
+            "min": 48.4,
+            "max": 55.4,
+            "avg": 51.4
+          },
+          {
+            "min": 48.2,
+            "max": 55.2,
+            "avg": 51.2
+          },
+          {
+            "min": 47.9,
+            "max": 54.9,
+            "avg": 50.9
+          },
+          {
+            "min": 47.8,
+            "max": 54.8,
+            "avg": 50.8
+          },
+          {
+            "min": 47.7,
+            "max": 54.7,
+            "avg": 50.7
+          },
+          {
+            "min": 47.8,
+            "max": 54.8,
+            "avg": 50.8
+          },
+          {
+            "min": 48.1,
+            "max": 55.1,
+            "avg": 51.1
+          },
+          {
+            "min": 48.6,
+            "max": 55.6,
+            "avg": 51.6
+          },
+          {
+            "min": 49.1,
+            "max": 56.1,
+            "avg": 52.1
+          },
+          {
+            "min": 49.5,
+            "max": 56.5,
+            "avg": 52.5
+          },
+          {
+            "min": 49.8,
+            "max": 56.8,
+            "avg": 52.8
+          },
+          {
+            "min": 49.8,
+            "max": 56.8,
+            "avg": 52.8
+          },
+          {
+            "min": 49.6,
+            "max": 56.6,
+            "avg": 52.6
+          },
+          {
+            "min": 49.2,
+            "max": 56.2,
+            "avg": 52.2
+          },
+          {
+            "min": 48.5,
+            "max": 55.5,
+            "avg": 51.5
+          },
+          {
+            "min": 47.8,
+            "max": 54.8,
+            "avg": 50.8
+          },
+          {
+            "min": 47.2,
+            "max": 54.2,
+            "avg": 50.2
+          },
+          {
+            "min": 46.6,
+            "max": 53.6,
+            "avg": 49.6
+          },
+          {
+            "min": 46.3,
+            "max": 53.3,
+            "avg": 49.3
+          },
+          {
+            "min": 46.2,
+            "max": 53.2,
+            "avg": 49.2
+          },
+          {
+            "min": 46.3,
+            "max": 53.3,
+            "avg": 49.3
+          },
+          {
+            "min": 46.4,
+            "max": 53.4,
+            "avg": 49.4
+          },
+          {
+            "min": 46.6,
+            "max": 53.6,
+            "avg": 49.6
+          },
+          {
+            "min": 46.7,
+            "max": 53.7,
+            "avg": 49.7
+          },
+          {
+            "min": 46.7,
+            "max": 53.7,
+            "avg": 49.7
+          },
+          {
+            "min": 46.5,
+            "max": 53.5,
+            "avg": 49.5
+          },
+          {
+            "min": 46.0,
+            "max": 53.0,
+            "avg": 49.0
+          },
+          {
+            "min": 45.5,
+            "max": 52.5,
+            "avg": 48.5
+          },
+          {
+            "min": 44.9,
+            "max": 51.9,
+            "avg": 47.9
+          },
+          {
+            "min": 44.4,
+            "max": 51.4,
+            "avg": 47.4
+          },
+          {
+            "min": 44.1,
+            "max": 51.1,
+            "avg": 47.1
+          },
+          {
+            "min": 44.0,
+            "max": 51.0,
+            "avg": 47.0
+          },
+          {
+            "min": 44.2,
+            "max": 51.2,
+            "avg": 47.2
+          },
+          {
+            "min": 44.6,
+            "max": 51.6,
+            "avg": 47.6
+          },
+          {
+            "min": 45.2,
+            "max": 52.2,
+            "avg": 48.2
+          },
+          {
+            "min": 45.8,
+            "max": 52.8,
+            "avg": 48.8
+          },
+          {
+            "min": 46.4,
+            "max": 53.4,
+            "avg": 49.4
+          },
+          {
+            "min": 46.9,
+            "max": 53.9,
+            "avg": 49.9
+          },
+          {
+            "min": 47.1,
+            "max": 54.1,
+            "avg": 50.1
+          },
+          {
+            "min": 47.2,
+            "max": 54.2,
+            "avg": 50.2
+          },
+          {
+            "min": 47.1,
+            "max": 54.1,
+            "avg": 50.1
+          },
+          {
+            "min": 46.9,
+            "max": 53.9,
+            "avg": 49.9
+          },
+          {
+            "min": 46.7,
+            "max": 53.7,
+            "avg": 49.7
+          },
+          {
+            "min": 46.7,
+            "max": 53.7,
+            "avg": 49.7
+          },
+          {
+            "min": 46.8,
+            "max": 53.8,
+            "avg": 49.8
+          },
+          {
+            "min": 47.2,
+            "max": 54.2,
+            "avg": 50.2
+          },
+          {
+            "min": 47.7,
+            "max": 54.7,
+            "avg": 50.7
+          },
+          {
+            "min": 48.3,
+            "max": 55.3,
+            "avg": 51.3
+          },
+          {
+            "min": 48.9,
+            "max": 55.9,
+            "avg": 51.9
+          },
+          {
+            "min": 49.5,
+            "max": 56.5,
+            "avg": 52.5
+          },
+          {
+            "min": 49.9,
+            "max": 56.9,
+            "avg": 52.9
+          },
+          {
+            "min": 50.0,
+            "max": 57.0,
+            "avg": 53.0
+          },
+          {
+            "min": 49.8,
+            "max": 56.8,
+            "avg": 52.8
+          },
+          {
+            "min": 49.4,
+            "max": 56.4,
+            "avg": 52.4
+          }
+        ]
+      },
+      "summary": {
+        "cpu": {
+          "max": 71.2,
+          "max_ts": "2026-01-01T03:00:00+00:00",
+          "min": 35.6,
+          "min_ts": "2026-01-01T06:45:00+00:00",
+          "avg": 53.5,
+          "hot_pct": 0.0
+        },
+        "gpu": {
+          "max": 64.0,
+          "max_ts": "2025-12-31T10:45:00+00:00",
+          "min": 33.3,
+          "min_ts": "2026-01-01T05:45:00+00:00",
+          "avg": 49.3,
+          "hot_pct": 0.0
+        },
+        "nvme": {
+          "max": 49.4,
+          "max_ts": "2026-01-01T09:45:00+00:00",
+          "min": 34.0,
+          "min_ts": "2025-12-31T15:45:00+00:00",
+          "avg": 41.1,
+          "hot_pct": 0.0
+        },
+        "network": {
+          "max": 57.0,
+          "max_ts": "2025-12-31T11:15:00+00:00",
+          "min": 44.0,
+          "min_ts": "2026-01-01T06:15:00+00:00",
+          "avg": 50.2,
+          "hot_pct": 0.0
+        }
+      }
+    },
+    "/api/predictions": {
+      "predictions": [
+        {
+          "id": 1,
+          "text": "A new open-weight model tops a public coding benchmark this quarter.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-03-31",
+          "confidence": 0.62,
+          "verified": null,
+          "generated_at": "2025-12-28",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 2,
+          "text": "Consumer GPU prices fall at least 10% by spring.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-04-30",
+          "confidence": 0.48,
+          "verified": null,
+          "generated_at": "2025-12-28",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 3,
+          "text": "A major browser ships an on-device model API.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-06-30",
+          "confidence": 0.55,
+          "verified": null,
+          "generated_at": "2025-12-28",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 4,
+          "text": "Home lab RAM prices rise again before summer.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-06-30",
+          "confidence": 0.41,
+          "verified": null,
+          "generated_at": "2025-12-28",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 5,
+          "text": "A 4B model passes 70% on a standard reasoning test.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2025-12-31",
+          "confidence": 0.7,
+          "verified": true,
+          "generated_at": "2025-12-28",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 6,
+          "text": "A cloud provider cuts small-model prices by half.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2025-12-15",
+          "confidence": 0.35,
+          "verified": false,
+          "generated_at": "2025-12-28",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 7,
+          "text": "An open model under 10B tops a translation benchmark.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-05-31",
+          "confidence": 0.58,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 8,
+          "text": "A major laptop maker ships 128 GB unified memory as standard.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-09-30",
+          "confidence": 0.33,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 9,
+          "text": "A new inference server release doubles long-context speed.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-04-30",
+          "confidence": 0.51,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 10,
+          "text": "An EU rule on AI labelling takes effect.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-08-02",
+          "confidence": 0.66,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 11,
+          "text": "A popular vector database adds built-in reranking.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-03-31",
+          "confidence": 0.6,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 12,
+          "text": "Small business AI adoption passes 40% in a national survey.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-06-30",
+          "confidence": 0.44,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 13,
+          "text": "A browser-based model runs a 7B model at 20 tokens per second.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-07-31",
+          "confidence": 0.39,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 14,
+          "text": "An open speech model matches a paid service on accuracy.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-05-31",
+          "confidence": 0.57,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 15,
+          "text": "A home NAS vendor adds a local model app.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-06-30",
+          "confidence": 0.62,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 16,
+          "text": "A large cloud outage lasts more than 6 hours.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-12-31",
+          "confidence": 0.29,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 17,
+          "text": "A new mixture-of-experts model fits in 32 GB at 4 bit.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-02-28",
+          "confidence": 0.71,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 18,
+          "text": "A desktop GPU with 48 GB launches under 1,500.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-10-31",
+          "confidence": 0.22,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 19,
+          "text": "A coding agent passes 80% on a public repair benchmark.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-09-30",
+          "confidence": 0.47,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        },
+        {
+          "id": 20,
+          "text": "An open embedding model tops a retrieval leaderboard.",
+          "domain": "tech",
+          "geography": "",
+          "timeframe": "2026-04-30",
+          "confidence": 0.64,
+          "verified": null,
+          "generated_at": "2025-12-29",
+          "brief": "",
+          "reasoning": ""
+        }
+      ]
+    },
+    "/api/files/list": {
+      "files": []
+    },
+    "/api/docs/tree": {
+      "tree": []
+    },
+    "/api/jobs": {
+      "jobs": [
+        {
+          "id": "research:r-demo-01",
+          "kind": "research",
+          "name": "Research: which e-ink tablets handle handwritten notes best under \u00a3300?",
+          "description": "standard on demo-model-30b",
+          "schedule": "one-off",
+          "next": null,
+          "last": {
+            "at": 1767268380,
+            "end": null,
+            "ok": true,
+            "detail": ""
+          },
+          "state": "running",
+          "can_act": false,
+          "units": {},
+          "href": "/research#run/r-demo-01",
+          "managed": false
+        },
+        {
+          "id": "user:weather-cache",
+          "kind": "user",
+          "name": "weather-cache",
+          "description": "Refresh the weather cache for the hall screen",
+          "schedule": "every 10 min after the last run",
+          "next": null,
+          "last": {
+            "at": 1767268760,
+            "end": null,
+            "ok": true,
+            "detail": ""
+          },
+          "state": "running",
+          "can_act": true,
+          "units": {
+            "timer": "weather-cache.timer",
+            "service": "weather-cache.service"
+          },
+          "managed": false
+        },
+        {
+          "id": "user:photo-sync",
+          "kind": "user",
+          "name": "photo-sync",
+          "description": "Copy new photos from the phone share to the NAS",
+          "schedule": "every 30 min after the last run",
+          "next": 1767269460,
+          "last": {
+            "at": 1767267660,
+            "end": 1767267664,
+            "ok": false,
+            "detail": "exit code 1"
+          },
+          "state": "failed",
+          "can_act": true,
+          "units": {
+            "timer": "photo-sync.timer",
+            "service": "photo-sync.service"
+          },
+          "managed": true,
+          "spec": {
+            "name": "photo-sync",
+            "description": "Copy new photos from the phone share to the NAS",
+            "command": "rsync -a /srv/demo/phone/ nas.example.com:/photos/",
+            "schedule": "*-*-* *:00/30:00"
+          }
+        },
+        {
+          "id": "user:disk-report",
+          "kind": "user",
+          "name": "disk-report",
+          "description": "Nightly disk usage report to the house channel",
+          "schedule": "daily 06:30",
+          "next": 1767335400,
+          "last": {
+            "at": 1767249000,
+            "end": 1767249900,
+            "ok": false,
+            "detail": "timeout"
+          },
+          "state": "failed",
+          "can_act": true,
+          "units": {
+            "timer": "disk-report.timer",
+            "service": "disk-report.service"
+          },
+          "managed": false
+        },
+        {
+          "id": "user:feed-fetch",
+          "kind": "user",
+          "name": "feed-fetch",
+          "description": "Pull the RSS feeds for the reading list",
+          "schedule": "every 15 min",
+          "next": 1767269160,
+          "last": {
+            "at": 1767268260,
+            "end": 1767268272,
+            "ok": true,
+            "detail": ""
+          },
+          "state": "ok",
+          "can_act": true,
+          "units": {
+            "timer": "feed-fetch.timer",
+            "service": "feed-fetch.service"
+          },
+          "managed": false
+        },
+        {
+          "id": "cron:1",
+          "kind": "cron",
+          "name": "check-mail.sh",
+          "description": "/srv/demo/bin/check-mail.sh >> /srv/demo/logs/mail.log 2>&1",
+          "schedule": "every 15 min",
+          "next": 1767269700,
+          "last": null,
+          "state": "unknown",
+          "can_act": false,
+          "units": {},
+          "managed": false
+        },
+        {
+          "id": "system:logrotate",
+          "kind": "system",
+          "name": "logrotate",
+          "description": "Daily rotation of log files",
+          "schedule": "daily 00:00",
+          "next": 1767312000,
+          "last": {
+            "at": 1767225600,
+            "end": 1767225602,
+            "ok": true,
+            "detail": ""
+          },
+          "state": "ok",
+          "can_act": false,
+          "units": {
+            "timer": "logrotate.timer",
+            "service": "logrotate.service"
+          },
+          "managed": false
+        },
+        {
+          "id": "user:nightly-backup",
+          "kind": "user",
+          "name": "nightly-backup",
+          "description": "Back up the home folder to the NAS",
+          "schedule": "daily 02:00",
+          "next": 1767319200,
+          "last": {
+            "at": 1767232800,
+            "end": 1767234060,
+            "ok": true,
+            "detail": ""
+          },
+          "state": "ok",
+          "can_act": true,
+          "units": {
+            "timer": "nightly-backup.timer",
+            "service": "nightly-backup.service"
+          },
+          "managed": true,
+          "spec": {
+            "name": "nightly-backup",
+            "description": "Back up the home folder to the NAS",
+            "command": "/srv/demo/bin/backup.sh --quiet",
+            "schedule": "*-*-* 02:00:00"
+          }
+        },
+        {
+          "id": "user:cert-renew",
+          "kind": "user",
+          "name": "cert-renew",
+          "description": "Renew the local TLS certificate when it is close to expiry",
+          "schedule": "daily 03:15",
+          "next": 1767323700,
+          "last": {
+            "at": 1767237300,
+            "end": 1767237306,
+            "ok": true,
+            "detail": ""
+          },
+          "state": "ok",
+          "can_act": true,
+          "units": {
+            "timer": "cert-renew.timer",
+            "service": "cert-renew.service"
+          },
+          "managed": false
+        },
+        {
+          "id": "cron:2",
+          "kind": "cron",
+          "name": "update-library.sh",
+          "description": "/srv/demo/tools/update-library.sh",
+          "schedule": "Sun 02:00",
+          "next": 1767578400,
+          "last": null,
+          "state": "unknown",
+          "can_act": false,
+          "units": {},
+          "managed": false
+        },
+        {
+          "id": "system:fstrim",
+          "kind": "system",
+          "name": "fstrim",
+          "description": "Discard unused filesystem blocks once a week",
+          "schedule": "Mon 00:00",
+          "next": 1767657600,
+          "last": {
+            "at": 1767052800,
+            "end": 1767052840,
+            "ok": true,
+            "detail": ""
+          },
+          "state": "ok",
+          "can_act": false,
+          "units": {
+            "timer": "fstrim.timer",
+            "service": "fstrim.service"
+          },
+          "managed": false
+        },
+        {
+          "id": "user:db-vacuum",
+          "kind": "user",
+          "name": "db-vacuum",
+          "description": "Weekly VACUUM of the notes database",
+          "schedule": "Sun 04:00",
+          "next": null,
+          "last": {
+            "at": 1766894400,
+            "end": 1766894495,
+            "ok": true,
+            "detail": ""
+          },
+          "state": "paused",
+          "can_act": true,
+          "units": {
+            "timer": "db-vacuum.timer",
+            "service": "db-vacuum.service"
+          },
+          "managed": false
+        }
+      ],
+      "counts": {
+        "total": 12,
+        "running": 2,
+        "failed": 2,
+        "ok": 5,
+        "unknown": 2,
+        "paused": 1
+      },
+      "at": 1767268800,
+      "setup": {
+        "available": true,
+        "linger": true,
+        "reason": ""
+      }
+    },
+    "/api/jobs/user:photo-sync/log": {
+      "lines": [
+        "2026-01-01T11:41:00+00:00 demo systemd[1200]: Starting photo-sync.service - Copy new photos from the phone share to the NAS...",
+        "2026-01-01T11:41:01+00:00 demo photo-sync[48112]: mounting //192.0.2.20/photos",
+        "2026-01-01T11:41:03+00:00 demo photo-sync[48112]: error: mount failed: host unreachable",
+        "2026-01-01T11:41:04+00:00 demo systemd[1200]: photo-sync.service: Main process exited, code=exited, status=1/FAILURE",
+        "2026-01-01T11:41:04+00:00 demo systemd[1200]: photo-sync.service: Failed with result 'exit-code'."
+      ]
+    },
+    "/api/jobs/preview": {
+      "calendar": "*-*-* 06:30:00",
+      "words": "daily 06:30",
+      "next": 1767335400
+    },
+    "/api/approvals": {
+      "pending": [
+        {
+          "id": "a1b2c3d4e5f6",
+          "kind": "agent",
+          "title": "Restart the relay after the config change",
+          "detail": "The relay picked up a new upstream list and needs a restart to use it.",
+          "command": "systemctl --user restart relay.service",
+          "target": "",
+          "requester": "relay-bot",
+          "client": "192.0.2.20",
+          "created": 1767268660,
+          "expires": 1767270460,
+          "status": "pending",
+          "decided_at": null,
+          "decided_by": "",
+          "result": "",
+          "replay": null,
+          "consumed": false,
+          "expires_in": 1660,
+          "kind_label": "Agents"
+        },
+        {
+          "id": "0f9e8d7c6b5a",
+          "kind": "job_run",
+          "title": "Run job photo-sync",
+          "detail": "",
+          "command": "",
+          "target": "photo-sync",
+          "requester": "dashboard",
+          "client": "127.0.0.1",
+          "created": 1767268765,
+          "expires": 1767270565,
+          "status": "pending",
+          "decided_at": null,
+          "decided_by": "",
+          "result": "",
+          "replay": {
+            "method": "POST",
+            "path": "/api/jobs/user:photo-sync/run"
+          },
+          "consumed": false,
+          "expires_in": 1765,
+          "kind_label": "Job runs"
+        },
+        {
+          "id": "112233445566",
+          "kind": "terminal",
+          "title": "Open a terminal",
+          "detail": "",
+          "command": "",
+          "target": "",
+          "requester": "dashboard",
+          "client": "192.0.2.31",
+          "created": 1767267280,
+          "expires": 1767269080,
+          "status": "pending",
+          "decided_at": null,
+          "decided_by": "",
+          "result": "",
+          "replay": null,
+          "consumed": false,
+          "expires_in": 280,
+          "kind_label": "Terminal"
+        }
+      ],
+      "recent": [
+        {
+          "id": "778899aabbcc",
+          "kind": "agent",
+          "title": "Clean the build cache",
+          "detail": "",
+          "command": "rm -rf / --no-preserve-root",
+          "target": "",
+          "requester": "night-shift",
+          "client": "192.0.2.20",
+          "created": 1767268200,
+          "expires": 1767270000,
+          "status": "blocked",
+          "decided_at": 1767268200,
+          "decided_by": "blocklist",
+          "result": "blocked: removes the root of the file system",
+          "replay": null,
+          "consumed": false,
+          "expires_in": 0,
+          "kind_label": "Agents"
+        },
+        {
+          "id": "ddeeff001122",
+          "kind": "service",
+          "title": "Restart demo-web",
+          "detail": "",
+          "command": "",
+          "target": "demo-web",
+          "requester": "dashboard",
+          "client": "127.0.0.1",
+          "created": 1767266900,
+          "expires": 1767268700,
+          "status": "done",
+          "decided_at": 1767266950,
+          "decided_by": "local",
+          "result": "restarted demo-web",
+          "replay": {
+            "method": "POST",
+            "path": "/api/services/demo-web/restart"
+          },
+          "consumed": false,
+          "expires_in": 0,
+          "kind_label": "Services"
+        },
+        {
+          "id": "334455667788",
+          "kind": "agent",
+          "title": "Fetch tonight's feed early",
+          "detail": "",
+          "command": "/srv/demo/bin/feed-fetch --now",
+          "target": "",
+          "requester": "relay-bot",
+          "client": "192.0.2.20",
+          "created": 1767265200,
+          "expires": 1767267000,
+          "status": "denied",
+          "decided_at": 1767265300,
+          "decided_by": "local",
+          "result": "denied by the owner",
+          "replay": null,
+          "consumed": false,
+          "expires_in": 0,
+          "kind_label": "Agents"
+        },
+        {
+          "id": "99aabbccddee",
+          "kind": "quick_action",
+          "title": "Quick action: Clear caches",
+          "detail": "",
+          "command": "",
+          "target": "clear-caches",
+          "requester": "dashboard",
+          "client": "127.0.0.1",
+          "created": 1767261600,
+          "expires": 1767263400,
+          "status": "expired",
+          "decided_at": 1767263400,
+          "decided_by": "timeout",
+          "result": "",
+          "replay": null,
+          "consumed": false,
+          "expires_in": 0,
+          "kind_label": "Quick actions"
+        },
+        {
+          "id": "ffeeddccbbaa",
+          "kind": "agent",
+          "title": "Rotate the relay log",
+          "detail": "",
+          "command": "/srv/demo/bin/rotate-log relay",
+          "target": "",
+          "requester": "relay-bot",
+          "client": "192.0.2.20",
+          "created": 1767182400,
+          "expires": 1767184200,
+          "status": "approved",
+          "decided_at": 1767182400,
+          "decided_by": "allowlist",
+          "result": "approved without asking",
+          "replay": null,
+          "consumed": false,
+          "expires_in": 0,
+          "kind_label": "Agents"
+        }
+      ],
+      "kinds": [
+        {
+          "id": "quick_action",
+          "label": "Quick actions",
+          "about": "The buttons on the Monitor page that run a shell line from your config."
+        },
+        {
+          "id": "service",
+          "label": "Services",
+          "about": "Start, stop and restart of the services you list, here and on other machines."
+        },
+        {
+          "id": "docker",
+          "label": "Containers",
+          "about": "Start, stop and restart of containers."
+        },
+        {
+          "id": "job_run",
+          "label": "Job runs",
+          "about": "Run now on a scheduled job or timer."
+        },
+        {
+          "id": "job_change",
+          "label": "Job changes",
+          "about": "Pause, resume, create, edit and delete of jobs."
+        },
+        {
+          "id": "terminal",
+          "label": "Terminal",
+          "about": "Opening a shell in the browser."
+        },
+        {
+          "id": "agent",
+          "label": "Agents",
+          "about": "Requests from your own agents and scripts through the API."
+        }
+      ],
+      "rules": {
+        "quick_action": "allow",
+        "service": "ask",
+        "docker": "allow",
+        "job_run": "ask",
+        "job_change": "allow",
+        "terminal": "ask",
+        "agent": "ask"
+      },
+      "builtin_blocks": [
+        "removes the root of the file system or your home folder",
+        "formats or wipes a disk",
+        "overwrites a disk device",
+        "shuts down or restarts the machine",
+        "a fork bomb",
+        "changes permissions or ownership across the whole system",
+        "wipes the crontab",
+        "pipes a download straight into a shell",
+        "kills every process"
+      ],
+      "block_patterns": [
+        "docker system prune",
+        "git push --force"
+      ],
+      "allow_commands": [
+        "/srv/demo/bin/rotate-log relay"
+      ],
+      "token_set": true,
+      "notify_command": "curl -s -d \"$LW_TITLE\" https://ntfy.example.com/approvals",
+      "ttl": 1800,
+      "local_only": true
+    },
+    "/api/approvals/summary": {
+      "pending": 3
+    },
+    "/api/audit": {
+      "events": [
+        {
+          "ts": 1767268765,
+          "action": "approval_requested",
+          "target": "Run job photo-sync",
+          "outcome": "pending",
+          "actor": "local",
+          "id": "0f9e8d7c6b5a",
+          "kind": "job_run"
+        },
+        {
+          "ts": 1767268660,
+          "action": "approval_requested",
+          "target": "Restart the relay after the config change",
+          "outcome": "pending",
+          "actor": "token",
+          "id": "a1b2c3d4e5f6",
+          "kind": "agent",
+          "requester": "relay-bot"
+        },
+        {
+          "ts": 1767268200,
+          "action": "approval_blocked",
+          "target": "Clean the build cache",
+          "outcome": "blocked",
+          "actor": "token",
+          "id": "778899aabbcc",
+          "kind": "agent",
+          "requester": "night-shift",
+          "reason": "removes the root of the file system"
+        },
+        {
+          "ts": 1767267900,
+          "action": "job_pause",
+          "target": "db-vacuum",
+          "outcome": "ok",
+          "actor": "local"
+        },
+        {
+          "ts": 1767267300,
+          "action": "approval_settings",
+          "target": "rules",
+          "outcome": "ok",
+          "actor": "local",
+          "changed": "service=ask"
+        },
+        {
+          "ts": 1767267280,
+          "action": "approval_requested",
+          "target": "terminal",
+          "outcome": "pending",
+          "actor": "session",
+          "id": "112233445566",
+          "kind": "terminal"
+        },
+        {
+          "ts": 1767266950,
+          "action": "service_restart",
+          "target": "demo-web",
+          "outcome": "ok",
+          "actor": "approved"
+        },
+        {
+          "ts": 1767266950,
+          "action": "approval_granted",
+          "target": "Restart demo-web",
+          "outcome": "ok",
+          "actor": "local",
+          "id": "ddeeff001122",
+          "kind": "service"
+        },
+        {
+          "ts": 1767266900,
+          "action": "approval_requested",
+          "target": "Restart demo-web",
+          "outcome": "pending",
+          "actor": "local",
+          "id": "ddeeff001122",
+          "kind": "service"
+        },
+        {
+          "ts": 1767266400,
+          "action": "docker_restart",
+          "target": "smtp-relay",
+          "outcome": "ok",
+          "actor": "local"
+        },
+        {
+          "ts": 1767265300,
+          "action": "approval_denied",
+          "target": "Fetch tonight's feed early",
+          "outcome": "denied",
+          "actor": "local",
+          "id": "334455667788",
+          "kind": "agent"
+        },
+        {
+          "ts": 1767265200,
+          "action": "approval_requested",
+          "target": "Fetch tonight's feed early",
+          "outcome": "pending",
+          "actor": "token",
+          "id": "334455667788",
+          "kind": "agent",
+          "requester": "relay-bot"
+        },
+        {
+          "ts": 1767264700,
+          "action": "research_start",
+          "target": "which e-ink tablets handle handwritten notes best under \u00a3300?",
+          "outcome": "ok",
+          "actor": "local",
+          "id": "r-demo-01",
+          "model": "demo-model-30b",
+          "depth": "standard",
+          "cap": 40
+        },
+        {
+          "ts": 1767263400,
+          "action": "approval_expired",
+          "target": "Quick action: Clear caches",
+          "outcome": "expired",
+          "actor": "system",
+          "id": "99aabbccddee",
+          "kind": "quick_action"
+        },
+        {
+          "ts": 1767262800,
+          "action": "terminal_open",
+          "target": "studio-k2m9x1",
+          "outcome": "ok",
+          "actor": "approved"
+        },
+        {
+          "ts": 1767261600,
+          "action": "approval_requested",
+          "target": "Quick action: Clear caches",
+          "outcome": "pending",
+          "actor": "local",
+          "id": "99aabbccddee",
+          "kind": "quick_action"
+        },
+        {
+          "ts": 1767259800,
+          "action": "quick_action",
+          "target": "disk-report",
+          "outcome": "ok",
+          "actor": "local"
+        },
+        {
+          "ts": 1767256800,
+          "action": "service_restart",
+          "target": "demo-web",
+          "outcome": "fail",
+          "actor": "local"
+        },
+        {
+          "ts": 1767248800,
+          "action": "job_create",
+          "target": "nightly-backup",
+          "outcome": "ok",
+          "actor": "local"
+        },
+        {
+          "ts": 1767228800,
+          "action": "approval_token",
+          "target": "token",
+          "outcome": "ok",
+          "actor": "local",
+          "change": "new"
+        },
+        {
+          "ts": 1767182400,
+          "action": "approval_granted",
+          "target": "Rotate the relay log",
+          "outcome": "ok",
+          "actor": "allowlist",
+          "id": "ffeeddccbbaa",
+          "kind": "agent",
+          "requester": "relay-bot"
+        },
+        {
+          "ts": 1767178800,
+          "action": "docker_stop",
+          "target": "old-indexer",
+          "outcome": "ok",
+          "actor": "local"
+        }
+      ]
+    },
+    "/api/spend": {
+      "month": {
+        "label": "January 2026",
+        "cost": 130.9,
+        "currency": "$",
+        "tokens": 5347661,
+        "requests": 1515,
+        "extra": [
+          {
+            "currency": "\u00a3",
+            "cost": 0.17
+          }
+        ],
+        "day_of_month": 14,
+        "days_in_month": 31
+      },
+      "local": {
+        "tokens": 19728028,
+        "share": 0.776
+      },
+      "days": [
+        {
+          "date": "2025-12-16",
+          "sources": {
+            "local-main": {
+              "tokens": 1279126,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 360956,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 210816,
+              "cost": 5.2209
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 507030,
+              "cost": 2.469
+            },
+            "Chat": {
+              "tokens": 474280,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 584998,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 173471,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 29380,
+              "cost": 0.7276
+            },
+            "docs-site": {
+              "tokens": 28736,
+              "cost": 0.7117
+            }
+          }
+        },
+        {
+          "date": "2025-12-17",
+          "sources": {
+            "local-main": {
+              "tokens": 790238,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 144907,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 761316,
+              "cost": 18.854
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 627402,
+              "cost": 9.1312
+            },
+            "Chat": {
+              "tokens": 521473,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 108378,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 46606,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 146491,
+              "cost": 3.6279
+            },
+            "docs-site": {
+              "tokens": 132409,
+              "cost": 3.2791
+            }
+          }
+        },
+        {
+          "date": "2025-12-18",
+          "sources": {
+            "local-main": {
+              "tokens": 879287,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 379323,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 865131,
+              "cost": 21.425
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 506351,
+              "cost": 5.4466
+            },
+            "Chat": {
+              "tokens": 611499,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 222675,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 138016,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 241614,
+              "cost": 5.9836
+            },
+            "docs-site": {
+              "tokens": 275789,
+              "cost": 6.8299
+            }
+          }
+        },
+        {
+          "date": "2025-12-19",
+          "sources": {
+            "local-main": {
+              "tokens": 2093404,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 340264,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 479407,
+              "cost": 11.8726
+            },
+            "Codex": {
+              "tokens": 32561,
+              "cost": null
+            },
+            "example-api": {
+              "tokens": 54000,
+              "cost": 0.144
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 935961,
+              "cost": 4.0329
+            },
+            "Chat": {
+              "tokens": 1075823,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 433840,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 150889,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 151010,
+              "cost": 3.7398
+            },
+            "docs-site": {
+              "tokens": 85582,
+              "cost": 2.1195
+            },
+            "Codex": {
+              "tokens": 23424,
+              "cost": null
+            },
+            "Which battery chemistry suits a home store?": {
+              "tokens": 54000,
+              "cost": 0.144
+            }
+          }
+        },
+        {
+          "date": "2025-12-20",
+          "sources": {
+            "local-main": {
+              "tokens": 370635,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 86693,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 75585,
+              "cost": 1.8719
+            },
+            "Codex": {
+              "tokens": 6640,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 155791,
+              "cost": 0.4407
+            },
+            "Chat": {
+              "tokens": 184084,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 89539,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 45708,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 18807,
+              "cost": 0.4658
+            },
+            "docs-site": {
+              "tokens": 29405,
+              "cost": 0.7282
+            },
+            "Codex": {
+              "tokens": 3672,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2025-12-21",
+          "sources": {
+            "local-main": {
+              "tokens": 667116,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 81498,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 257747,
+              "cost": 6.3832
+            },
+            "Codex": {
+              "tokens": 4089,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 376394,
+              "cost": 2.2277
+            },
+            "Chat": {
+              "tokens": 303533,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 135591,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 23050,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 73672,
+              "cost": 1.8245
+            },
+            "docs-site": {
+              "tokens": 32119,
+              "cost": 0.7954
+            },
+            "Codex": {
+              "tokens": 2389,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2025-12-22",
+          "sources": {
+            "local-main": {
+              "tokens": 1992828,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 383010,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 554531,
+              "cost": 13.733
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 693309,
+              "cost": 6.4011
+            },
+            "Chat": {
+              "tokens": 1303452,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 434844,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 202706,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 90031,
+              "cost": 2.2296
+            },
+            "docs-site": {
+              "tokens": 178087,
+              "cost": 4.4103
+            }
+          }
+        },
+        {
+          "date": "2025-12-23",
+          "sources": {
+            "local-main": {
+              "tokens": 845567,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 147811,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 670625,
+              "cost": 16.608
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 334404,
+              "cost": 3.7231
+            },
+            "Chat": {
+              "tokens": 582991,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 158139,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 68180,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 174169,
+              "cost": 4.3133
+            },
+            "docs-site": {
+              "tokens": 217939,
+              "cost": 5.3973
+            }
+          }
+        },
+        {
+          "date": "2025-12-24",
+          "sources": {
+            "local-main": {
+              "tokens": 1502869,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 268099,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 308252,
+              "cost": 7.6339
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 495426,
+              "cost": 1.7168
+            },
+            "Chat": {
+              "tokens": 825825,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 485431,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 33610,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 58630,
+              "cost": 1.452
+            },
+            "docs-site": {
+              "tokens": 125326,
+              "cost": 3.1037
+            }
+          }
+        },
+        {
+          "date": "2025-12-25",
+          "sources": {
+            "local-main": {
+              "tokens": 1835481,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 299648,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 743851,
+              "cost": 18.4215
+            },
+            "Codex": {
+              "tokens": 80949,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 731646,
+              "cost": 5.4451
+            },
+            "Chat": {
+              "tokens": 556644,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 923343,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 143366,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 124522,
+              "cost": 3.0838
+            },
+            "docs-site": {
+              "tokens": 325767,
+              "cost": 8.0676
+            },
+            "Codex": {
+              "tokens": 60215,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2025-12-26",
+          "sources": {
+            "local-main": {
+              "tokens": 1557651,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 134283,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 215271,
+              "cost": 5.3312
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 550251,
+              "cost": 1.3711
+            },
+            "Chat": {
+              "tokens": 664630,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 489523,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 42894,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 79217,
+              "cost": 1.9618
+            },
+            "docs-site": {
+              "tokens": 45539,
+              "cost": 1.1278
+            }
+          }
+        },
+        {
+          "date": "2025-12-27",
+          "sources": {
+            "local-main": {
+              "tokens": 236753,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 44398,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 74577,
+              "cost": 1.8469
+            },
+            "Codex": {
+              "tokens": 11021,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 81843,
+              "cost": 0.8538
+            },
+            "Chat": {
+              "tokens": 103672,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 115382,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 14730,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 15407,
+              "cost": 0.3816
+            },
+            "docs-site": {
+              "tokens": 9609,
+              "cost": 0.238
+            },
+            "Codex": {
+              "tokens": 7288,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2025-12-28",
+          "sources": {
+            "local-main": {
+              "tokens": 531455,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 108104,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 80018,
+              "cost": 1.9817
+            },
+            "Codex": {
+              "tokens": 20911,
+              "cost": null
+            },
+            "example-api": {
+              "tokens": 35500,
+              "cost": 0.098
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 144145,
+              "cost": 0.482
+            },
+            "Chat": {
+              "tokens": 304964,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 165622,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 44291,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 25729,
+              "cost": 0.6372
+            },
+            "docs-site": {
+              "tokens": 25917,
+              "cost": 0.6419
+            },
+            "Codex": {
+              "tokens": 8298,
+              "cost": null
+            },
+            "Is a second-hand ebike worth it in winter?": {
+              "tokens": 35500,
+              "cost": 0.098
+            }
+          }
+        },
+        {
+          "date": "2025-12-29",
+          "sources": {
+            "local-main": {
+              "tokens": 648435,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 156861,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 703762,
+              "cost": 17.4287
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 518369,
+              "cost": 5.0443
+            },
+            "Chat": {
+              "tokens": 339004,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 127843,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 23767,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 196467,
+              "cost": 4.8655
+            },
+            "docs-site": {
+              "tokens": 107661,
+              "cost": 2.6662
+            }
+          }
+        },
+        {
+          "date": "2025-12-30",
+          "sources": {
+            "local-main": {
+              "tokens": 1369025,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 363937,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 383876,
+              "cost": 9.5067
+            },
+            "Codex": {
+              "tokens": 25578,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 567288,
+              "cost": 3.6503
+            },
+            "Chat": {
+              "tokens": 592782,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 537518,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 182770,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 103228,
+              "cost": 2.5564
+            },
+            "docs-site": {
+              "tokens": 100604,
+              "cost": 2.4915
+            },
+            "Codex": {
+              "tokens": 20232,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2025-12-31",
+          "sources": {
+            "local-main": {
+              "tokens": 2151626,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 95193,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 645179,
+              "cost": 15.9779
+            },
+            "Codex": {
+              "tokens": 58619,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 738568,
+              "cost": 4.4379
+            },
+            "Chat": {
+              "tokens": 1022143,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 643799,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 21508,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 190006,
+              "cost": 4.7055
+            },
+            "docs-site": {
+              "tokens": 241176,
+              "cost": 5.9727
+            },
+            "Codex": {
+              "tokens": 43019,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2026-01-01",
+          "sources": {
+            "local-main": {
+              "tokens": 1332995,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 326457,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 656098,
+              "cost": 16.2483
+            },
+            "Codex": {
+              "tokens": 62845,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 552860,
+              "cost": 6.2917
+            },
+            "Chat": {
+              "tokens": 537737,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 660543,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 162366,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 188997,
+              "cost": 4.6805
+            },
+            "docs-site": {
+              "tokens": 171345,
+              "cost": 4.2434
+            },
+            "Codex": {
+              "tokens": 31824,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2026-01-02",
+          "sources": {
+            "local-main": {
+              "tokens": 1948747,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 283704,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 337193,
+              "cost": 8.3506
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 989038,
+              "cost": 2.7572
+            },
+            "Chat": {
+              "tokens": 564848,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 672677,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 117221,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 88255,
+              "cost": 2.1856
+            },
+            "docs-site": {
+              "tokens": 48443,
+              "cost": 1.1997
+            }
+          }
+        },
+        {
+          "date": "2026-01-03",
+          "sources": {
+            "local-main": {
+              "tokens": 480589,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 48868,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 212652,
+              "cost": 5.2663
+            },
+            "Codex": {
+              "tokens": 20724,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 294597,
+              "cost": 2.3274
+            },
+            "Chat": {
+              "tokens": 131641,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 167424,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 29776,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 28938,
+              "cost": 0.7166
+            },
+            "docs-site": {
+              "tokens": 71419,
+              "cost": 1.7687
+            },
+            "Codex": {
+              "tokens": 10574,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2026-01-04",
+          "sources": {
+            "local-main": {
+              "tokens": 583541,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 44627,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 98671,
+              "cost": 2.4436
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 172213,
+              "cost": 0.8067
+            },
+            "Chat": {
+              "tokens": 170420,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 306939,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 11171,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 30504,
+              "cost": 0.7554
+            },
+            "docs-site": {
+              "tokens": 28320,
+              "cost": 0.7013
+            }
+          }
+        },
+        {
+          "date": "2026-01-05",
+          "sources": {
+            "local-main": {
+              "tokens": 1046231,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 250912,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 287440,
+              "cost": 7.1185
+            },
+            "Codex": {
+              "tokens": 86831,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 429284,
+              "cost": 1.5537
+            },
+            "Chat": {
+              "tokens": 672567,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 164343,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 93688,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 94818,
+              "cost": 2.3482
+            },
+            "docs-site": {
+              "tokens": 108922,
+              "cost": 2.6975
+            },
+            "Codex": {
+              "tokens": 73161,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2026-01-06",
+          "sources": {
+            "local-main": {
+              "tokens": 1482121,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 347673,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 342002,
+              "cost": 8.4697
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 485404,
+              "cost": 3.2402
+            },
+            "Chat": {
+              "tokens": 727360,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 686567,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 61301,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 91394,
+              "cost": 2.2634
+            },
+            "docs-site": {
+              "tokens": 46696,
+              "cost": 1.1564
+            }
+          }
+        },
+        {
+          "date": "2026-01-07",
+          "sources": {
+            "local-main": {
+              "tokens": 2120840,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 351764,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 261263,
+              "cost": 6.4702
+            },
+            "Codex": {
+              "tokens": 5531,
+              "cost": null
+            },
+            "example-api": {
+              "tokens": 62000,
+              "cost": 0.166
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 899705,
+              "cost": 3.0084
+            },
+            "Chat": {
+              "tokens": 888144,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 677229,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 129005,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 30339,
+              "cost": 0.7513
+            },
+            "docs-site": {
+              "tokens": 45395,
+              "cost": 1.1242
+            },
+            "Codex": {
+              "tokens": 3344,
+              "cost": null
+            },
+            "Cheapest way to host a static site in 2026": {
+              "tokens": 62000,
+              "cost": 0.166
+            }
+          }
+        },
+        {
+          "date": "2026-01-08",
+          "sources": {
+            "local-main": {
+              "tokens": 1778031,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 312389,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 680110,
+              "cost": 16.843
+            },
+            "Codex": {
+              "tokens": 66605,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 1020687,
+              "cost": 6.4314
+            },
+            "Chat": {
+              "tokens": 1070456,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 155106,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 103865,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 109232,
+              "cost": 2.7051
+            },
+            "docs-site": {
+              "tokens": 145108,
+              "cost": 3.5936
+            },
+            "Codex": {
+              "tokens": 39085,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2026-01-09",
+          "sources": {
+            "local-main": {
+              "tokens": 1119371,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 216101,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 362429,
+              "cost": 8.9756
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 682041,
+              "cost": 4.0569
+            },
+            "Chat": {
+              "tokens": 700762,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 80970,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 35516,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 47893,
+              "cost": 1.1861
+            },
+            "docs-site": {
+              "tokens": 56214,
+              "cost": 1.3921
+            }
+          }
+        },
+        {
+          "date": "2026-01-10",
+          "sources": {
+            "local-main": {
+              "tokens": 669171,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 79581,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 103983,
+              "cost": 2.5752
+            },
+            "Codex": {
+              "tokens": 11058,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 269927,
+              "cost": 1.2409
+            },
+            "Chat": {
+              "tokens": 258853,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 257201,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 12875,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 21176,
+              "cost": 0.5244
+            },
+            "docs-site": {
+              "tokens": 16996,
+              "cost": 0.4209
+            },
+            "Codex": {
+              "tokens": 9736,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2026-01-11",
+          "sources": {
+            "local-main": {
+              "tokens": 353503,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 65763,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 230217,
+              "cost": 5.7013
+            },
+            "Codex": {
+              "tokens": 4028,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 186868,
+              "cost": 1.8309
+            },
+            "Chat": {
+              "tokens": 190099,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 98066,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 18165,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 51008,
+              "cost": 1.2632
+            },
+            "docs-site": {
+              "tokens": 54109,
+              "cost": 1.34
+            },
+            "Codex": {
+              "tokens": 1255,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2026-01-12",
+          "sources": {
+            "local-main": {
+              "tokens": 1761927,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 253800,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 687145,
+              "cost": 17.0172
+            },
+            "Codex": {
+              "tokens": 29957,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 920687,
+              "cost": 8.3083
+            },
+            "Chat": {
+              "tokens": 536935,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 810942,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 82649,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 82237,
+              "cost": 2.0366
+            },
+            "docs-site": {
+              "tokens": 229312,
+              "cost": 5.6789
+            },
+            "Codex": {
+              "tokens": 10870,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2026-01-13",
+          "sources": {
+            "local-main": {
+              "tokens": 1156928,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 221791,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 858809,
+              "cost": 21.2684
+            },
+            "Codex": {
+              "tokens": 67473,
+              "cost": null
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 627890,
+              "cost": 9.4792
+            },
+            "Chat": {
+              "tokens": 875344,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 212087,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 46163,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 132141,
+              "cost": 3.2725
+            },
+            "docs-site": {
+              "tokens": 133991,
+              "cost": 3.3183
+            },
+            "Codex": {
+              "tokens": 48597,
+              "cost": null
+            }
+          }
+        },
+        {
+          "date": "2026-01-14",
+          "sources": {
+            "local-main": {
+              "tokens": 787615,
+              "cost": null
+            },
+            "local-small": {
+              "tokens": 302988,
+              "cost": null
+            },
+            "claude-opus-5-5": {
+              "tokens": 167649,
+              "cost": 4.1519
+            }
+          },
+          "jobs": {
+            "relay": {
+              "tokens": 236553,
+              "cost": 1.6206
+            },
+            "Chat": {
+              "tokens": 579301,
+              "cost": null
+            },
+            "Other on local-main": {
+              "tokens": 176983,
+              "cost": null
+            },
+            "Other on local-small": {
+              "tokens": 163204,
+              "cost": null
+            },
+            "photo-sync": {
+              "tokens": 45022,
+              "cost": 1.115
+            },
+            "docs-site": {
+              "tokens": 20030,
+              "cost": 0.4961
+            }
+          }
+        }
+      ],
+      "days_n": 30,
+      "sources": [
+        {
+          "name": "claude-opus-5-5",
+          "kind": "tool",
+          "tokens": 12315605,
+          "in": 10468251,
+          "out": 1847354,
+          "cache": 6280938,
+          "requests": 3504,
+          "cost": 304.9969,
+          "currency": "$",
+          "priced": true
+        },
+        {
+          "name": "Codex",
+          "kind": "tool",
+          "tokens": 595420,
+          "in": 506100,
+          "out": 89320,
+          "cache": 0,
+          "requests": 162,
+          "cost": null,
+          "currency": null,
+          "priced": false
+        },
+        {
+          "name": "example-api",
+          "kind": "api",
+          "tokens": 151500,
+          "in": 134000,
+          "out": 17500,
+          "cache": 0,
+          "requests": 36,
+          "cost": 0.408,
+          "currency": "\u00a3",
+          "priced": true
+        },
+        {
+          "name": "local-main",
+          "kind": "local",
+          "tokens": 35373106,
+          "in": 30067123,
+          "out": 5305983,
+          "cache": 0,
+          "requests": 634,
+          "cost": null,
+          "currency": null,
+          "priced": false
+        },
+        {
+          "name": "local-small",
+          "kind": "local",
+          "tokens": 6501403,
+          "in": 5526178,
+          "out": 975225,
+          "cache": 0,
+          "requests": 748,
+          "cost": null,
+          "currency": null,
+          "priced": false
+        }
+      ],
+      "jobs": [
+        {
+          "id": "chat",
+          "label": "Chat",
+          "source": "local-main",
+          "tokens": 17371266,
+          "requests": 1060,
+          "cost": null,
+          "currency": null
+        },
+        {
+          "id": "claude-code:relay",
+          "label": "relay",
+          "source": "local-main",
+          "tokens": 11297174,
+          "requests": 312,
+          "cost": null,
+          "currency": null
+        },
+        {
+          "id": "other:local-main",
+          "label": "Other on local-main",
+          "source": "local-main",
+          "tokens": 10783542,
+          "requests": 0,
+          "cost": null,
+          "currency": null
+        },
+        {
+          "id": "claude:relay",
+          "label": "relay",
+          "source": "claude-opus-5-5",
+          "tokens": 4434758,
+          "requests": 1157,
+          "cost": 109.8271,
+          "currency": "$"
+        },
+        {
+          "id": "claude:docs-site",
+          "label": "docs-site",
+          "source": "claude-opus-5-5",
+          "tokens": 3137965,
+          "requests": 1157,
+          "cost": 77.7119,
+          "currency": "$"
+        },
+        {
+          "id": "claude:photo-sync",
+          "label": "photo-sync",
+          "source": "claude-opus-5-5",
+          "tokens": 2760334,
+          "requests": 1157,
+          "cost": 68.3598,
+          "currency": "$"
+        },
+        {
+          "id": "other:local-small",
+          "label": "Other on local-small",
+          "source": "local-small",
+          "tokens": 2422527,
+          "requests": 0,
+          "cost": null,
+          "currency": null
+        },
+        {
+          "id": "codex:Codex",
+          "label": "Codex",
+          "source": "Codex",
+          "tokens": 396983,
+          "requests": 162,
+          "cost": null,
+          "currency": null
+        },
+        {
+          "id": "research:r-1219-c",
+          "label": "Cheapest way to host a static site in 2026",
+          "source": "example-api",
+          "tokens": 62000,
+          "requests": 12,
+          "cost": 0.166,
+          "currency": "\u00a3"
+        },
+        {
+          "id": "research:r-0107-a",
+          "label": "Which battery chemistry suits a home store?",
+          "source": "example-api",
+          "tokens": 54000,
+          "requests": 12,
+          "cost": 0.144,
+          "currency": "\u00a3"
+        },
+        {
+          "id": "research:r-1229-b",
+          "label": "Is a second-hand ebike worth it in winter?",
+          "source": "example-api",
+          "tokens": 35500,
+          "requests": 12,
+          "cost": 0.098,
+          "currency": "\u00a3"
+        }
+      ],
+      "prices": {
+        "claude-opus-5-5": {
+          "in": 15.0,
+          "out": 75.0,
+          "cache": 1.5,
+          "currency": "$",
+          "from": "spend"
+        },
+        "example-api": {
+          "in": 2.0,
+          "out": 8.0,
+          "cache": 0.0,
+          "currency": "\u00a3",
+          "from": "research"
+        }
+      },
+      "updated": 1768392000.0
+    },
+    "/api/agents": {
+      "now": 1767268800.0,
+      "live": [
+        {
+          "id": "claude:0f3c2a1e-demo-0001",
+          "agent": "Claude Code",
+          "kind": "claude-code",
+          "state": "working",
+          "title": "Add a retry to the photo sync job",
+          "project": "demo-shop",
+          "line": "Bash: run the unit tests",
+          "since": 1767268758.0,
+          "started": 1767267498.0
+        },
+        {
+          "id": "research:20260101-1050-tidal",
+          "agent": "Research",
+          "kind": "research",
+          "state": "working",
+          "title": "Can tidal lagoons cover a town's winter demand?",
+          "project": "example-api",
+          "line": "reading page 3 of 5",
+          "since": 1767268610.0,
+          "started": 1767266210.0
+        },
+        {
+          "id": "claude:0f3c2a1e-demo-0002",
+          "agent": "Claude Code",
+          "kind": "claude-code",
+          "state": "idle",
+          "title": "Why the nightly backup skipped Sunday",
+          "project": "home-server",
+          "line": "Answer: the timer missed the window because the clock drifted",
+          "since": 1767259800.0,
+          "started": 1767258000.0
+        },
+        {
+          "id": "service:helper",
+          "agent": "Helper",
+          "kind": "service",
+          "state": "online",
+          "machine": "box-2",
+          "line": "Up 3 hours",
+          "containers": [
+            "helper",
+            "helper-db"
+          ],
+          "since": null
+        },
+        {
+          "id": "service:scraper",
+          "agent": "Scraper",
+          "kind": "service",
+          "state": "offline",
+          "machine": "box-1",
+          "line": "Exited (1) 2 hours ago",
+          "containers": [
+            "scraper"
+          ],
+          "since": null
+        }
+      ],
+      "runs": [
+        {
+          "id": "claude:0f3c2a1e-demo-0001",
+          "agent": "Claude Code",
+          "title": "Add a retry to the photo sync job",
+          "project": "demo-shop",
+          "started": 1767267498.0,
+          "ended": null,
+          "seconds": 1302,
+          "steps": 38,
+          "tokens": 412300,
+          "cost": null,
+          "status": "working",
+          "line": "Bash: run the unit tests"
+        },
+        {
+          "id": "research:20260101-1050-tidal",
+          "agent": "Research",
+          "title": "Can tidal lagoons cover a town's winter demand?",
+          "project": "example-api",
+          "started": 1767266210.0,
+          "ended": null,
+          "seconds": 2590,
+          "steps": 21,
+          "tokens": 96400,
+          "cost": 0.42,
+          "status": "working",
+          "line": "reading page 3 of 5"
+        },
+        {
+          "id": "claude:0f3c2a1e-demo-0002",
+          "agent": "Claude Code",
+          "title": "Why the nightly backup skipped Sunday",
+          "project": "home-server",
+          "started": 1767258000.0,
+          "ended": null,
+          "seconds": 2410,
+          "steps": 27,
+          "tokens": 188900,
+          "cost": null,
+          "status": "idle",
+          "line": "Answer: the timer missed the window because the"
+        },
+        {
+          "id": "codex:rollout-2026-01-01T08-15-demo",
+          "agent": "Codex",
+          "title": "Rename the config loader and update callers",
+          "project": "demo-shop",
+          "started": 1767254400.0,
+          "ended": 1767255260.0,
+          "seconds": 860,
+          "steps": 19,
+          "tokens": 75200,
+          "cost": null,
+          "status": "done",
+          "line": "Answer: renamed in 6 files, tests green"
+        },
+        {
+          "id": "claude:0f3c2a1e-demo-0003",
+          "agent": "Claude Code",
+          "title": "Fix the broken date filter on the orders page",
+          "project": "demo-shop",
+          "started": 1767247200.0,
+          "ended": 1767248940.0,
+          "seconds": 1740,
+          "steps": 52,
+          "tokens": 655100,
+          "cost": null,
+          "status": "done",
+          "line": "Answer: the filter compared strings; now parses"
+        },
+        {
+          "id": "research:20251231-1812-heatpump",
+          "agent": "Research",
+          "title": "Heat pump running cost versus gas for a 1930s semi",
+          "project": "example-api",
+          "started": 1767204000.0,
+          "ended": 1767205310.0,
+          "seconds": 1310,
+          "steps": 17,
+          "tokens": 71800,
+          "cost": 0.31,
+          "status": "done",
+          "line": "report written"
+        },
+        {
+          "id": "research:20251231-0940-ferry",
+          "agent": "Research",
+          "title": "Which ferry routes dropped sailings in December?",
+          "project": "local-main",
+          "started": 1767175200.0,
+          "ended": 1767175620.0,
+          "seconds": 420,
+          "steps": 9,
+          "tokens": 22100,
+          "cost": null,
+          "status": "failed",
+          "line": "fetch failed: 3 sources timed out"
+        },
+        {
+          "id": "codex:rollout-2025-12-30T16-02-demo",
+          "agent": "Codex",
+          "title": "Write a smoke test for the image resizer",
+          "project": "image-tools",
+          "started": 1767110400.0,
+          "ended": 1767111010.0,
+          "seconds": 610,
+          "steps": 14,
+          "tokens": 41900,
+          "cost": null,
+          "status": "done",
+          "line": "Answer: added tests/test_resize.py"
+        },
+        {
+          "id": "claude:0f3c2a1e-demo-0004",
+          "agent": "Claude Code",
+          "title": "Tidy the README install steps",
+          "project": "image-tools",
+          "started": 1767016800.0,
+          "ended": 1767017100.0,
+          "seconds": 300,
+          "steps": 8,
+          "tokens": 24600,
+          "cost": null,
+          "status": "done",
+          "line": "Answer: shortened to five steps"
+        }
+      ],
+      "agents": [
+        "Claude Code",
+        "Codex",
+        "Helper",
+        "Research",
+        "Scraper"
+      ],
+      "window_days": 7
+    },
+    "/api/agents/runs/claude:0f3c2a1e-demo-0001": {
+      "run": {
+        "id": "claude:0f3c2a1e-demo-0001",
+        "agent": "Claude Code",
+        "title": "Add a retry to the photo sync job",
+        "project": "demo-shop",
+        "started": 1767267498.0,
+        "ended": null,
+        "seconds": 1302,
+        "steps": 38,
+        "tokens": 412300,
+        "cost": null,
+        "status": "working",
+        "line": "Bash: run the unit tests",
+        "in": 502,
+        "out": 1010,
+        "cache": 30700,
+        "thinking": 4,
+        "cwd": "/srv/demo/demo-shop"
+      },
+      "steps": [
+        {
+          "t": 1767267498.0,
+          "offset": 0,
+          "dur": 4,
+          "kind": "prompt",
+          "label": "Prompt",
+          "detail": "Add a retry to the photo sync job, three tries with a short wait",
+          "in": 0,
+          "out": 0,
+          "cache": 0,
+          "calls": 0
+        },
+        {
+          "t": 1767267502.0,
+          "offset": 4,
+          "dur": 2,
+          "kind": "text",
+          "label": "Answer",
+          "detail": "Reading the job runner first.",
+          "in": 0,
+          "out": 80,
+          "cache": 4100,
+          "calls": 0
+        },
+        {
+          "t": 1767267504.0,
+          "offset": 6,
+          "dur": 3,
+          "kind": "tool",
+          "label": "Read",
+          "detail": "jobs.py",
+          "in": 12,
+          "out": 60,
+          "cache": 0,
+          "calls": 0
+        },
+        {
+          "t": 1767267507.0,
+          "offset": 9,
+          "dur": 5,
+          "kind": "tool",
+          "label": "Grep",
+          "detail": "photo-sync",
+          "in": 30,
+          "out": 40,
+          "cache": 0,
+          "calls": 0
+        },
+        {
+          "t": 1767267512.0,
+          "offset": 14,
+          "dur": 41,
+          "kind": "tool",
+          "label": "Edit",
+          "detail": "jobs.py",
+          "in": 200,
+          "out": 310,
+          "cache": 8200,
+          "calls": 0
+        },
+        {
+          "t": 1767267553.0,
+          "offset": 55,
+          "dur": 28,
+          "kind": "tool",
+          "label": "Bash",
+          "detail": "run the unit tests",
+          "in": 40,
+          "out": 70,
+          "cache": 0,
+          "calls": 0
+        },
+        {
+          "t": 1767267581.0,
+          "offset": 83,
+          "dur": 6,
+          "kind": "text",
+          "label": "Answer",
+          "detail": "One test failed: the retry waited inside the lock.",
+          "in": 0,
+          "out": 120,
+          "cache": 9000,
+          "calls": 0
+        },
+        {
+          "t": 1767267587.0,
+          "offset": 89,
+          "dur": 24,
+          "kind": "tool",
+          "label": "Edit",
+          "detail": "jobs.py",
+          "in": 180,
+          "out": 260,
+          "cache": 0,
+          "calls": 0
+        },
+        {
+          "t": 1767267611.0,
+          "offset": 113,
+          "dur": 1189,
+          "kind": "tool",
+          "label": "Bash",
+          "detail": "run the unit tests",
+          "in": 40,
+          "out": 70,
+          "cache": 9400,
+          "calls": 0
+        }
+      ],
+      "now": 1767268800.0
+    },
+    "/api/agents/runs/research:20251231-1812-heatpump": {
+      "run": {
+        "id": "research:20251231-1812-heatpump",
+        "agent": "Research",
+        "title": "Heat pump running cost versus gas for a 1930s semi",
+        "project": "example-api",
+        "started": 1767204000.0,
+        "ended": 1767205310.0,
+        "seconds": 1310,
+        "steps": 17,
+        "tokens": 71800,
+        "cost": 0.31,
+        "status": "done",
+        "line": "report written",
+        "in": 0,
+        "out": 71800,
+        "cache": 0,
+        "thinking": 0,
+        "cwd": ""
+      },
+      "steps": [
+        {
+          "t": 1767204000.0,
+          "offset": 0,
+          "dur": 3,
+          "kind": "stage",
+          "label": "plan",
+          "detail": "3 sub-questions",
+          "in": 0,
+          "out": 900,
+          "cache": 0,
+          "calls": 1
+        },
+        {
+          "t": 1767204003.0,
+          "offset": 3,
+          "dur": 40,
+          "kind": "stage",
+          "label": "search",
+          "detail": "12 results across 4 queries",
+          "in": 0,
+          "out": 0,
+          "cache": 0,
+          "calls": 0
+        },
+        {
+          "t": 1767204043.0,
+          "offset": 43,
+          "dur": 310,
+          "kind": "stage",
+          "label": "read",
+          "detail": "reading 9 pages",
+          "in": 0,
+          "out": 31000,
+          "cache": 0,
+          "calls": 6
+        },
+        {
+          "t": 1767204353.0,
+          "offset": 353,
+          "dur": 870,
+          "kind": "stage",
+          "label": "verify",
+          "detail": "12 claims checked, 2 dropped",
+          "in": 0,
+          "out": 28000,
+          "cache": 0,
+          "calls": 8
+        },
+        {
+          "t": 1767205223.0,
+          "offset": 1223,
+          "dur": 87,
+          "kind": "stage",
+          "label": "write",
+          "detail": "report written",
+          "in": 0,
+          "out": 11900,
+          "cache": 0,
+          "calls": 2
+        }
+      ],
+      "now": 1767268800.0
+    },
+    "/api/research/models": {
+      "models": [
+        {
+          "name": "local-main",
+          "local": true,
+          "paid": false,
+          "size": "medium",
+          "note": "Mid-sized model. Good at gathering and checking facts. It can still miss options a specialist would expect and weigh evidence less well than the largest models."
+        },
+        {
+          "name": "local-small",
+          "local": true,
+          "paid": false,
+          "size": "small",
+          "note": "Small model. It reads pages and copies quotes reliably, but often misses options, makes more judgement mistakes and writes thinner reports. Check the key claims yourself."
+        },
+        {
+          "name": "example-api",
+          "local": false,
+          "paid": true,
+          "added": true,
+          "price_in": 2,
+          "price_out": 8,
+          "currency": "\u00a3",
+          "size": "large",
+          "note": "Large model. The best results this app can give, but the report is still only as good as the sources it could read."
+        }
+      ],
+      "warning": "Research quality depends on the model you pick. Smaller models miss more and judge evidence less well. Every report shows how its claims were checked, so you can see where it is weak.",
+      "default": "local-main",
+      "depths": [
+        {
+          "id": "quick",
+          "label": "Quick answer",
+          "time": "4 to 6 minutes",
+          "about": "Searches the web, reads about 12 pages and gives a short answer with sources. It reads fewer pages, so it can miss things."
+        },
+        {
+          "id": "full",
+          "label": "Full report",
+          "time": "15 to 30 minutes",
+          "about": "Reads 25 to 40 pages, checks each claim against its source and against other sources, and writes a long report you can print. You can leave the page and come back."
+        }
+      ],
+      "depth_note": "This is AI research. Treat it as a starting point and check the sources before relying on anything. Results depend on the model: small local models miss more and make more mistakes."
+    },
+    "/api/research/runs": {
+      "runs": [
+        {
+          "id": "20260101-104800-a1b2c3",
+          "question": "Which e-ink tablets handle handwritten notes best under \u00a3300?",
+          "status": "running",
+          "started": "Thu 1 Jan 10:48",
+          "model": "local-main",
+          "depth": "quick"
+        },
+        {
+          "id": "20251231-181200-d4e5f6",
+          "question": "Is a heat pump cheaper to run than gas for a 1930s semi?",
+          "title": "Heat pump running cost versus gas for a 1930s semi",
+          "status": "done",
+          "started": "Wed 31 Dec 18:12",
+          "model": "example-api",
+          "depth": "full",
+          "seconds": 1310,
+          "cost": 0.41
+        },
+        {
+          "id": "20251231-090500-0a1b2c",
+          "question": "Cheapest way to host a static site in 2026",
+          "title": "Cheapest way to host a static site in 2026",
+          "status": "done",
+          "started": "Wed 31 Dec 09:05",
+          "model": "example-api",
+          "depth": "quick",
+          "seconds": 402,
+          "cost": 0.17
+        },
+        {
+          "id": "20251230-201000-9f8e7d",
+          "question": "Which battery chemistry suits a home store?",
+          "title": "Which battery chemistry suits a home store?",
+          "status": "done",
+          "started": "Tue 30 Dec 20:10",
+          "model": "local-main",
+          "depth": "full",
+          "seconds": 1544
+        },
+        {
+          "id": "20251230-120000-1c2d3e",
+          "question": "Which ferry routes dropped sailings in December?",
+          "status": "no evidence",
+          "started": "Tue 30 Dec 12:00",
+          "model": "local-small",
+          "depth": "quick",
+          "seconds": 288
+        }
+      ]
+    },
+    "/api/research/runs/20260101-104800-a1b2c3": {
+      "id": "20260101-104800-a1b2c3",
+      "meta": {
+        "question": "Which e-ink tablets handle handwritten notes best under \u00a3300?",
+        "model": "local-main",
+        "depth": "quick",
+        "started": "Thu 1 Jan 10:48",
+        "status": "running"
+      },
+      "report": null,
+      "sources": {},
+      "drafts": null
+    },
+    "/api/research/runs/20260101-104800-a1b2c3/events": {
+      "events": [
+        {
+          "t": 1767264480,
+          "stage": "scan",
+          "msg": "Looking at the question",
+          "level": "info"
+        },
+        {
+          "t": 1767264520,
+          "stage": "scope",
+          "msg": "Split into 4 things to find out: writing feel, latency, note export, price",
+          "level": "info"
+        },
+        {
+          "t": 1767264560,
+          "stage": "gather",
+          "msg": "Searched the web: 18 pages to read",
+          "level": "info"
+        },
+        {
+          "t": 1767264600,
+          "stage": "read",
+          "msg": "Read 7 of 18 pages",
+          "level": "info"
+        },
+        {
+          "t": 1767264640,
+          "stage": "read",
+          "msg": "Read 12 of 18 pages",
+          "level": "info"
+        },
+        {
+          "t": 1767264680,
+          "stage": "extract",
+          "msg": "Pulled 31 facts from 12 pages",
+          "level": "info"
+        },
+        {
+          "t": 1767264720,
+          "stage": "claims",
+          "msg": "Grouped into 9 claims, 6 backed by two or more sources",
+          "level": "info"
+        }
+      ],
+      "next": 7,
+      "status": "running"
+    }
+  }
+}

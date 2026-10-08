@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Jobs · llamawatch</title>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#0d1018">
+<link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+<link rel="stylesheet" href="/static/jobs.css?v=4">
+<link rel="stylesheet" href="/static/rail.css?v=6">
+</head>
+<body>
+
+<nav id="rail" aria-label="Main">
+  <button id="rail-toggle" type="button" aria-expanded="false" aria-label="Open menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <div id="rail-items"></div>
+  <button id="rail-pin" type="button" aria-pressed="false" aria-label="Keep menu open">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l-1 6 4 4H6l4-4zM12 13v8"/></svg><span class="rail-label">Keep open</span>
+  </button>
+</nav>
+
+<div id="rs-page" class="lw-page">
+  <header class="rs-top">
+    <a class="rs-brand" href="/studio"><img src="/static/icons/icon-192.png" alt=""><span>llamawatch</span></a>
+    <span class="rs-crumb">/ Jobs</span>
+    <span class="jb-updated" id="jb-updated" aria-live="polite"></span>
+  </header>
+
+  <main class="rs-main">
+    <section class="rs-card jb-head">
+      <div class="jb-title-row">
+        <h1>Scheduled jobs</h1>
+        <p class="jb-sub">Timers, cron lines and research runs on this machine. Failed ones first.</p>
+      </div>
+      <div class="jb-head-side">
+        <div class="jb-chips" id="jb-chips" role="group" aria-label="Show"></div>
+        <button type="button" class="rs-btn primary" id="jb-add">+ Add job</button>
+        <p class="jb-add-note" id="jb-add-note" hidden></p>
+      </div>
+    </section>
+
+    <section class="rs-card jb-strip-card">
+      <div class="jb-strip-head">
+        <span class="rs-kicker">Next 24 hours</span>
+        <span class="jb-strip-note" id="jb-strip-note">Tap an hour to see what runs then.</span>
+      </div>
+      <div class="jb-strip" id="jb-strip" role="group" aria-label="Runs per hour, next 24 hours"></div>
+    </section>
+
+    <section class="rs-card jb-list-card">
+      <div class="jb-tools">
+        <input id="jb-search" type="search" placeholder="Search by name or description" aria-label="Search jobs" autocomplete="off">
+        <span class="jb-count" id="jb-count"></span>
+      </div>
+      <div class="jb-cols" aria-hidden="true">
+        <span></span><span>Job</span><span>Schedule</span><span>Last run</span><span>Next</span><span></span>
+      </div>
+      <ul class="jb-list" id="jb-list" aria-live="polite"></ul>
+      <p class="jb-empty" id="jb-empty" hidden>Nothing matches.</p>
+      <p class="rs-err" id="jb-err"></p>
+    </section>
+  </main>
+</div>
+
+<!-- Confirm dialog for run / pause / resume -->
+<div class="rs-scrim" id="jb-scrim" hidden>
+  <div class="rs-dialog" role="dialog" aria-modal="true" aria-labelledby="jb-dlg-title">
+    <h3 id="jb-dlg-title"></h3>
+    <p id="jb-dlg-text"></p>
+    <div class="rs-actions">
+      <button type="button" class="rs-btn" id="jb-dlg-cancel">Cancel</button>
+      <button type="button" class="rs-btn primary" id="jb-dlg-ok">Yes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add / edit a job -->
+<div class="rs-scrim" id="jb-form-scrim" hidden>
+  <form class="rs-dialog jb-form" id="jb-form" novalidate role="dialog" aria-modal="true" aria-labelledby="jb-form-title">
+    <h3 id="jb-form-title">New job</h3>
+    <label class="rs-label" for="jb-f-name">Name</label>
+    <input id="jb-f-name" name="name" maxlength="40" autocomplete="off" spellcheck="false" placeholder="nightly-backup">
+    <p class="jb-hint" id="jb-f-name-hint">Lowercase letters, numbers and dashes. It becomes the timer's name and cannot change later.</p>
+    <label class="rs-label" for="jb-f-desc">What it does</label>
+    <input id="jb-f-desc" name="description" maxlength="200" placeholder="Back up the home folder to the NAS">
+    <label class="rs-label" for="jb-f-cmd">Command</label>
+    <textarea id="jb-f-cmd" name="command" rows="3" spellcheck="false" placeholder="/srv/scripts/backup.sh --quiet"></textarea>
+    <p class="jb-hint">Runs with /bin/sh from your home folder. Several lines are fine; it stops at the first one that fails.</p>
+    <label class="rs-label" for="jb-f-sched">Schedule</label>
+    <input id="jb-f-sched" name="schedule" autocomplete="off" placeholder="daily 06:30">
+    <p class="jb-hint" id="jb-f-preview">Try “every 15 min”, “daily 06:30”, “Mon 02:00”, “mon,wed,fri 09:00”, or a systemd calendar expression.</p>
+    <p class="jb-note" id="jb-f-linger" hidden>Timers only run while you are logged in on this machine. To keep them running after you log out, run <code>loginctl enable-linger</code> once in a terminal.</p>
+    <p class="rs-err" id="jb-form-err"></p>
+    <div class="rs-actions">
+      <button type="button" class="rs-btn danger" id="jb-f-delete" hidden>Delete job</button>
+      <span class="rs-spacer"></span>
+      <button type="button" class="rs-btn" id="jb-f-cancel">Cancel</button>
+      <button type="submit" class="rs-btn primary" id="jb-f-save">Create job</button>
+    </div>
+  </form>
+</div>
+
+<div class="jb-toast" id="jb-toast" role="status" hidden></div>
+
+<script src="/static/layout.js?v=7"></script>
+<script src="/static/jobs.js?v=2"></script>
+</body>
+</html>

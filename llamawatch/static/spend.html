@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Spend · llamawatch</title>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#0d1018">
+<link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+<link rel="stylesheet" href="/static/spend.css?v=4">
+<link rel="stylesheet" href="/static/rail.css?v=6">
+</head>
+<body>
+
+<nav id="rail" aria-label="Main">
+  <button id="rail-toggle" type="button" aria-expanded="false" aria-label="Open menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <div id="rail-items"></div>
+  <button id="rail-pin" type="button" aria-pressed="false" aria-label="Keep menu open">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l-1 6 4 4H6l4-4zM12 13v8"/></svg><span class="rail-label">Keep open</span>
+  </button>
+</nav>
+
+<div id="rs-page" class="lw-page">
+  <header class="rs-top">
+    <a class="rs-brand" href="/studio"><img src="/static/icons/icon-192.png" alt=""><span>llamawatch</span></a>
+    <span class="rs-crumb">/ Spend</span>
+    <span class="sp-updated" id="sp-updated" aria-live="polite"></span>
+  </header>
+
+  <main class="rs-main">
+    <section class="rs-card sp-head">
+      <div>
+        <h1>Spend</h1>
+        <p class="sp-sub">Real money against free local tokens. Paid API use is shown apart from what your own machines did for nothing.</p>
+      </div>
+    </section>
+
+    <div class="sp-cols">
+      <div class="sp-col">
+        <section class="rs-card sp-month" id="sp-month-card">
+          <div class="sp-card-head">
+            <h2>This month, API</h2>
+            <span class="sp-hint" id="sp-month-label"></span>
+          </div>
+          <div class="sp-dials">
+            <figure class="sp-dial" id="sp-dial-money">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="sp-ring-bg" cx="60" cy="60" r="52"/>
+                <circle class="sp-ring money" cx="60" cy="60" r="52" id="sp-ring-money"/>
+              </svg>
+              <figcaption>
+                <strong id="sp-money">–</strong>
+                <span class="sp-dial-sub" id="sp-money-sub">spent</span>
+              </figcaption>
+            </figure>
+            <figure class="sp-dial" id="sp-dial-tokens">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="sp-ring-bg" cx="60" cy="60" r="52"/>
+                <circle class="sp-ring tokens" cx="60" cy="60" r="52" id="sp-ring-tokens"/>
+              </svg>
+              <figcaption>
+                <strong id="sp-tokens">–</strong>
+                <span class="sp-dial-sub" id="sp-tokens-sub">paid tokens</span>
+              </figcaption>
+            </figure>
+          </div>
+          <p class="sp-hint" id="sp-month-note"></p>
+        </section>
+
+        <section class="rs-card sp-local" id="sp-local-card">
+          <div class="sp-card-head">
+            <h2>Local tokens (free)</h2>
+            <span class="sp-hint">This month, on your own machines.</span>
+          </div>
+          <p class="sp-big"><strong id="sp-local">–</strong> <span class="sp-dial-sub">tokens</span></p>
+          <div class="sp-share" role="img" aria-label="Share of all tokens that was free" id="sp-share-wrap">
+            <div class="sp-share-bar"><div class="sp-share-fill" id="sp-share-fill"></div></div>
+            <span class="sp-hint" id="sp-share-text"></span>
+          </div>
+        </section>
+      </div>
+
+      <div class="sp-col">
+        <section class="rs-card sp-chart-card">
+          <div class="sp-card-head sp-row">
+            <h2>Last <span id="sp-days-n">30</span> days</h2>
+            <div class="sp-seg" role="group" aria-label="Stack by">
+              <button type="button" data-by="source" aria-pressed="true">By provider</button>
+              <button type="button" data-by="job" aria-pressed="false">By job</button>
+            </div>
+          </div>
+          <div class="sp-chart" id="sp-chart"></div>
+          <div class="sp-legend" id="sp-legend"></div>
+          <p class="sp-empty" id="sp-chart-empty" hidden>Nothing recorded yet. The ledger fills as models are used.</p>
+          <div class="sp-tip" id="sp-tip" hidden></div>
+        </section>
+      </div>
+    </div>
+
+    <section class="rs-card">
+      <div class="sp-card-head"><h2>Totals, last <span class="sp-days-n">30</span> days</h2></div>
+      <h3 class="rs-kicker">Providers</h3>
+      <table class="sp-table" id="sp-sources"><thead><tr><th>Provider</th><th>Kind</th><th class="num">Requests</th><th class="num">Tokens</th><th class="num">Cost</th></tr></thead><tbody></tbody></table>
+      <h3 class="rs-kicker">Jobs</h3>
+      <table class="sp-table" id="sp-jobs"><thead><tr><th>Job</th><th>Provider</th><th class="num">Requests</th><th class="num">Tokens</th><th class="num">Cost</th></tr></thead><tbody></tbody></table>
+      <p class="sp-empty small" id="sp-jobs-empty" hidden>No jobs yet.</p>
+    </section>
+
+    <section class="rs-card sp-providers">
+      <div class="sp-card-head">
+        <h2>Connected providers</h2>
+        <span class="sp-hint">Paste a key and llamawatch reads what that account spent, once an hour. Keys are stored encrypted on this machine. <a href="https://github.com/Huzy85/llamawatch/blob/main/docs/SPEND-PROVIDERS.md" target="_blank" rel="noopener">Which providers work, and how</a></span>
+      </div>
+      <ul class="sp-prov-list" id="sp-prov-list"></ul>
+      <p class="rs-err" id="sp-prov-err"></p>
+    </section>
+
+    <section class="rs-card sp-prices">
+      <div class="sp-card-head">
+        <h2>Prices</h2>
+        <span class="sp-hint">Per million tokens. A source with no price shows tokens only. On a subscription (Claude Code on a plan, Codex on a plan) tokens cost nothing extra, so leave its price empty. Research models take their price from the Research page.</span>
+      </div>
+      <table class="sp-table sp-price-table" id="sp-price-table"><thead><tr><th>Source</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cache read</th><th>Currency</th><th></th></tr></thead><tbody></tbody></table>
+      <p class="sp-hint sp-estimate">The estimate before a paid research run is on the Research page, shown before you approve it.</p>
+      <p class="rs-err" id="sp-err"></p>
+    </section>
+  </main>
+</div>
+
+<div class="sp-toast" id="sp-toast" role="status" hidden></div>
+
+<script src="/static/layout.js?v=7"></script>
+<script src="/static/spend.js?v=2"></script>
+</body>
+</html>

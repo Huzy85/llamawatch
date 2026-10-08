@@ -1,0 +1,12 @@
+[
+  {"id": "buy-vacuum", "shape": "buying", "question": "What is the best robot vacuum for a UK home with two dogs for under £400?"},
+  {"id": "cmp-vectordb", "shape": "comparison", "question": "How do the main open-source vector databases compare for a small team running everything on one server?"},
+  {"id": "how-backup", "shape": "howto", "question": "How do I set up automatic off-site backups for a home NAS cheaply and safely?"},
+  {"id": "fact-charging", "shape": "factcheck", "question": "Is it true that charging a phone overnight damages its battery?"},
+  {"id": "exp-mtd", "shape": "explainer", "question": "How does Making Tax Digital for Income Tax work in the UK, and who has to use it from April 2026?"},
+  {"id": "gen-fasting", "shape": "general", "question": "What does the evidence say about intermittent fasting compared with ordinary calorie restriction for weight loss?"},
+  {"id": "now-codemodels", "shape": "comparison", "question": "Which open-weight language models under 40B parameters are best at coding right now?"},
+  {"id": "reg-gpsr", "shape": "howto", "question": "What does a small UK online shop need to do to meet the EU General Product Safety Regulation when selling to EU customers?"},
+  {"id": "fact-vikings", "shape": "factcheck", "question": "Did Vikings wear horned helmets?"},
+  {"id": "buy-llmbox", "shape": "buying", "question": "What is the best hardware a UK buyer can get for under £3,000 to run 100B+ parameter language models locally?"}
+]

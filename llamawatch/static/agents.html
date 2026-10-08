@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Agents · llamawatch</title>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#0d1018">
+<link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+<link rel="stylesheet" href="/static/agents.css?v=1">
+<link rel="stylesheet" href="/static/rail.css?v=6">
+</head>
+<body>
+
+<nav id="rail" aria-label="Main">
+  <button id="rail-toggle" type="button" aria-expanded="false" aria-label="Open menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <div id="rail-items"></div>
+  <button id="rail-pin" type="button" aria-pressed="false" aria-label="Keep menu open">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l-1 6 4 4H6l4-4zM12 13v8"/></svg><span class="rail-label">Keep open</span>
+  </button>
+</nav>
+
+<div id="rs-page" class="lw-page">
+  <header class="rs-top">
+    <a class="rs-brand" href="/studio"><img src="/static/icons/icon-192.png" alt=""><span>llamawatch</span></a>
+    <span class="rs-crumb">/ Agents</span>
+    <span class="ag-updated" id="ag-updated" aria-live="polite"></span>
+  </header>
+
+  <main class="rs-main">
+    <section class="rs-card ag-head">
+      <div>
+        <h1>Agents</h1>
+        <p class="ag-sub">What is running now, and a replay of what each run did: the steps, how long they took and the tokens they used.</p>
+      </div>
+    </section>
+
+    <section class="rs-card" id="ag-now-card" aria-labelledby="ag-now-h">
+      <div class="ag-card-head ag-row">
+        <h2 id="ag-now-h">Now</h2>
+        <span class="ag-hint" id="ag-now-hint"></span>
+      </div>
+      <div class="ag-cards" id="ag-cards"></div>
+      <p class="ag-empty" id="ag-now-empty" hidden>Nothing is working right now.</p>
+    </section>
+
+    <section class="rs-card" id="ag-history-card" aria-labelledby="ag-history-h">
+      <div class="ag-card-head ag-row">
+        <div>
+          <h2 id="ag-history-h">Run history</h2>
+          <span class="ag-hint" id="ag-history-hint">Click a run to replay its steps, time and tokens.</span>
+        </div>
+        <div class="ag-filters">
+          <div class="ag-chips" id="ag-chips" role="group" aria-label="Filter by agent"></div>
+          <input type="search" id="ag-search" placeholder="Search title or project" aria-label="Search runs">
+        </div>
+      </div>
+      <div class="ag-scroll">
+        <table class="ag-table" id="ag-runs">
+          <thead><tr>
+            <th scope="col">Agent</th><th scope="col">Run</th><th scope="col" class="ag-project">Project</th>
+            <th scope="col">Started</th><th scope="col" class="num">Length</th><th scope="col" class="num ag-steps-col">Steps</th>
+            <th scope="col" class="num">Tokens</th><th scope="col">State</th>
+          </tr></thead>
+          <tbody id="ag-runs-body"></tbody>
+        </table>
+      </div>
+      <p class="ag-empty" id="ag-history-empty" hidden>No runs in the last 7 days.</p>
+      <p class="rs-err" id="ag-err"></p>
+    </section>
+
+    <section class="rs-card ag-replay" id="ag-replay" hidden aria-labelledby="ag-replay-h" tabindex="-1">
+      <div class="ag-card-head ag-row">
+        <div>
+          <h2 id="ag-replay-h">Replay</h2>
+          <span class="ag-hint" id="ag-replay-sub"></span>
+        </div>
+        <button type="button" class="rs-btn small" id="ag-replay-close">Close</button>
+      </div>
+      <div class="ag-totals" id="ag-totals"></div>
+      <ol class="ag-steps" id="ag-steps"></ol>
+    </section>
+  </main>
+</div>
+
+<script src="/static/layout.js?v=7"></script>
+<script src="/static/agents.js?v=1"></script>
+</body>
+</html>
